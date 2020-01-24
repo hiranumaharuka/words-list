@@ -10,6 +10,18 @@ const routes: Routes = [
     pathMatch: 'full',
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
 
+  },
+  {
+    path: 'mypage',
+    loadChildren: () => import('./mypage/mypage.module').then(m => m.MypageModule),
+  },
+  {
+    path: 'setting',
+    loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule),
+  },
+  {
+    path: 'addvocabulary',
+    loadChildren: () => import('./addvocabulary/addvocabulary.module').then(m => m.AddvocabularyModule),
   }
 ];
 
