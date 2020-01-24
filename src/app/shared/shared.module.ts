@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PopularwordbookComponent } from './popularwordbook/popularwordbook.component';
+import { VocabularyComponent } from './vocabulary/vocabulary.component';
 import {
   MatIconModule,
   MatButtonModule,
@@ -10,7 +10,7 @@ import {
 
 @NgModule({
   declarations: [
-    PopularwordbookComponent
+    VocabularyComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +18,7 @@ import {
     MatButtonModule,
   ],
   exports: [
-    PopularwordbookComponent,
+    VocabularyComponent,
     MatIconModule,
     MatButtonModule,
   ]
