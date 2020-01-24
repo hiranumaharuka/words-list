@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PopularwordbookComponent } from './popularwordbook.component';
+import { VocabularyComponent } from './vocabulary.component';
 
-describe('PopularwordbookComponent', () => {
-  let component: PopularwordbookComponent;
-  let fixture: ComponentFixture<PopularwordbookComponent>;
+describe('VocabularyComponent', () => {
+  let component: VocabularyComponent;
+  let fixture: ComponentFixture<VocabularyComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PopularwordbookComponent ]
+      declarations: [ VocabularyComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PopularwordbookComponent);
+    fixture = TestBed.createComponent(VocabularyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
