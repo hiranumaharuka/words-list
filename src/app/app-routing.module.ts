@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'addvocabulary',
     loadChildren: () => import('./addvocabulary/addvocabulary.module').then(m => m.AddvocabularyModule),
+  },
+  {
+    path: 'termsofsale',
+    loadChildren: () => import('./termsofsale/termsofsale.module').then(m => m.TermsofsaleModule),
   }
 ];
 
