@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 
-
 const routes: Routes = [
   {
     // /でアクセスするとhomemoduleにアクセスする
@@ -15,38 +14,60 @@ const routes: Routes = [
   },
   {
     path: 'mypage',
-    loadChildren: () => import('./mypage/mypage.module').then(m => m.MypageModule),
+    loadChildren: () =>
+      import('./mypage/mypage.module').then(m => m.MypageModule),
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
   },
   {
     path: 'setting',
-    loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule),
+    loadChildren: () =>
+      import('./setting/setting.module').then(m => m.SettingModule),
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
   },
   {
     path: 'addvocabulary',
-    loadChildren: () => import('./addvocabulary/addvocabulary.module').then(m => m.AddvocabularyModule),
+    loadChildren: () =>
+      import('./addvocabulary/addvocabulary.module').then(
+        m => m.AddvocabularyModule
+      ),
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
   },
   {
     path: 'termsofsale',
-    loadChildren: () => import('./termsofsale/termsofsale.module').then(m => m.TermsofsaleModule),
-
+    loadChildren: () =>
+      import('./termsofsale/termsofsale.module').then(m => m.TermsofsaleModule)
   },
   {
     path: 'termsofuse',
-    loadChildren: () => import('./termsofuse/termsofuse.module').then(m => m.TermsofuseModule),
+    loadChildren: () =>
+      import('./termsofuse/termsofuse.module').then(m => m.TermsofuseModule)
   },
   {
     path: 'contact',
-    loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule),
+    loadChildren: () =>
+      import('./contact/contact.module').then(m => m.ContactModule)
   },
   {
     path: 'welcome',
-    loadChildren: () => import('./welcome/welcome.module').then(m => m.WelcomeModule),
+    loadChildren: () =>
+      import('./welcome/welcome.module').then(m => m.WelcomeModule)
+  },
+  {
+    path: 'myvocabulary',
+    loadChildren: () =>
+      import('./myvocabulary/myvocabulary.module').then(
+        m => m.MyvocabularyModule
+      )
+  },
+  {
+    path: 'favvocabulary',
+    loadChildren: () =>
+      import('./favvocabulary/favvocabulary.module').then(
+        m => m.FavvocabularyModule
+      )
   }
 ];
 
@@ -54,4 +75,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
