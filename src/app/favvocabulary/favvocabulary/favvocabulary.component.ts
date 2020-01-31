@@ -10,6 +10,7 @@ export class FavvocabularyComponent implements OnInit {
   vocabulary: Vocabulary = {
     title: '英単語帳',
     description: '簡単な英単語まとめました',
+    tag: 'TOEIC',
     user: 'ダミーたろう'
   };
   constructor() {}

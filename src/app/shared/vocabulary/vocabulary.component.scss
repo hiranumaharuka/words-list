@@ -5,26 +5,28 @@
   text-align: left;
   padding-left: 16px;
 
-  &__title{
+  &__title {
     font-size: 24px;
     margin-top: 16px;
     margin-bottom: 4px;
   }
-  &__description{
+  &__description {
     color: #777;
     margin-top: 0;
   }
-  &__content{
+  &__tag {
+    color: #777;
+    font-size: 12px;
+  }
+  &__content {
     display: flex;
   }
-  &__user{
+  &__user {
     color: #777;
     font-size: 12px;
   }
 }
-button{
+button {
   padding-right: 16px;
   margin-left: auto;
-
 }
-

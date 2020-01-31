@@ -2,7 +2,14 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /{document=**} {
-      allow read, write: if false;
+      // 見ることは誰でもできる
+      allow read: if true;
+      // 作ることはログインした人しかできない
+      allow create: if request.auth.uid != null
+      // 作成者であり、そのuserを変えようとしていない人がupdateできる
+      allow update: if request.auth.uid == resource.data.user && resource.data.user == request.resource.data.user;
+      // 作った人だけがdeleteできる。resource.dataはこれから作るデータにアクセスできる
+      allow delete: if request.auth.uid == resource.data.user;
     }
   }
 }

@@ -7,11 +7,9 @@ import { Vocabulary } from 'src/app/interfaces/vocabulary';
   styleUrls: ['./vocabulary.component.scss']
 })
 export class VocabularyComponent implements OnInit {
-
+  // 親からvocabularyという型を受け取る
   @Input() vocabulary: Vocabulary;
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

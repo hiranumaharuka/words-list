@@ -7,15 +7,13 @@ import { Vocabulary } from 'src/app/interfaces/vocabulary';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-
   vocabulary: Vocabulary = {
     title: '英単語帳',
     description: '簡単な英単語まとめました',
+    tag: 'TOEIC',
     user: 'ダミーたろう'
   };
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
