@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { GuestGuard } from './guards/guest.guard';
+import { NotfoundComponent } from './notfound/notfound.component';
 
 const routes: Routes = [
   {
@@ -53,7 +55,9 @@ const routes: Routes = [
   {
     path: 'welcome',
     loadChildren: () =>
-      import('./welcome/welcome.module').then(m => m.WelcomeModule)
+      import('./welcome/welcome.module').then(m => m.WelcomeModule),
+    canLoad: [GuestGuard],
+    canActivate: [GuestGuard]
   },
   {
     path: 'myvocabulary',
@@ -68,6 +72,10 @@ const routes: Routes = [
       import('./favvocabulary/favvocabulary.module').then(
         m => m.FavvocabularyModule
       )
+  },
+  {
+    path: '**',
+    component: NotfoundComponent
   }
 ];
 
