@@ -17,10 +17,13 @@ export class VocabularyService {
 
   addVocabulary(vocabulary: Vocabulary) {
     // createIdは元からfirebaseの中で定義されている
-    const id = this.db.createId();
+    const vocabularyId = this.db.createId();
     return this.db
-      .doc(`vocabularies/${id}`)
-      .set(vocabulary)
+      .doc(`vocabularies/${vocabularyId}`)
+      .set({
+        vocabularyId,
+        ...vocabulary
+      })
       .then(() => {
         this.router.navigateByUrl('/myvocabulary');
       });

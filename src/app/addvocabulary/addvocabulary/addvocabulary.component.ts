@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { Vocabulary } from 'src/app/interfaces/vocabulary';
 
 @Component({
   selector: 'app-addvocabulary',
@@ -32,11 +33,12 @@ export class AddvocabularyComponent implements OnInit {
     // 結果表示のため
     // console.log(this.form.value);
     const formData = this.form.value;
-    this.vocabularyService.addVocabulary({
+    const sendData: Vocabulary = {
       title: formData.title,
       description: formData.description,
       tag: formData.tag,
       user: this.authService.uid
-    });
+    };
+    this.vocabularyService.addVocabulary(sendData);
   }
 }
