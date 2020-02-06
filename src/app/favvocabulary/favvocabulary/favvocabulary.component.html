@@ -1,4 +1,6 @@
 <div class="container">
   <h2>お気に入りの単語帳</h2>
-  <app-vocabulary [vocabulary]="vocabulary"></app-vocabulary>
+  <app-vocabulary
+    *ngFor="let vocabulary of vocabulary$ | async"
+  ></app-vocabulary>
 </div>

@@ -1,6 +1,10 @@
 <div class="container">
-<h2>人気の単語帳</h2>
-<app-vocabulary [vocabulary] = "vocabulary"></app-vocabulary>
-<h2>最新の単語帳</h2>
-<app-vocabulary [vocabulary] = "vocabulary"></app-vocabulary>
+  <h2>人気の単語帳</h2>
+  <app-vocabulary
+    *ngFor="let vocabulary of vocabulary$ | async"
+  ></app-vocabulary>
+  <h2>最新の単語帳</h2>
+  <app-vocabulary
+    *ngFor="let vocabulary of vocabulary$ | async"
+  ></app-vocabulary>
 </div>

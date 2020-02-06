@@ -1,16 +1,14 @@
 <div class="container">
   <h2>My単語帳</h2>
   <app-vocabulary
-    *ngIf="vocabulary$ | async as vocabulary"
-    [vocabulary]="vocabulary"
+    *ngFor="let result of results$ | async as result"
   ></app-vocabulary>
   <button routerLink="/myvocabulary" mat-raised-button color="primary">
     もっと見る
   </button>
   <h2>お気に入りの単語帳</h2>
   <app-vocabulary
-    *ngIf="vocabulary$ | async as vocabulary"
-    [vocabulary]="vocabulary"
+    *ngFor="let vocabulary of vocabularies$ | async"
   ></app-vocabulary>
   <button routerLink="/favvocabulary" mat-raised-button color="primary">
     もっと見る
