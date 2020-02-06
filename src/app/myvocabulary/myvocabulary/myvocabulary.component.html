@@ -2,5 +2,6 @@
   <h2>My単語帳</h2>
   <app-vocabulary
     *ngFor="let vocabulary of vocabulary$ | async"
+    [vocabulary]="vocabulary"
   ></app-vocabulary>
 </div>

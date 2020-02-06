@@ -1,3 +1,5 @@
+import { VocabularyWithAuthor } from './../../interfaces/vocabulary';
+import { tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { Vocabulary } from 'src/app/interfaces/vocabulary';
 import { Observable } from 'rxjs';
@@ -10,9 +12,9 @@ import { VocabularyService } from 'src/app/services/vocabulary.service';
 })
 export class MyvocabularyComponent implements OnInit {
   vocabulary$: Observable<
-    Vocabulary[]
+    VocabularyWithAuthor[]
   > = this.vocabularyService.getVocabularies();
-  constructor(private vocabularyService: VocabularyService) {}
+  constructor(private vocabularyService: VocabularyService) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

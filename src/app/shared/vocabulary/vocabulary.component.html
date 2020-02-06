@@ -1,12 +1,9 @@
 <div class="vocabulary">
-  <p
-    class="vocabulary__title"
-    *ngFor="let vocabulary of vocabularies$ | async as vocabulary"
-  >
+  <p class="vocabulary__title">
     {{ vocabulary.title }}
   </p>
-  <p class="vocabulary__description" *ngFor="let result of results$ | async">
-    {{ result.description }}
+  <p class="vocabulary__description">
+    {{ vocabulary.description }}
   </p>
   <!-- <p class="vocabulary__tag" *ngIf ="results$ | async as result">{{ (result | async)?.tag }}</p> -->
 

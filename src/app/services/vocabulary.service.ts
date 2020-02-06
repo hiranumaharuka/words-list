@@ -17,7 +17,7 @@ export class VocabularyService {
     // データベースにアクセスする
     private db: AngularFirestore,
     private router: Router
-  ) {}
+  ) { }
 
   addVocabulary(vocabulary: Vocabulary, uid: string): Promise<void> {
     // createIdは元からfirebaseの中で定義されている
@@ -34,10 +34,14 @@ export class VocabularyService {
       });
   }
 
-  getVocabularies(): Observable<VocabularyWithAuthor[]> {
+  getVocabularies(authorId?: string): Observable<VocabularyWithAuthor[]> {
     let vocabularies: Vocabulary[];
-    return this.db
-      .collection<Vocabulary>(`vocabularies`)
+    let ref = this.db.collection<Vocabulary>(`vocabularies`);
+    if (authorId) {
+      ref = this.db.collection<Vocabulary>(`vocabularies`, ref => ref.where('authorId', '==', authorId));
+    }
+
+    return ref
       .valueChanges()
       .pipe(
         switchMap((docs: Vocabulary[]) => {
