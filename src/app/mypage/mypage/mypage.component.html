@@ -1,7 +1,8 @@
 <div class="container">
   <h2>My単語帳</h2>
   <app-vocabulary
-    *ngFor="let result of results$ | async as result"
+    *ngFor="let vocabulary of vocabularies$ | async"
+    [vocabulary]="vocabulary"
   ></app-vocabulary>
   <button routerLink="/myvocabulary" mat-raised-button color="primary">
     もっと見る
@@ -9,6 +10,7 @@
   <h2>お気に入りの単語帳</h2>
   <app-vocabulary
     *ngFor="let vocabulary of vocabularies$ | async"
+    [vocabulary]="vocabulary"
   ></app-vocabulary>
   <button routerLink="/favvocabulary" mat-raised-button color="primary">
     もっと見る

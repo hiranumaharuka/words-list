@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Vocabulary } from 'src/app/interfaces/vocabulary';
+import { VocabularyWithAuthor } from 'src/app/interfaces/vocabulary';
 import { Observable } from 'rxjs';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
 
@@ -9,8 +9,8 @@ import { VocabularyService } from 'src/app/services/vocabulary.service';
   styleUrls: ['./myvocabulary.component.scss']
 })
 export class MyvocabularyComponent implements OnInit {
-  vocabulary$: Observable<
-    Vocabulary[]
+  vocabularies$: Observable<
+    VocabularyWithAuthor[]
   > = this.vocabularyService.getVocabularies();
   constructor(private vocabularyService: VocabularyService) {}
 

@@ -1,10 +1,12 @@
 <div class="container">
   <h2>人気の単語帳</h2>
   <app-vocabulary
-    *ngFor="let vocabulary of vocabulary$ | async"
+    *ngFor="let vocabulary of vocabularies$ | async"
+    [vocabulary]="vocabulary"
   ></app-vocabulary>
   <h2>最新の単語帳</h2>
   <app-vocabulary
-    *ngFor="let vocabulary of vocabulary$ | async"
+    *ngFor="let vocabulary of vocabularies$ | async"
+    [vocabulary]="vocabulary"
   ></app-vocabulary>
 </div>
