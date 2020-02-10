@@ -12,5 +12,7 @@ export class VocabularyComponent implements OnInit {
   @Input() vocabulary: VocabularyWithAuthor;
   constructor(private vocabularyService: VocabularyService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.vocabulary);
+  }
 }

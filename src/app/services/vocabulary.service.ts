@@ -42,9 +42,9 @@ export class VocabularyService {
 
   getVocabularies(authorId?: string): Observable<VocabularyWithAuthor[]> {
     let vocabularies: Vocabulary[];
-    let ref = this.db.collection<Vocabulary>(`vocabularies`);
+    let vocabulariesRef = this.db.collection<Vocabulary>(`vocabularies`);
     if (authorId) {
-      ref = this.db.collection<Vocabulary>(`vocabularies`, ref =>
+      vocabulariesRef = this.db.collection<Vocabulary>(`vocabularies`, ref =>
         ref
           .where('authorId', '==', authorId)
           .orderBy('createdAt', 'desc')
@@ -96,11 +96,14 @@ export class VocabularyService {
         })
       );
   }
+
+  // TODO: authorID使って絞り込み＆インデックス作成
+  // TODO: VocabularyWithAuthor で返してあげる
   getMyVocabularies(
     authorId: string,
     startAfter?: QueryDocumentSnapshot<Vocabulary>
   ): Observable<{
-    docs: any[];
+    docs: VocabularyWithAuthor[];
     lastDoc: QueryDocumentSnapshot<Vocabulary>;
   }> {
     return this.db

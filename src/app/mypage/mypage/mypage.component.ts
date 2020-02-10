@@ -7,6 +7,7 @@ import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { Observable } from 'rxjs';
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/services/auth.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-mypage',
@@ -14,9 +15,13 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./mypage.component.scss']
 })
 export class MypageComponent implements OnInit {
-  vocabularies$ = this.vocabularyService.getMyVocabularies(
-    this.authService.uid
-  );
+  vocabularies$: Observable<{
+    docs: Vocabulary[];
+    lastDoc: QueryDocumentSnapshot<Vocabulary>;
+  }> = this.vocabularyService
+    .getMyVocabularies(this.authService.uid)
+    .pipe(tap(data => console.log(data)));
+
   moreItems$: Observable<{
     docs: Vocabulary[];
     lastDoc: QueryDocumentSnapshot<Vocabulary>;
