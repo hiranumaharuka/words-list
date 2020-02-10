@@ -4,6 +4,7 @@ export interface Vocabulary {
   tag: string;
   authorId: string;
   vocabularyId: string;
+  createdAt: Date;
 }
 
 export interface User {
