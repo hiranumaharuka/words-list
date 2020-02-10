@@ -1,8 +1,14 @@
 <div class="vocabulary">
-  <p class="vocabulary__title">{{ vocabulary.title }}</p>
-  <p class="vocabulary__description">{{ vocabulary.description }}</p>
+  <p class="vocabulary__title">
+    {{ vocabulary.title }}
+  </p>
+  <p class="vocabulary__description">
+    {{ vocabulary.description }}
+  </p>
   <p class="vocabulary__tag">{{ vocabulary.tag }}</p>
+
   <div class="vocabulary__content">
+    <p class="vocabulary__username">{{ vocabulary.author.userName }}</p>
     <button
       mat-icon-button
       disabled

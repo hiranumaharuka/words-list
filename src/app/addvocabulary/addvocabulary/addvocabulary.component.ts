@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { Vocabulary } from 'src/app/interfaces/vocabulary';
+import { Vocabulary, User } from 'src/app/interfaces/vocabulary';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-addvocabulary',
@@ -25,20 +26,20 @@ export class AddvocabularyComponent implements OnInit {
     // formを作るための機能
     private fb: FormBuilder,
     private vocabularyService: VocabularyService,
-    private authService: AuthService
+    private authService: AuthService,
+    private db: AngularFirestore
   ) {}
 
   ngOnInit() {}
   submit() {
-    // 結果表示のため
-    // console.log(this.form.value);
     const formData = this.form.value;
     const sendData: Vocabulary = {
       title: formData.title,
       description: formData.description,
       tag: formData.tag,
-      user: this.authService.uid
+      authorId: this.authService.uid,
+      vocabularyId: this.db.createId()
     };
-    this.vocabularyService.addVocabulary(sendData);
+    this.vocabularyService.addVocabulary(sendData, this.authService.uid);
   }
 }

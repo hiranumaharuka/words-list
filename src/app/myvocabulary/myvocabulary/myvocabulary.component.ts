@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Vocabulary } from 'src/app/interfaces/vocabulary';
+import { VocabularyWithAuthor } from 'src/app/interfaces/vocabulary';
+import { Observable } from 'rxjs';
+import { VocabularyService } from 'src/app/services/vocabulary.service';
 
 @Component({
   selector: 'app-myvocabulary',
@@ -7,13 +9,10 @@ import { Vocabulary } from 'src/app/interfaces/vocabulary';
   styleUrls: ['./myvocabulary.component.scss']
 })
 export class MyvocabularyComponent implements OnInit {
-  vocabulary: Vocabulary = {
-    title: '英単語帳',
-    description: '簡単な英単語まとめました',
-    tag: 'TOEIC',
-    user: 'ダミーたろう'
-  };
-  constructor() {}
+  vocabularies$: Observable<
+    VocabularyWithAuthor[]
+  > = this.vocabularyService.getVocabularies();
+  constructor(private vocabularyService: VocabularyService) {}
 
   ngOnInit() {}
 }

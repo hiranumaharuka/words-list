@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Vocabulary } from 'src/app/interfaces/vocabulary';
+import { VocabularyWithAuthor } from 'src/app/interfaces/vocabulary';
+import { VocabularyService } from 'src/app/services/vocabulary.service';
 
 @Component({
   selector: 'app-vocabulary',
@@ -8,8 +9,8 @@ import { Vocabulary } from 'src/app/interfaces/vocabulary';
 })
 export class VocabularyComponent implements OnInit {
   // 親からvocabularyという型を受け取る
-  @Input() vocabulary: Vocabulary;
-  constructor() {}
+  @Input() vocabulary: VocabularyWithAuthor;
+  constructor(private vocabularyService: VocabularyService) {}
 
   ngOnInit() {}
 }
