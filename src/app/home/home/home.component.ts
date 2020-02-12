@@ -14,5 +14,7 @@ export class HomeComponent implements OnInit {
   > = this.vocabularyService.getVocabularies();
   constructor(private vocabularyService: VocabularyService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.vocabularies$);
+  }
 }
