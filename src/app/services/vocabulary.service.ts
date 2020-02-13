@@ -40,135 +40,30 @@ export class VocabularyService {
       });
   }
 
-  getVocabularies(authorId?: string): Observable<VocabularyWithAuthor[]> {
+  getVocabularies(
+    authorId?: string,
+    sorted: AngularFirestoreCollection<Vocabulary>
+  ): Observable<VocabularyWithAuthor[]> {
     let vocabularies: Vocabulary[];
     let vocabularyRef = this.db.collection<Vocabulary>(`vocabularies`);
-    if (authorId) {
-      vocabularyRef = this.db.collection<Vocabulary>(`vocabularies`, ref =>
-        ref
-          .where('authorId', '==', authorId)
-          .orderBy('createdAt', 'desc')
-          .limit(3)
-      );
-    }
-    return this.db
-      .collection<Vocabulary>(`vocabularies`, ref =>
-        ref.orderBy('createdAt', 'desc').limit(3)
-      )
-      .valueChanges()
-      .pipe(
-        switchMap((docs: Vocabulary[]) => {
-          // 単語帳一覧を一時保管しておく
-          vocabularies = docs;
-          if (vocabularies.length) {
-            // ユニークな投稿者IDリストを作成
-            const authorIds: string[] = vocabularies
-              .filter((vocabulary, index, self) => {
-                return (
-                  self.findIndex(
-                    item => vocabulary.authorId === item.authorId
-                  ) === index
-                );
-              })
-              .map(vocabulary => vocabulary.authorId);
-
-            // 投稿者たちのドキュメントを取得
-            return combineLatest(
-              authorIds.map(uid => {
-                return this.db.doc<User>(`users/${uid}`).valueChanges();
-              })
-            );
-          } else {
-            return of([]);
-          }
-        }),
-        map((users: User[]) => {
-          // 一時保管した記事一覧とユーザーを結合する
-          return vocabularies.map(vocabulary => {
-            const result: VocabularyWithAuthor = {
-              ...vocabulary,
-              author: users.find(
-                user => user && user.id === vocabulary.authorId
-              )
-            };
-            return result;
-          });
-        })
-      );
   }
   getMyVocabularies(
     authorId: string,
     startAfter?: QueryDocumentSnapshot<VocabularyWithAuthor>
-  ): Observable<{
-    docs: VocabularyWithAuthor[];
-    lastDoc: QueryDocumentSnapshot<VocabularyWithAuthor>;
-  }> {
-    let vocabularies: Vocabulary[];
-    return (
-      this.db
-        .collection<VocabularyWithAuthor>(`vocabularies`, ref => {
-          // 作成日順に3件取得
-          let query = ref
-            .where('authorId', '==', authorId)
-            .orderBy('createdAt', 'desc')
-            .limit(3);
-          // もし開始位置があればそれ以降を取得
-          if (startAfter) {
-            query = query.startAfter(startAfter);
-          }
-          // 開始位置がなければそのままかえす
-          return query;
-        })
-
-        // snapshotchangesの型をVocabularyWithAuthorにしたい
-        .snapshotChanges().pipe(
-          map(snaps => snaps.map(snap => snap.payload.doc))
-        ,
-          map(actions => {
-            return {
-              docs: actions.map(
-                doc => doc.payload.doc.data() as VocabularyWithAuthor
-              ),
-              // actionsがunkownだから
-              lastDoc: actions[actions.length - 1].payload.doc
-            };
-          }),
-          switchMap(
-            (docs: Vocabulary[]) => {
-              vocabularies = docs;
-              if (vocabularies.length) {
-                const authorIds: string[] = vocabularies
-                  .filter((vocabulary, index, self) => {
-                    return (
-                      self.findIndex(
-                        item => vocabulary.authorId === item.authorId
-                      ) === index
-                    );
-                  })
-                  .map(vocabulary => vocabulary.authorId);
-                return combineLatest(
-                  authorIds.map(uid => {
-                    return this.db.doc<User>(`users/${uid}`).valueChanges();
-                  })
-                );
-              } else {
-                return of([]);
-              }
-            },
-            map((users: User[]) => {
-              return vocabularies.map(vocabulary => {
-                const result: VocabularyWithAuthor = {
-                  ...vocabulary,
-                  author: users.find(
-                    user => user && user.id === vocabulary.authorId
-                  )
-                };
-                return result;
-              });
-            }))
-          )
-        );
-    )
+  ) {
+    const sorted = this.db.collection<Vocabulary>(`vocabularies`, ref => {
+      // 作成日順に3件取得
+      let query = ref
+        .where('authorId', '==', authorId)
+        .orderBy('createdAt', 'desc')
+        .limit(3);
+      // もし開始位置があればそれ以降を取得
+      if (startAfter) {
+        query = query.startAfter(startAfter);
+      }
+      // 開始位置がなければそのままかえす
+      return query;
+    });
   }
   // getVocabulariesCombineObservables(): Observable<VocabularyWithAuthor[]> {
   //   const vocabulariesCollection = this.db.collection<Vocabulary>(
@@ -206,4 +101,49 @@ export class VocabularyService {
   //       })
   //     );
   // }
+  // map(snaps => snaps.map(snap => snap.payload.doc))
+  // ,
+  //   map(actions => {
+  //     return {
+  //       docs: actions.map(
+  //         doc => doc.payload.doc.data() as VocabularyWithAuthor
+  //       ),
+  //       // actionsがunkownだから
+  //       lastDoc: actions[actions.length - 1].payload.doc
+  //     };
+  //   }),
+  //   switchMap(
+  //     (docs: Vocabulary[]) => {
+  //       vocabularies = docs;
+  //       if (vocabularies.length) {
+  //         const authorIds: string[] = vocabularies
+  //           .filter((vocabulary, index, self) => {
+  //             return (
+  //               self.findIndex(
+  //                 item => vocabulary.authorId === item.authorId
+  //               ) === index
+  //             );
+  //           })
+  //           .map(vocabulary => vocabulary.authorId);
+  //         return combineLatest(
+  //           authorIds.map(uid => {
+  //             return this.db.doc<User>(`users/${uid}`).valueChanges();
+  //           })
+  //         );
+  //       } else {
+  //         return of([]);
+  //       }
+  //     },
+  //     map((users: User[]) => {
+  //       return vocabularies.map(vocabulary => {
+  //         const result: VocabularyWithAuthor = {
+  //           ...vocabulary,
+  //           author: users.find(
+  //             user => user && user.id === vocabulary.authorId
+  //           )
+  //         };
+  //         return result;
+  //       });
+  //     }))
+  //   )
 }
