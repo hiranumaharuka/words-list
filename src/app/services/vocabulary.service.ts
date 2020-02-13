@@ -104,65 +104,71 @@ export class VocabularyService {
     lastDoc: QueryDocumentSnapshot<VocabularyWithAuthor>;
   }> {
     let vocabularies: Vocabulary[];
-    return this.db
-      .collection<Vocabulary>(`vocabularies`, ref => {
-        // 作成日順に3件取得
-        let query = ref.orderBy('createdAt', 'desc').limit(3);
-        // もし開始位置があればそれ以降を取得
-        if (startAfter) {
-          query = query.startAfter(startAfter);
-        }
-        // 開始位置がなければそのままかえす
-        return query;
-      })
-      .valueChanges()
-      .pipe(
-        switchMap((docs: Vocabulary[]) => {
-          vocabularies = docs;
-          if (vocabularies.length) {
-            const authorIds: string[] = vocabularies
-              .filter((vocabulary, index, self) => {
-                return (
-                  self.findIndex(
-                    item => vocabulary.authorId === item.authorId
-                  ) === index
-                );
-              })
-              .map(vocabulary => vocabulary.authorId);
-            return combineLatest(
-              authorIds.map(uid => {
-                return this.db.doc<User>(`users/${uid}`).valueChanges();
-              })
-            );
-          } else {
-            return of([]);
+    return (
+      this.db
+        .collection<VocabularyWithAuthor>(`vocabularies`, ref => {
+          // 作成日順に3件取得
+          let query = ref
+            .where('authorId', '==', authorId)
+            .orderBy('createdAt', 'desc')
+            .limit(3);
+          // もし開始位置があればそれ以降を取得
+          if (startAfter) {
+            query = query.startAfter(startAfter);
           }
-        }),
-        map((users: User[]) => {
-          return vocabularies.map(vocabulary => {
-            const result: VocabularyWithAuthor = {
-              ...vocabulary,
-              author: users.find(
-                user => user && user.id === vocabulary.authorId
-              )
-            };
-            return result;
-          });
+          // 開始位置がなければそのままかえす
+          return query;
         })
-          // snapshotchangesの型をVocabularyWithAuthorにしたい
-          .snapshotChanges()
-          .pipe(
-            map(actions => {
-              return {
-                docs: actions.map(
-                  doc => doc.payload.doc.data() as VocabularyWithAuthor
-                ),
-                // actionsがunkownだから
-                lastDoc: actions[actions.length - 1].payload.doc
-              };
-            })
+
+        // snapshotchangesの型をVocabularyWithAuthorにしたい
+        .snapshotChanges().pipe(
+          map(snaps => snaps.map(snap => snap.payload.doc))
+        ,
+          map(actions => {
+            return {
+              docs: actions.map(
+                doc => doc.payload.doc.data() as VocabularyWithAuthor
+              ),
+              // actionsがunkownだから
+              lastDoc: actions[actions.length - 1].payload.doc
+            };
+          }),
+          switchMap(
+            (docs: Vocabulary[]) => {
+              vocabularies = docs;
+              if (vocabularies.length) {
+                const authorIds: string[] = vocabularies
+                  .filter((vocabulary, index, self) => {
+                    return (
+                      self.findIndex(
+                        item => vocabulary.authorId === item.authorId
+                      ) === index
+                    );
+                  })
+                  .map(vocabulary => vocabulary.authorId);
+                return combineLatest(
+                  authorIds.map(uid => {
+                    return this.db.doc<User>(`users/${uid}`).valueChanges();
+                  })
+                );
+              } else {
+                return of([]);
+              }
+            },
+            map((users: User[]) => {
+              return vocabularies.map(vocabulary => {
+                const result: VocabularyWithAuthor = {
+                  ...vocabulary,
+                  author: users.find(
+                    user => user && user.id === vocabulary.authorId
+                  )
+                };
+                return result;
+              });
+            }))
           )
-      );
+        );
+    )
   }
   // getVocabulariesCombineObservables(): Observable<VocabularyWithAuthor[]> {
   //   const vocabulariesCollection = this.db.collection<Vocabulary>(
@@ -174,5 +180,30 @@ export class VocabularyService {
   //       const vocabularyData = a.payload.doc.data() as Vocabulary;
   //     });
   //   });
+  // }
+  // getMyVocabularies(
+  //   authorId: string,
+  //   startAfter?: QueryDocumentSnapshot<Vocabulary>
+  // ): Observable<{
+  //   docs: any[];
+  //   lastDoc: QueryDocumentSnapshot<Vocabulary>;
+  // }> {
+  //   return this.db
+  //     .collection<Vocabulary>(`vocabularies`, ref => {
+  //       let query = ref.orderBy('createdAt').limit(3);
+  //       if (startAfter) {
+  //         query = query.startAfter(startAfter);
+  //       }
+  //       return query;
+  //     })
+  //     .snapshotChanges()
+  //     .pipe(
+  //       map(actions => {
+  //         return {
+  //           docs: actions.map(doc => doc.payload.doc.data()),
+  //           lastDoc: actions[actions.length - 1].payload.doc
+  //         };
+  //       })
+  //     );
   // }
 }
