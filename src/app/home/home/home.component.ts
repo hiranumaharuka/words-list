@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class HomeComponent implements OnInit {
   vocabularies$: Observable<
     VocabularyWithAuthor[]
-  > = this.vocabularyService.getVocabularies();
+  > = this.vocabularyService.getLatestVocabularies();
   constructor(private vocabularyService: VocabularyService) {}
 
   ngOnInit() {}

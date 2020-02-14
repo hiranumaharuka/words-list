@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { VocabularyWithAuthor } from 'src/app/interfaces/vocabulary';
-import { Observable } from 'rxjs';
+
 import { VocabularyService } from 'src/app/services/vocabulary.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { firestore } from 'firebase';
 
 @Component({
   selector: 'app-myvocabulary',
@@ -9,10 +11,22 @@ import { VocabularyService } from 'src/app/services/vocabulary.service';
   styleUrls: ['./myvocabulary.component.scss']
 })
 export class MyvocabularyComponent implements OnInit {
-  vocabularies$: Observable<
-    VocabularyWithAuthor[]
-  > = this.vocabularyService.getVocabularies();
-  constructor(private vocabularyService: VocabularyService) {}
-
-  ngOnInit() {}
+  startAfter: firestore.QueryDocumentSnapshot<firestore.DocumentData>;
+  vocabularies: VocabularyWithAuthor[] = [];
+  constructor(
+    private vocabularyService: VocabularyService,
+    private authService: AuthService
+  ) {}
+  // ページ開いたら実行される
+  ngOnInit() {
+    this.getMore();
+  }
+  getMore() {
+    this.vocabularyService
+      .getMyVocabularies(this.authService.uid, this.startAfter)
+      .subscribe(({ vocabulariesData, lastDoc }) => {
+        this.startAfter = lastDoc;
+        vocabulariesData.map(doc => this.vocabularies.push(doc));
+      });
+  }
 }

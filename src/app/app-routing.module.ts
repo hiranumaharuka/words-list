@@ -15,13 +15,6 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'mypage',
-    loadChildren: () =>
-      import('./mypage/mypage.module').then(m => m.MypageModule),
-    canLoad: [AuthGuard],
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'setting',
     loadChildren: () =>
       import('./setting/setting.module').then(m => m.SettingModule),
@@ -64,14 +57,18 @@ const routes: Routes = [
     loadChildren: () =>
       import('./myvocabulary/myvocabulary.module').then(
         m => m.MyvocabularyModule
-      )
+      ),
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard]
   },
   {
     path: 'favvocabulary',
     loadChildren: () =>
       import('./favvocabulary/favvocabulary.module').then(
         m => m.FavvocabularyModule
-      )
+      ),
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard]
   },
   {
     path: '**',
