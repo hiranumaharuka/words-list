@@ -95,7 +95,7 @@ export class VocabularyService {
     );
   }
   getMyVocabularies(
-    authorId: string,
+    authorId?: string,
     startAfter?: firestore.QueryDocumentSnapshot<firestore.DocumentData>
   ) {
     const sorted = this.db.collection<Vocabulary>(`vocabularies`, ref => {

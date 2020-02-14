@@ -27,7 +27,6 @@ export class MyvocabularyComponent implements OnInit {
       .subscribe(({ vocabulariesData, lastDoc }) => {
         this.startAfter = lastDoc;
         vocabulariesData.map(doc => this.vocabularies.push(doc));
-        console.log(this.vocabularies);
       });
   }
 }
