@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
-  QueryDocumentSnapshot
+  QueryDocumentSnapshot,
+  AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import {
   Vocabulary,
@@ -11,6 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { map, switchMap } from 'rxjs/operators';
 import { Observable, combineLatest, of } from 'rxjs';
+import { firestore } from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -36,20 +38,65 @@ export class VocabularyService {
         authorId: uid
       })
       .then(() => {
-        this.router.navigateByUrl('/mypage');
+        this.router.navigateByUrl('/myvocabulary');
       });
   }
 
   getVocabularies(
-    authorId?: string,
     sorted: AngularFirestoreCollection<Vocabulary>
-  ): Observable<VocabularyWithAuthor[]> {
+  ): Observable<{
+    lastDoc: firestore.QueryDocumentSnapshot<firestore.DocumentData>;
+    vocabulariesData: VocabularyWithAuthor[];
+  }> {
     let vocabularies: Vocabulary[];
-    let vocabularyRef = this.db.collection<Vocabulary>(`vocabularies`);
+    let lastDoc: firestore.QueryDocumentSnapshot<firestore.DocumentData>;
+    return sorted.snapshotChanges().pipe(
+      map(snaps => snaps.map(snap => snap.payload.doc)),
+      switchMap(docs => {
+        lastDoc = docs[docs.length - 1];
+        // 最後にvocabuleryのデータを取ってくるため
+        vocabularies = docs.map(doc => doc.data() as Vocabulary);
+        if (vocabularies.length) {
+          // 重複なしのauthorIdをとってくる
+          const authorIds: string[] = vocabularies
+            // 新verのvocabulariesをとってくる
+            .filter((vocabulary, index, self) => {
+              return (
+                // 1ユーザー1vocabularyのvocabulariesを作る
+                self.findIndex(
+                  item => vocabulary.authorId === item.authorId
+                ) === index
+              );
+            })
+            // vocabularyをidだけにする
+            .map(vocabulary => vocabulary.authorId);
+          return combineLatest(
+            authorIds.map(authorId => {
+              return this.db.doc<User>(`users/${authorId}`).valueChanges();
+            })
+          );
+        } else {
+          return of([]);
+        }
+      }),
+      map((users: User[]) => {
+        const vocabulariesData = vocabularies.map(vocabulary => {
+          const result: VocabularyWithAuthor = {
+            ...vocabulary,
+            author: users.find(user => user && user.id === vocabulary.authorId)
+          };
+          return result;
+        });
+        return {
+          vocabulariesData,
+          lastDoc
+        };
+      })
+    );
   }
   getMyVocabularies(
     authorId: string,
-    startAfter?: QueryDocumentSnapshot<VocabularyWithAuthor>
+    startAfter?: firestore.QueryDocumentSnapshot<firestore.DocumentData>
   ) {
     const sorted = this.db.collection<Vocabulary>(`vocabularies`, ref => {
       // 作成日順に3件取得
@@ -64,86 +111,20 @@ export class VocabularyService {
       // 開始位置がなければそのままかえす
       return query;
     });
+    return this.getVocabularies(sorted);
   }
-  // getVocabulariesCombineObservables(): Observable<VocabularyWithAuthor[]> {
-  //   const vocabulariesCollection = this.db.collection<Vocabulary>(
-  //     'projects',
-  //     ref => ref.orderBy('createdAt', 'desc')
-  //   );
-  //   return vocabulariesCollection.snapshotChanges().map(actions => {
-  //     return actions.map(a => {
-  //       const vocabularyData = a.payload.doc.data() as Vocabulary;
-  //     });
-  //   });
-  // }
-  // getMyVocabularies(
-  //   authorId: string,
-  //   startAfter?: QueryDocumentSnapshot<Vocabulary>
-  // ): Observable<{
-  //   docs: any[];
-  //   lastDoc: QueryDocumentSnapshot<Vocabulary>;
-  // }> {
-  //   return this.db
-  //     .collection<Vocabulary>(`vocabularies`, ref => {
-  //       let query = ref.orderBy('createdAt').limit(3);
-  //       if (startAfter) {
-  //         query = query.startAfter(startAfter);
-  //       }
-  //       return query;
-  //     })
-  //     .snapshotChanges()
-  //     .pipe(
-  //       map(actions => {
-  //         return {
-  //           docs: actions.map(doc => doc.payload.doc.data()),
-  //           lastDoc: actions[actions.length - 1].payload.doc
-  //         };
-  //       })
-  //     );
-  // }
-  // map(snaps => snaps.map(snap => snap.payload.doc))
-  // ,
-  //   map(actions => {
-  //     return {
-  //       docs: actions.map(
-  //         doc => doc.payload.doc.data() as VocabularyWithAuthor
-  //       ),
-  //       // actionsがunkownだから
-  //       lastDoc: actions[actions.length - 1].payload.doc
-  //     };
-  //   }),
-  //   switchMap(
-  //     (docs: Vocabulary[]) => {
-  //       vocabularies = docs;
-  //       if (vocabularies.length) {
-  //         const authorIds: string[] = vocabularies
-  //           .filter((vocabulary, index, self) => {
-  //             return (
-  //               self.findIndex(
-  //                 item => vocabulary.authorId === item.authorId
-  //               ) === index
-  //             );
-  //           })
-  //           .map(vocabulary => vocabulary.authorId);
-  //         return combineLatest(
-  //           authorIds.map(uid => {
-  //             return this.db.doc<User>(`users/${uid}`).valueChanges();
-  //           })
-  //         );
-  //       } else {
-  //         return of([]);
-  //       }
-  //     },
-  //     map((users: User[]) => {
-  //       return vocabularies.map(vocabulary => {
-  //         const result: VocabularyWithAuthor = {
-  //           ...vocabulary,
-  //           author: users.find(
-  //             user => user && user.id === vocabulary.authorId
-  //           )
-  //         };
-  //         return result;
-  //       });
-  //     }))
-  //   )
+
+  getLatestVocabularies(): Observable<VocabularyWithAuthor[]> {
+    const sorted = this.db.collection<VocabularyWithAuthor>(
+      `vocabularies`,
+      ref => {
+        return ref.orderBy('createdAt', 'desc').limit(5);
+      }
+    );
+    return this.getVocabularies(sorted).pipe(
+      map(result => {
+        return result.vocabulariesData;
+      })
+    );
+  }
 }

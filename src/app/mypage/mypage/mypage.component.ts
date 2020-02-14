@@ -1,13 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  VocabularyWithAuthor,
-  Vocabulary
-} from 'src/app/interfaces/vocabulary';
+import { VocabularyWithAuthor } from 'src/app/interfaces/vocabulary';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
-import { Observable } from 'rxjs';
-import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/services/auth.service';
-import { tap } from 'rxjs/operators';
+import { firestore } from 'firebase';
 
 @Component({
   selector: 'app-mypage',
@@ -15,29 +10,22 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./mypage.component.scss']
 })
 export class MypageComponent implements OnInit {
-  vocabularies$ = this.vocabularyService
-    .getMyVocabularies(this.authService.uid)
-    .pipe(
-      tap(vocabularies => {
-        console.log(vocabularies);
-      })
-    );
-  moreItems$: Observable<{
-    docs: Vocabulary[];
-    lastDoc: QueryDocumentSnapshot<Vocabulary>;
-  }>;
+  startAfter: firestore.QueryDocumentSnapshot<firestore.DocumentData>;
+  vocabularies: VocabularyWithAuthor[] = [];
   constructor(
     private vocabularyService: VocabularyService,
     private authService: AuthService
   ) {}
-
+  // ページ開いたら実行される
   ngOnInit() {
-    console.log(this.vocabularies$);
+    this.getMore();
   }
-  getMore(stratAfter: QueryDocumentSnapshot<Vocabulary>) {
-    this.moreItems$ = this.vocabularyService.getMyVocabularies(
-      this.authService.uid,
-      stratAfter
-    );
+  getMore() {
+    this.vocabularyService
+      .getMyVocabularies(this.authService.uid, this.startAfter)
+      .subscribe(({ vocabulariesData, lastDoc }) => {
+        this.startAfter = lastDoc;
+        vocabulariesData.map(doc => this.vocabularies.push(doc));
+      });
   }
 }

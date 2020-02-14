@@ -1,27 +1,19 @@
-<div *ngIf="vocabularies$ | async as result">
-  <div class="container">
-    <h2>My単語帳</h2>
-    <app-vocabulary
-      *ngFor="let vocabulary of result.docs"
-      [vocabulary]="vocabulary"
-    ></app-vocabulary>
-    <button
-      *ngIf="!(moreItems$ | async)"
-      (click)="getMore(result.lastDoc)"
-      routerLink="/myvocabulary"
-      mat-raised-button
-      color="primary"
-    >
-      もっと見る
-    </button>
+<div class="container">
+  <h2>My単語帳</h2>
+  <app-vocabulary
+    *ngFor="let vocabulary of vocabularies"
+    [vocabulary]="vocabulary"
+  ></app-vocabulary>
+  <button (click)="getMore(vocabularies)" mat-raised-button color="primary">
+    もっと見る
+  </button>
 
-    <h2>お気に入りの単語帳</h2>
-    <app-vocabulary
-      *ngFor="let vocabulary of result.docs"
-      [vocabulary]="vocabulary"
-    ></app-vocabulary>
-    <button routerLink="/favvocabulary" mat-raised-button color="primary">
-      もっと見る
-    </button>
-  </div>
+  <h2>お気に入りの単語帳</h2>
+  <app-vocabulary
+    *ngFor="let vocabulary of vocabularies"
+    [vocabulary]="vocabulary"
+  ></app-vocabulary>
+  <button routerLink="/favvocabulary" mat-raised-button color="primary">
+    もっと見る
+  </button>
 </div>

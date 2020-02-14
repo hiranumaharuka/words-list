@@ -1,7 +1,10 @@
-<div class="container" *ngIf="moreItems$ | async as result">
+<div class="container">
   <h2>My単語帳</h2>
   <app-vocabulary
-    *ngFor="let vocabulary of result.docs"
+    *ngFor="let vocabulary of vocabularies"
     [vocabulary]="vocabulary"
   ></app-vocabulary>
+  <button (click)="getMore(vocabularies)" mat-raised-button color="primary">
+    もっと見る
+  </button>
 </div>
