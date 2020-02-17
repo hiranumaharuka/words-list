@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
-  QueryDocumentSnapshot,
   AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import {
@@ -13,6 +12,7 @@ import { Router } from '@angular/router';
 import { map, switchMap } from 'rxjs/operators';
 import { Observable, combineLatest, of } from 'rxjs';
 import { firestore } from 'firebase';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,8 @@ export class VocabularyService {
   constructor(
     // データベースにアクセスする
     private db: AngularFirestore,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   addVocabulary(
@@ -38,6 +39,7 @@ export class VocabularyService {
         authorId: uid
       })
       .then(() => {
+        this.snackBar.open('単語帳を作成しました', null, { duration: 1500 });
         this.router.navigateByUrl('/myvocabulary');
       });
   }
