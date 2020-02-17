@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { auth, User } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,11 @@ export class AuthService {
   afUser$: Observable<User> = this.afAuth.user;
   uid: string;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) {
+  constructor(
+    private afAuth: AngularFireAuth,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {
     // afUser$を表示する
     this.afUser$.subscribe(user => {
       // userがいれば、いなければnull
@@ -22,20 +27,22 @@ export class AuthService {
   }
 
   // 処理を書いていく
-  login() {
+  async login() {
     // afAuthを使ってログインする
     // signInWithPopupはpopupが開いてその中でログイする
-    this.afAuth.auth
-      .signInWithPopup(
-        // googleでログインする
-        new auth.GoogleAuthProvider()
-      )
-      .then(() => this.router.navigateByUrl('/'));
+    await this.afAuth.auth.signInWithPopup(
+      // googleでログインする
+      new auth.GoogleAuthProvider()
+    );
+    this.router.navigateByUrl('/').then(() => {
+      this.snackBar.open('ログインしました', null, { duration: 1000 });
+    });
   }
 
   logout() {
-    this.afAuth.auth
-      .signOut()
-      .then(() => this.router.navigateByUrl('/welcome'));
+    this.afAuth.auth.signOut().then(() => {
+      this.snackBar.open('ログアウトしました', null, { duration: 1000 });
+    });
+    this.router.navigateByUrl('/welcome');
   }
 }

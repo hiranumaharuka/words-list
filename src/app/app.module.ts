@@ -8,7 +8,8 @@ import {
   MatIconModule,
   MatButtonModule,
   MatMenuModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatSnackBarModule
 } from '@angular/material';
 import { FooterComponent } from './footer/footer.component';
 import { AngularFireModule } from '@angular/fire';
@@ -36,7 +37,8 @@ import { NotfoundComponent } from './notfound/notfound.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireStorageModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

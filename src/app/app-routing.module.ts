@@ -33,17 +33,23 @@ const routes: Routes = [
   {
     path: 'termsofsale',
     loadChildren: () =>
-      import('./termsofsale/termsofsale.module').then(m => m.TermsofsaleModule)
+      import('./termsofsale/termsofsale.module').then(m => m.TermsofsaleModule),
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard]
   },
   {
     path: 'termsofuse',
     loadChildren: () =>
-      import('./termsofuse/termsofuse.module').then(m => m.TermsofuseModule)
+      import('./termsofuse/termsofuse.module').then(m => m.TermsofuseModule),
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard]
   },
   {
     path: 'contact',
     loadChildren: () =>
-      import('./contact/contact.module').then(m => m.ContactModule)
+      import('./contact/contact.module').then(m => m.ContactModule),
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard]
   },
   {
     path: 'welcome',
