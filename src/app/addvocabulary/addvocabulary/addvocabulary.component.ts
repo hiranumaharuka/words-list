@@ -31,7 +31,7 @@ export class AddvocabularyComponent implements OnInit {
   ngOnInit() {}
   submit() {
     const formData = this.form.value;
-    const sendData: Omit<Vocabulary, 'vocabularyId'> = {
+    const sendData: Omit<Vocabulary, 'vocabularyId' | 'likedCount'> = {
       title: formData.title,
       description: formData.description,
       tag: formData.tag,

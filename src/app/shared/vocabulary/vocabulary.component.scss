@@ -23,6 +23,12 @@
   }
 }
 button {
-  padding-right: 16px;
+  margin-right: 16px;
   margin-left: auto;
+}
+.material-icons.md-dark.md-inactive {
+  color: rgba(0, 0, 0, 0.26);
+}
+.material-icons.pink {
+  color: #ff4081;
 }

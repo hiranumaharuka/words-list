@@ -26,7 +26,7 @@ export class VocabularyService {
   ) {}
 
   addVocabulary(
-    vocabulary: Omit<Vocabulary, 'vocabularyId'>,
+    vocabulary: Omit<Vocabulary, 'vocabularyId' | 'likedCount'>,
     uid: string
   ): Promise<void> {
     // createIdは元からfirebaseの中で定義されている
@@ -70,7 +70,7 @@ export class VocabularyService {
                 ) === index
               );
             })
-            // vocabularyをidだけにする
+            // vocabularyをauthorIdだけにする
             .map(vocabulary => vocabulary.authorId);
           return combineLatest(
             authorIds.map(authorId => {
@@ -97,7 +97,7 @@ export class VocabularyService {
     );
   }
   getMyVocabularies(
-    authorId?: string,
+    authorId: string,
     startAfter?: firestore.QueryDocumentSnapshot<firestore.DocumentData>
   ) {
     const sorted = this.db.collection<Vocabulary>(`vocabularies`, ref => {
@@ -129,4 +129,30 @@ export class VocabularyService {
       })
     );
   }
+  // 自分がいいねしたアイテムを取得
+  // getMyLikedItems(userId: string): Observable<VocabularyWithAuthor[]> {
+  //   const sorted = this.db
+  //     // いいねした記事のID一覧を取得
+  //     .collection<Vocabulary>(`users/${userId}/likedVocabularies`)
+  //     .valueChanges().pipe(
+  //       switchMap(
+  //         vocabularies => {
+  //           return combineLatest(
+  //             vocabularies.map((vocabulary: Vocabulary) =>
+  //               // Vocabularyだけ
+  //               this.db.doc(`vocabularies/${vocabulary.vocabularyId}`).valueChanges())
+  //           );
+  //         }
+  //       )
+  //     );
+  //   // いいねした記事の本体を取得したい（本体がVocabularyとUserを合体したもの）
+  //   return this.getVocabularies(sorted).pipe(
+  //     map((result: {
+  //       lastDoc: firestore.QueryDocumentSnapshot<firestore.DocumentData>;
+  //       vocabulariesData: VocabularyWithAuthor[];
+  //     }) => {
+  //       return result.vocabulariesData;
+  //     })
+  //   );
+  // }
 }
