@@ -1,0 +1,11 @@
+<div class="container" *ngIf="vocabulary$ | async as vocabulary">
+  <h2>単語一覧</h2>
+  <button
+    *ngIf="vocabulary.authorId === userId"
+    mat-raised-button
+    color="primary"
+    routerLink="/wordlist/{{ vocabulary.vocabularyId }}/addword"
+  >
+    作成
+  </button>
+</div>

@@ -3,10 +3,12 @@
   <app-vocabulary
     *ngFor="let vocabulary of vocabularies$ | async"
     [vocabulary]="vocabulary"
+    routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
   ></app-vocabulary>
   <h2>最新の単語帳</h2>
   <app-vocabulary
     *ngFor="let vocabulary of vocabularies$ | async"
     [vocabulary]="vocabulary"
+    routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
   ></app-vocabulary>
 </div>
