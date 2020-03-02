@@ -43,7 +43,11 @@ export class VocabularyService {
         this.router.navigateByUrl('/myvocabulary');
       });
   }
-
+  getVocabulary(vocabularyId: string): Observable<Vocabulary> {
+    return this.db
+      .doc<Vocabulary>(`vocabularies/${vocabularyId}`)
+      .valueChanges();
+  }
   getVocabularies(
     sorted: AngularFirestoreCollection<Vocabulary>
   ): Observable<{

@@ -3,6 +3,7 @@
   <app-vocabulary
     *ngFor="let vocabulary of vocabularies"
     [vocabulary]="vocabulary"
+    routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
   ></app-vocabulary>
   <button (click)="getMore(vocabularies)" mat-raised-button color="primary">
     もっと見る
