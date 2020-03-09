@@ -43,7 +43,11 @@ export class LikeService {
         .valueChanges()
         // doc=vocabularyにいいねしている人のドキュメント一覧
         // docがあればtrue、docがなければfalseでbooleanで判断できるようにしている
-        .pipe(map(doc => !!doc))
+        .pipe(
+          map(doc => {
+            return !!doc;
+          })
+        )
     );
   }
   // vocabularyにいいねした人の一覧を取得する

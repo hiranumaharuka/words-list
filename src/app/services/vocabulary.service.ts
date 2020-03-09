@@ -36,12 +36,23 @@ export class VocabularyService {
       .set({
         vocabularyId,
         ...vocabulary,
+        likedCount: 0,
         authorId: uid
       })
       .then(() => {
         this.snackBar.open('単語帳を作成しました', null, { duration: 1500 });
         this.router.navigateByUrl('/myvocabulary');
       });
+  }
+
+  getVocabulary(vocabularyId: string): Observable<Vocabulary> {
+    return this.db
+      .doc<Vocabulary>(`vocabularies/${vocabularyId}`)
+      .valueChanges();
+  }
+
+  getUser(userId: string): Observable<User> {
+    return this.db.doc<User>(`users/${userId}`).valueChanges();
   }
 
   getVocabularies(

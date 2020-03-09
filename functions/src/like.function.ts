@@ -8,7 +8,7 @@ export const countUpLiked = functions.firestore
   .document('vocabularies/{vocabularyId}/likedUserIds/{userId}')
   .onCreate(async (snap, context) => {
     const eventId = context.eventId;
-    return shouldEventRun(eventId).then(async should => {
+    return shouldEventRun(eventId).then(async (should: boolean) => {
       if (should) {
         // tslint:disable-next-line: no-floating-promises
         db.doc(`vocabularies/${context.params.vocabularyId}`).update(
@@ -27,7 +27,7 @@ export const countDownLiked = functions.firestore
   .document('vocabularies/{vocabularyId}/likedUserIds/{userId}')
   .onDelete(async (snap, context) => {
     const eventId = context.eventId;
-    return shouldEventRun(eventId).then(async should => {
+    return shouldEventRun(eventId).then(async (should: boolean) => {
       if (should) {
         // tslint:disable-next-line: no-floating-promises
         db.doc(`vocabularies/${context.params.vocabularyId}`).update(
