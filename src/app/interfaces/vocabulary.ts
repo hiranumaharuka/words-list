@@ -5,6 +5,7 @@ export interface Vocabulary {
   authorId: string;
   vocabularyId: string;
   createdAt: Date;
+  likedCount: number;
 }
 
 export interface User {

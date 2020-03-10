@@ -26,7 +26,7 @@ export class VocabularyService {
   ) {}
 
   addVocabulary(
-    vocabulary: Omit<Vocabulary, 'vocabularyId'>,
+    vocabulary: Omit<Vocabulary, 'vocabularyId' | 'likedCount'>,
     uid: string
   ): Promise<void> {
     // createIdは元からfirebaseの中で定義されている
@@ -36,6 +36,7 @@ export class VocabularyService {
       .set({
         vocabularyId,
         ...vocabulary,
+        likedCount: 0,
         authorId: uid
       })
       .then(() => {
@@ -43,11 +44,17 @@ export class VocabularyService {
         this.router.navigateByUrl('/myvocabulary');
       });
   }
+
   getVocabulary(vocabularyId: string): Observable<Vocabulary> {
     return this.db
       .doc<Vocabulary>(`vocabularies/${vocabularyId}`)
       .valueChanges();
   }
+
+  getUser(userId: string): Observable<User> {
+    return this.db.doc<User>(`users/${userId}`).valueChanges();
+  }
+
   getVocabularies(
     sorted: AngularFirestoreCollection<Vocabulary>
   ): Observable<{
@@ -74,7 +81,7 @@ export class VocabularyService {
                 ) === index
               );
             })
-            // vocabularyをidだけにする
+            // vocabularyをauthorIdだけにする
             .map(vocabulary => vocabulary.authorId);
           return combineLatest(
             authorIds.map(authorId => {
@@ -101,7 +108,7 @@ export class VocabularyService {
     );
   }
   getMyVocabularies(
-    authorId?: string,
+    authorId: string,
     startAfter?: firestore.QueryDocumentSnapshot<firestore.DocumentData>
   ) {
     const sorted = this.db.collection<Vocabulary>(`vocabularies`, ref => {

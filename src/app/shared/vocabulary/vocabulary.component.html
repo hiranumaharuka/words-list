@@ -9,12 +9,29 @@
 
   <div class="vocabulary__content">
     <p class="vocabulary__username">{{ vocabulary.author.userName }}</p>
-    <button
-      mat-icon-button
-      disabled
-      aria-label="Example icon-button with a heart icon"
-    >
-      <mat-icon>favorite</mat-icon>
-    </button>
+    <ng-container *ngIf="user$ | async as user">
+      <ng-template #disLikeButton>
+        <button
+          mat-icon-button
+          aria-label="heart icon"
+          (click)="likeVocabulary(user.uid)"
+        >
+          <i class="material-icons md-dark md-inactive">
+            favorite_border
+          </i>
+        </button>
+      </ng-template>
+      <button
+        mat-icon-button
+        aria-label="heart icon"
+        *ngIf="isLiked; else disLikeButton"
+        (click)="dislikeVocabulary(user.uid)"
+      >
+        <i class="material-icons pink">
+          favorite
+        </i>
+      </button>
+    </ng-container>
+    <p class="like">{{ likedCount }}</p>
   </div>
 </div>
