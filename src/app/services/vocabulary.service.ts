@@ -140,30 +140,4 @@ export class VocabularyService {
       })
     );
   }
-  // 自分がいいねしたアイテムを取得
-  // getMyLikedItems(userId: string): Observable<VocabularyWithAuthor[]> {
-  //   const sorted = this.db
-  //     // いいねした記事のID一覧を取得
-  //     .collection<Vocabulary>(`users/${userId}/likedVocabularies`)
-  //     .valueChanges().pipe(
-  //       switchMap(
-  //         vocabularies => {
-  //           return combineLatest(
-  //             vocabularies.map((vocabulary: Vocabulary) =>
-  //               // Vocabularyだけ
-  //               this.db.doc(`vocabularies/${vocabulary.vocabularyId}`).valueChanges())
-  //           );
-  //         }
-  //       )
-  //     );
-  //   // いいねした記事の本体を取得したい（本体がVocabularyとUserを合体したもの）
-  //   return this.getVocabularies(sorted).pipe(
-  //     map((result: {
-  //       lastDoc: firestore.QueryDocumentSnapshot<firestore.DocumentData>;
-  //       vocabulariesData: VocabularyWithAuthor[];
-  //     }) => {
-  //       return result.vocabulariesData;
-  //     })
-  //   );
-  // }
 }

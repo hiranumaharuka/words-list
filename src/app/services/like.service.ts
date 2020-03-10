@@ -50,39 +50,4 @@ export class LikeService {
         )
     );
   }
-  // vocabularyにいいねした人の一覧を取得する
-  // observableの型がstringだとエラーが出る
-  // getLikedUserIds(vocabularyId: string): Observable<any[]> {
-  //   return this.db
-  //   // vocabularyにいいねしている人のID一覧が入ってるサブコレクション取得
-  //     .collection(`vocabularies/${vocabularyId}/likedUserIds`)
-  //     .valueChanges()
-  //     .pipe(
-  //       // users=vocabularyにいいねした人のID一覧
-  //       switchMap(users => {
-  //         return combineLatest(
-  //           // いいねした人のidからいいねした人本体を取り出す
-  //           users.map(user => this.db.doc(`users/${user.id}`).valueChanges())
-  //         );
-  //       })
-  //     );
-  // }
-  // 自分がいいねしたアイテムを取得する
-  // observableの型がstringだとエラーが出る
-  // getMyLikedItems(userId: string): Observable<string[]> {
-  //   return this.db
-  //   // いいねした記事のID一覧を取得
-  //     .collection(`users/${userId}/likedVocabularies`)
-  //     .valueChanges()
-  //     .pipe(
-  //       // vocabularies = いいねした記事のid一覧
-  //       switchMap(vocabularies => {
-  //         return combineLatest(
-  //           vocabularies.map(vocabulary =>
-  //             this.db.doc(`vocabularies/${vocabulary.id}`).valueChanges()
-  //           )
-  //         );
-  //       })
-  //     );
-  // }
 }

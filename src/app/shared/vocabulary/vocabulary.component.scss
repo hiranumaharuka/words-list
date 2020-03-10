@@ -23,8 +23,14 @@
   }
 }
 button {
-  margin-right: 16px;
   margin-left: auto;
+  i {
+    line-height: 2;
+  }
+}
+
+.like {
+  padding-right: 16px;
 }
 .material-icons.md-dark.md-inactive {
   color: rgba(0, 0, 0, 0.26);

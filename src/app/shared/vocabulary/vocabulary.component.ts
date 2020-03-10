@@ -4,9 +4,8 @@ import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { LikeService } from 'src/app/services/like.service';
 import { combineLatest, Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
-import { switchMap, map, tap } from 'rxjs/operators';
-import { Subscription, of } from 'rxjs';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import { switchMap, map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-vocabulary',
@@ -14,22 +13,17 @@ import { connectableObservableDescriptor } from 'rxjs/internal/observable/Connec
   styleUrls: ['./vocabulary.component.scss']
 })
 export class VocabularyComponent implements OnInit, OnDestroy {
-  // 親からvocabularyという型を受け取る
+  // 親から型を受け取る
   @Input()
   vocabulary: VocabularyWithAuthor;
   isLiked: boolean;
+  isLiked$: Observable<boolean>;
   likedCount: number;
   vocabularyId: string;
   vocabulary$: Observable<VocabularyWithAuthor>;
   user$ = this.authService.afUser$;
   sub = new Subscription();
 
-  isLiked$ = combineLatest([this.vocabulary$, this.user$]).pipe(
-    switchMap(([vocabulary, user]) => {
-      return this.likeService.isLiked(vocabulary.vocabularyId, user.uid);
-    }),
-    tap(isLiked => console.log(isLiked))
-  );
   constructor(
     private vocabularyService: VocabularyService,
     private likeService: LikeService,
@@ -49,20 +43,20 @@ export class VocabularyComponent implements OnInit, OnDestroy {
         return result;
       })
     );
-
+    this.isLiked$ = combineLatest([this.vocabulary$, this.user$]).pipe(
+      switchMap(([vocabulary, user]) => {
+        return this.likeService.isLiked(vocabulary.vocabularyId, user.uid);
+      })
+    );
     this.sub.add(
       this.vocabulary$.subscribe(vocabulary => {
         // これがないと自動でいいねがふくれあがる
         // 2回目以降はif文で弾かれて、最新のlikedcountは代入されない
+        // 等しくなければ最新のlikedcountが入ってくる
         if (this.vocabularyId !== vocabulary.vocabularyId) {
           // ページを開いた時点のlikedcountを保持させる、なければ0
           this.likedCount = vocabulary.likedCount || 0;
-          console.log(this.vocabularyId);
         }
-
-        console.log(vocabulary.likedCount);
-        console.log(vocabulary.vocabularyId);
-        console.log(this.vocabularyId);
 
         this.vocabulary = vocabulary;
         this.vocabularyId = vocabulary.vocabularyId;
@@ -72,11 +66,9 @@ export class VocabularyComponent implements OnInit, OnDestroy {
     // 初期状態いいねした状態で表示されるか
     this.sub.add(
       this.isLiked$.subscribe(isLiked => {
-        console.log(isLiked);
         this.isLiked = isLiked;
       })
     );
-    this.isLiked$.pipe(tap(isLiked => console.log(isLiked)));
   }
 
   likeVocabulary(uid: string) {
