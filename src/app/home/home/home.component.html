@@ -1,14 +1,6 @@
 <div class="container">
   <h2>人気の単語帳</h2>
-  <app-vocabulary
-    *ngFor="let vocabulary of vocabularies$ | async"
-    [vocabulary]="vocabulary"
-    routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
-  ></app-vocabulary>
+  <app-popularvocabulary></app-popularvocabulary>
   <h2>最新の単語帳</h2>
-  <app-vocabulary
-    *ngFor="let vocabulary of vocabularies$ | async"
-    [vocabulary]="vocabulary"
-    routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
-  ></app-vocabulary>
+  <app-latestvocabulary></app-latestvocabulary>
 </div>

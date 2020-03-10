@@ -140,4 +140,17 @@ export class VocabularyService {
       })
     );
   }
+  getPopularVocabularies(): Observable<VocabularyWithAuthor[]> {
+    const sorted = this.db.collection<VocabularyWithAuthor>(
+      `vocabularies`,
+      ref => {
+        return ref.orderBy('likedCount', 'desc').limit(5);
+      }
+    );
+    return this.getVocabularies(sorted).pipe(
+      map(result => {
+        return result.vocabulariesData;
+      })
+    );
+  }
 }
