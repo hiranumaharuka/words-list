@@ -14,7 +14,7 @@
         <button
           mat-icon-button
           aria-label="heart icon"
-          (click)="likeVocabulary(user.uid)"
+          (click)="likeVocabulary(user.uid); $event.stopPropagation()"
         >
           <i class="material-icons md-dark md-inactive">
             favorite_border
@@ -25,7 +25,8 @@
         mat-icon-button
         aria-label="heart icon"
         *ngIf="isLiked; else disLikeButton"
-        (click)="dislikeVocabulary(user.uid)"
+        (click)="dislikeVocabulary(user.uid); $event.stopPropagation()"
+        type="button"
       >
         <i class="material-icons pink">
           favorite
