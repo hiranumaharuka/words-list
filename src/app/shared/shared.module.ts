@@ -5,13 +5,22 @@ import {
   MatIconModule,
   MatButtonModule,
   MatInputModule,
-  MatFormFieldModule
+  MatFormFieldModule,
+  MatCardModule,
+  MatMenuModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { WordComponent } from './word/word.component';
 
 @NgModule({
-  declarations: [VocabularyComponent],
-  imports: [CommonModule, MatIconModule, MatButtonModule],
+  declarations: [VocabularyComponent, WordComponent],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    MatMenuModule
+  ],
   exports: [
     VocabularyComponent,
     MatIconModule,
@@ -19,7 +28,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    WordComponent,
+    MatCardModule
   ]
 })
 export class SharedModule {}

@@ -1,0 +1,12 @@
+button {
+  display: block;
+  margin-bottom: 16px;
+  position: fixed;
+  right: 16px;
+  &.add {
+    bottom: 130px;
+  }
+  &.flash {
+    bottom: 80px;
+  }
+}

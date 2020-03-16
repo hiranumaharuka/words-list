@@ -1,0 +1,30 @@
+<mat-card class="example-card">
+  <mat-card-content>
+    <p class="surface">{{ word.surface }}</p>
+    <p class="backside">{{ word.backside }}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      aria-label="menu"
+      (click)="$event.stopPropagation()"
+    >
+      <mat-icon aria-hidden="true" aria-label="menu">more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>edit</mat-icon>
+        <span routerLink="/myvocabulary">編集</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>delete</mat-icon>
+        <span routerLink="/favvocabulary">削除</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>hearing</mat-icon>
+        <span routerLink="/setting">音声</span>
+      </button>
+    </mat-menu>
+  </mat-card-actions>
+</mat-card>
