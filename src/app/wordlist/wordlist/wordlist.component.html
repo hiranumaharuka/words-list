@@ -1,11 +1,20 @@
 <div class="container" *ngIf="vocabulary$ | async as vocabulary">
   <h2>単語一覧</h2>
+  <app-word *ngFor="let word of words$ | async" [word]="word"></app-word>
   <button
     *ngIf="vocabulary.authorId === userId"
-    mat-raised-button
+    mat-mini-fab
     color="primary"
     routerLink="/wordlist/{{ vocabulary.vocabularyId }}/addword"
+    class="add"
   >
-    作成
+    <i class="material-icons">
+      add
+    </i>
+  </button>
+  <button mat-mini-fab color="primary" class="flash">
+    <i class="material-icons">
+      style
+    </i>
   </button>
 </div>

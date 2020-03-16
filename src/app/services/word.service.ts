@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material';
 import { Word } from '../interfaces/word';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +25,10 @@ export class WordService {
       .then(() => {
         this.snackBar.open('単語帳を作成しました', null, { duration: 1500 });
       });
+  }
+  getWords(vocabularyId: string): Observable<Word[]> {
+    return this.db
+      .collection<Word>(`vocabularies/${vocabularyId}/words`)
+      .valueChanges();
   }
 }

@@ -5,6 +5,8 @@ import { Vocabulary } from 'src/app/interfaces/vocabulary';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
+import { Word } from 'src/app/interfaces/word';
+import { WordService } from 'src/app/services/word.service';
 
 @Component({
   selector: 'app-wordlist',
@@ -14,11 +16,13 @@ import { AuthService } from 'src/app/services/auth.service';
 export class WordlistComponent implements OnInit {
   vocabulary$: Observable<Vocabulary>;
   userId: string = this.authService.uid;
-
+  words$: Observable<Word[]>;
+  vocabularyId: string;
   constructor(
     private route: ActivatedRoute,
     private vocabularyService: VocabularyService,
-    private authService: AuthService
+    private authService: AuthService,
+    private wordService: WordService
   ) {}
 
   ngOnInit(): void {
@@ -28,5 +32,7 @@ export class WordlistComponent implements OnInit {
         return this.vocabularyService.getVocabulary(vocabularyId);
       })
     );
+    this.vocabularyId = this.route.snapshot.paramMap.get('vocabularyId');
+    this.words$ = this.wordService.getWords(this.vocabularyId);
   }
 }
