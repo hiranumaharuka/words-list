@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Word } from 'src/app/interfaces/word';
 import { Observable } from 'rxjs';
 import { Vocabulary } from 'src/app/interfaces/vocabulary';
@@ -13,6 +13,8 @@ import { switchMap } from 'rxjs/operators';
   styleUrls: ['./word.component.scss']
 })
 export class WordComponent implements OnInit {
+  @Output() delete = new EventEmitter<string>();
+
   @Input()
   word: Word;
   vocabulary$: Observable<Vocabulary>;
@@ -36,6 +38,7 @@ export class WordComponent implements OnInit {
   }
   deleteWord() {
     this.wordService.deleteWord(this.vocabularyId, this.word.wordId);
+    this.delete.emit(this.word.wordId);
   }
   editWord() {
     return (this.editState = true);

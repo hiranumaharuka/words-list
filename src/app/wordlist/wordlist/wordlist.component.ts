@@ -57,4 +57,9 @@ export class WordlistComponent implements OnInit {
         }
       });
   }
+
+  deleteWord(wordId: string) {
+    const targetIndex = this.words.findIndex(word => word.wordId === wordId);
+    this.words.splice(targetIndex, 1);
+  }
 }

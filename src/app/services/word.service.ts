@@ -48,8 +48,10 @@ export class WordService {
           return ref.orderBy('createdAt', 'desc').limit(6);
         }
       })
-      .snapshotChanges()
-      .pipe(map(snaps => snaps.map(snap => snap.payload.doc)));
+      .get({ source: 'server' })
+      .pipe(
+        map(snaps => snaps.docs.map(doc => doc as QueryDocumentSnapshot<Word>))
+      );
   }
   updateWord(vocabularyId: string, word: Word): Promise<void> {
     return this.db
