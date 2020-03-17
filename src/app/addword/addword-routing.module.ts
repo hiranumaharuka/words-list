@@ -10,6 +10,10 @@ const routes: Routes = [
   {
     path: 'wordlist/:vocabularyId/addword',
     component: AddwordComponent
+  },
+  {
+    path: 'wordlist/:vocabularyId/edit',
+    component: AddwordComponent
   }
 ];
 

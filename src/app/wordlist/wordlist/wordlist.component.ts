@@ -17,7 +17,6 @@ export class WordlistComponent implements OnInit {
   vocabulary$: Observable<Vocabulary>;
   userId: string = this.authService.uid;
   lastDoc;
-  // words$: Observable<Word[]>;
   words: Word[] = [];
   isComplete: boolean;
   vocabularyId: string;

@@ -84,6 +84,13 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'wordlist/:vocabularyId/edit',
+    loadChildren: () =>
+      import('./addword/addword.module').then(m => m.AddwordModule),
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'wordlist/:vocabularyId',
     loadChildren: () =>
       import('./wordlist/wordlist.module').then(m => m.WordlistModule),

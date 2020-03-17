@@ -1,54 +1,102 @@
 <div class="container">
-  <h2>単語を作成</h2>
-  <form
-    [formGroup]="form"
-    (ngSubmit)="submit(createNgForm)"
-    #createNgForm="ngForm"
-  >
-    <mat-form-field>
-      <mat-label>表面</mat-label>
-      <input
-        formControlName="surface"
-        type="text"
-        matInput
-        autocomplete="off"
-        required
-      />
-      <mat-error *ngIf="surfaceControl.hasError('required')"
-        >必須入力です</mat-error
-      >
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>裏面</mat-label>
-      <input
-        formControlName="backside"
-        type="text"
-        matInput
-        autocomplete="off"
-        required
-      />
-      <mat-error *ngIf="backsideControl.hasError('required')"
-        >必須入力です</mat-error
-      >
-    </mat-form-field>
-    <button
-      [disabled]="form.invalid"
-      mat-raised-button
-      color="primary"
-      (click)="goBack()"
+  <ng-template #addword>
+    <h2>単語を作成</h2>
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit(createNgForm)"
+      #createNgForm="ngForm"
     >
-      保存する
-    </button>
-    <button
-      [disabled]="form.invalid"
-      mat-raised-button
-      color="primary"
-      routerLink="/wordlist/{{ vocabularyId }}/addword"
-    >
-      保存して次へ
-    </button>
-    <button type="button" mat-raised-button (click)="goBack()">
-      キャンセル
-    </button>
-  </form>
+      <mat-form-field>
+        <mat-label>表面</mat-label>
+        <input
+          formControlName="surface"
+          type="text"
+          matInput
+          autocomplete="off"
+          required
+        />
+        <mat-error *ngIf="surfaceControl.hasError('required')"
+          >必須入力です</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>裏面</mat-label>
+        <input
+          formControlName="backside"
+          type="text"
+          matInput
+          autocomplete="off"
+          required
+        />
+        <mat-error *ngIf="backsideControl.hasError('required')"
+          >必須入力です</mat-error
+        >
+      </mat-form-field>
+      <button
+        [disabled]="form.invalid"
+        mat-raised-button
+        color="primary"
+        (click)="goBack()"
+      >
+        保存する
+      </button>
+      <button
+        [disabled]="form.invalid"
+        mat-raised-button
+        color="primary"
+        routerLink="/wordlist/{{ vocabularyId }}/addword"
+      >
+        保存して次へ
+      </button>
+      <button type="button" mat-raised-button (click)="goBack()">
+        キャンセル
+      </button>
+    </form>
+  </ng-template>
+  <!-- <ng-template *ngIf="word$ | async as word"> -->
+  <ng-container *ngIf="editState; else addword">
+    <h2>単語を編集</h2>
+    <form [formGroup]="form" (ngSubmit)="updateWord(word)">
+      <mat-form-field>
+        <mat-label>表面</mat-label>
+        <input
+          formControlName="surface"
+          type="text"
+          matInput
+          autocomplete="off"
+          required
+          [(ngModel)]="word.surface"
+        />
+        <mat-error *ngIf="surfaceControl.hasError('required')"
+          >必須入力です</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>裏面</mat-label>
+        <input
+          formControlName="backside"
+          type="text"
+          matInput
+          autocomplete="off"
+          required
+          [(ngModel)]="word.backside"
+        />
+        <mat-error *ngIf="backsideControl.hasError('required')"
+          >必須入力です</mat-error
+        >
+      </mat-form-field>
+      <button
+        [disabled]="form.invalid"
+        mat-raised-button
+        color="primary"
+        (click)="goBack()"
+      >
+        保存する
+      </button>
+      <button type="button" mat-raised-button (click)="goBack()">
+        キャンセル
+      </button>
+    </form>
+  </ng-container>
+  <!-- </ng-template> -->
 </div>

@@ -5,6 +5,8 @@ import { WordService } from 'src/app/services/word.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-addword',
@@ -17,6 +19,9 @@ export class AddwordComponent implements OnInit {
     surface: ['', [Validators.required]],
     backside: ['', [Validators.required]]
   });
+  editState: boolean;
+  word$: Observable<Word>;
+  word: Word;
   get surfaceControl() {
     return this.form.get('surface') as FormControl;
   }
@@ -33,6 +38,12 @@ export class AddwordComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.word$ = this.route.queryParamMap.pipe(
+      switchMap(map => {
+        const wordId = map.get('wordId');
+        return this.wordService.getWord(this.vocabularyId, wordId);
+      })
+    );
     this.vocabularyId = this.route.snapshot.paramMap.get('vocabularyId');
   }
   submit(form: NgForm) {
@@ -48,5 +59,8 @@ export class AddwordComponent implements OnInit {
   }
   goBack(): void {
     this.location.back();
+  }
+  updateWord(word: Word) {
+    this.wordService.updateWord(this.vocabularyId, word);
   }
 }
