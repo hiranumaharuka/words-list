@@ -5,6 +5,8 @@ import { WordService } from 'src/app/services/word.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { Observable, Subscription } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-addword',
@@ -17,6 +19,10 @@ export class AddwordComponent implements OnInit {
     surface: ['', [Validators.required]],
     backside: ['', [Validators.required]]
   });
+  isEditing: boolean;
+  word$: Observable<Word>;
+  word: Word;
+  wordId: string;
   get surfaceControl() {
     return this.form.get('surface') as FormControl;
   }
@@ -33,8 +39,16 @@ export class AddwordComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.word$ = this.route.queryParamMap.pipe(
+      switchMap(map => {
+        const wordId = map.get('wordId');
+        return this.wordService.getWord(this.vocabularyId, wordId);
+      })
+    );
     this.vocabularyId = this.route.snapshot.paramMap.get('vocabularyId');
+    this.patchDefaultValue();
   }
+
   submit(form: NgForm) {
     const formData = this.form.value;
     const sendData: Omit<Word, 'wordId'> = {
@@ -48,5 +62,46 @@ export class AddwordComponent implements OnInit {
   }
   goBack(): void {
     this.location.back();
+  }
+
+  updateWord() {
+    const formData = this.form.value;
+    this.route.queryParamMap.pipe(take(1)).subscribe(params => {
+      this.wordId = params.get('wordId');
+      this.wordService
+        .getWord(this.vocabularyId, this.wordId)
+        .pipe(take(1))
+        .subscribe(word => {
+          const sendData: Omit<Word, 'createdAt'> = {
+            surface: formData.surface,
+            backside: formData.backside,
+            authorId: word.authorId,
+            wordId: word.wordId
+          };
+          this.wordService
+            .updateWord(this.vocabularyId, sendData)
+            .then(() => this.goBack());
+        });
+    });
+  }
+
+  patchDefaultValue() {
+    this.route.queryParamMap.pipe(take(1)).subscribe(params => {
+      this.wordId = params.get('wordId');
+      if (this.wordId) {
+        this.isEditing = true;
+        this.wordService
+          .getWord(this.vocabularyId, this.wordId)
+          .pipe(take(1))
+          .subscribe(word => {
+            this.form.patchValue({
+              surface: word.surface,
+              backside: word.backside
+            });
+          });
+      } else {
+        this.isEditing = false;
+      }
+    });
   }
 }

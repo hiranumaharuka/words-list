@@ -1,5 +1,8 @@
 <div class="container">
-  <h2>単語を作成</h2>
+  <ng-template #addheading>
+    <h2>単語を作成</h2>
+  </ng-template>
+  <h2 *ngIf="isEditing; else addheading">単語を編集</h2>
   <form
     [formGroup]="form"
     (ngSubmit)="submit(createNgForm)"
@@ -35,18 +38,30 @@
       [disabled]="form.invalid"
       mat-raised-button
       color="primary"
-      (click)="goBack()"
+      (click)="updateWord()"
+      type="button"
+      *ngIf="isEditing; else addword"
     >
-      保存する
+      編集を適用
     </button>
-    <button
-      [disabled]="form.invalid"
-      mat-raised-button
-      color="primary"
-      routerLink="/wordlist/{{ vocabularyId }}/addword"
-    >
-      保存して次へ
-    </button>
+    <ng-template #addword>
+      <button
+        [disabled]="form.invalid"
+        mat-raised-button
+        color="primary"
+        (click)="goBack()"
+      >
+        保存する
+      </button>
+      <button
+        [disabled]="form.invalid"
+        mat-raised-button
+        color="primary"
+        routerLink="/wordlist/{{ vocabularyId }}/addword"
+      >
+        保存して次へ
+      </button>
+    </ng-template>
     <button type="button" mat-raised-button (click)="goBack()">
       キャンセル
     </button>

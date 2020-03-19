@@ -17,7 +17,6 @@ export class WordlistComponent implements OnInit {
   vocabulary$: Observable<Vocabulary>;
   userId: string = this.authService.uid;
   lastDoc;
-  // words$: Observable<Word[]>;
   words: Word[] = [];
   isComplete: boolean;
   vocabularyId: string;
@@ -57,5 +56,9 @@ export class WordlistComponent implements OnInit {
           this.words.push(...words);
         }
       });
+  }
+  deleteWord(wordId: string) {
+    const targetIndex = this.words.findIndex(word => word.wordId === wordId);
+    this.words.splice(targetIndex, 1);
   }
 }

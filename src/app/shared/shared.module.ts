@@ -11,6 +11,7 @@ import {
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WordComponent } from './word/word.component';
+import { SharedRoutingModule } from './shared-routing.module';
 
 @NgModule({
   declarations: [VocabularyComponent, WordComponent],
@@ -19,7 +20,8 @@ import { WordComponent } from './word/word.component';
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    MatMenuModule
+    MatMenuModule,
+    SharedRoutingModule
   ],
   exports: [
     VocabularyComponent,

@@ -30,6 +30,12 @@ export class WordService {
         this.snackBar.open('単語帳を作成しました', null, { duration: 1500 });
       });
   }
+
+  getWord(vocabularyId: string, wordId: string): Observable<Word> {
+    return this.db
+      .doc<Word>(`vocabularies/${vocabularyId}/words/${wordId}`)
+      .valueChanges();
+  }
   getWords(
     vocabularyId: string,
     startAt?: QueryDocumentSnapshot<Word>
@@ -42,7 +48,26 @@ export class WordService {
           return ref.orderBy('createdAt', 'desc').limit(6);
         }
       })
-      .snapshotChanges()
-      .pipe(map(snaps => snaps.map(snap => snap.payload.doc)));
+      .get({ source: 'server' })
+      .pipe(
+        map(snaps => snaps.docs.map(doc => doc as QueryDocumentSnapshot<Word>))
+      );
+  }
+
+  updateWord(
+    vocabularyId: string,
+    word: Omit<Word, 'createdAt'>
+  ): Promise<void> {
+    return this.db
+      .doc(`vocabularies/${vocabularyId}/words/${word.wordId}`)
+      .update({
+        ...word
+      })
+      .then(() => {
+        this.snackBar.open('単語を編集しました', null, { duration: 1500 });
+      });
+  }
+  deleteWord(vocabularyId: string, wordId: string): Promise<void> {
+    return this.db.doc(`vocabularies/${vocabularyId}/words/${wordId}`).delete();
   }
 }
