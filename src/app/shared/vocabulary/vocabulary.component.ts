@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { VocabularyWithAuthor } from 'src/app/interfaces/vocabulary';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { LikeService } from 'src/app/services/like.service';
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './vocabulary.component.html',
   styleUrls: ['./vocabulary.component.scss']
 })
-export class VocabularyComponent implements OnInit, OnDestroy {
+export class VocabularyComponent implements OnInit {
   // 親から型を受け取る
   @Input()
   vocabulary: VocabularyWithAuthor;
@@ -80,8 +80,5 @@ export class VocabularyComponent implements OnInit, OnDestroy {
     this.isLiked = false;
     this.likedCount--;
     this.likeService.dislikeVocabulary(this.vocabulary.vocabularyId, uid);
-  }
-  ngOnDestroy() {
-    this.sub.unsubscribe();
   }
 }

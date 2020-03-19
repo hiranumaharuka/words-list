@@ -16,13 +16,17 @@
       <button
         mat-menu-item
         routerLink="/wordlist/{{ vocabulary.vocabularyId }}/edit"
-        [queryParams]="{ id: word.wordId }"
-        (click)="editWord()"
+        [queryParams]="{ wordId: word.wordId }"
+        *ngIf="vocabulary.authorId === uid"
       >
         <mat-icon>edit</mat-icon>
         <span>編集</span>
       </button>
-      <button mat-menu-item (click)="deleteWord()">
+      <button
+        mat-menu-item
+        (click)="deleteWord()"
+        *ngIf="word.authorId === uid"
+      >
         <mat-icon>delete</mat-icon>
         <span>削除</span>
       </button>

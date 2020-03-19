@@ -33,7 +33,7 @@ export class WordService {
 
   getWord(vocabularyId: string, wordId: string): Observable<Word> {
     return this.db
-      .doc<Word>(`vocabulares/${vocabularyId}/words/${wordId}`)
+      .doc<Word>(`vocabularies/${vocabularyId}/words/${wordId}`)
       .valueChanges();
   }
   getWords(
@@ -48,14 +48,23 @@ export class WordService {
           return ref.orderBy('createdAt', 'desc').limit(6);
         }
       })
-      .snapshotChanges()
-      .pipe(map(snaps => snaps.map(snap => snap.payload.doc)));
+      .get({ source: 'server' })
+      .pipe(
+        map(snaps => snaps.docs.map(doc => doc as QueryDocumentSnapshot<Word>))
+      );
   }
-  updateWord(vocabularyId: string, word: Word): Promise<void> {
+
+  updateWord(
+    vocabularyId: string,
+    word: Omit<Word, 'createdAt'>
+  ): Promise<void> {
     return this.db
       .doc(`vocabularies/${vocabularyId}/words/${word.wordId}`)
-      .set(word, {
-        merge: true
+      .update({
+        ...word
+      })
+      .then(() => {
+        this.snackBar.open('単語を編集しました', null, { duration: 1500 });
       });
   }
   deleteWord(vocabularyId: string, wordId: string): Promise<void> {

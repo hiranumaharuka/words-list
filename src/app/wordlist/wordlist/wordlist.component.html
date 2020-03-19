@@ -1,6 +1,10 @@
 <div class="container" *ngIf="vocabulary$ | async as vocabulary">
   <h2>単語一覧</h2>
-  <app-word *ngFor="let word of words" [word]="word"></app-word>
+  <app-word
+    *ngFor="let word of words"
+    [word]="word"
+    (delete)="deleteWord($event)"
+  ></app-word>
   <button
     *ngIf="vocabulary.authorId === userId"
     mat-mini-fab

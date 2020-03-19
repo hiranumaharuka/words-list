@@ -14,17 +14,17 @@
       <mat-icon aria-hidden="true" aria-label="menu">more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>
+      <button mat-menu-item routerLink="/myvocabulary">
         <mat-icon>library_books</mat-icon>
-        <span routerLink="/myvocabulary">My単語帳</span>
+        <span>My単語帳</span>
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item routerLink="/favvocabulary">
         <mat-icon>favorite</mat-icon>
-        <span routerLink="/favvocabulary">お気に入りの単語帳</span>
+        <span>お気に入りの単語帳</span>
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item routerLink="/setting">
         <mat-icon>settings</mat-icon>
-        <span routerLink="/setting">設定</span>
+        <span>設定</span>
       </button>
       <!-- asynで最新の値があるか判断 -->
       <button *ngIf="user$ | async" (click)="logout()" mat-menu-item>
