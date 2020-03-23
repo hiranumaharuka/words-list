@@ -45,7 +45,10 @@ export class VocabularyComponent implements OnInit {
     );
     this.isLiked$ = combineLatest([this.vocabulary$, this.user$]).pipe(
       switchMap(([vocabulary, user]) => {
-        return this.likeService.isLiked(vocabulary.vocabularyId, user.uid);
+        return this.likeService.isLiked(
+          vocabulary.vocabularyId,
+          user && user.uid
+        );
       })
     );
     this.sub.add(
