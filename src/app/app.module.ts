@@ -17,6 +17,7 @@ import { environment } from '../environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireFunctionsModule, REGION } from '@angular/fire/functions';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { SharedModule } from './shared/shared.module';
 
@@ -40,9 +41,15 @@ import { SharedModule } from './shared/shared.module';
     AngularFireStorageModule,
     AngularFireAuthModule,
     MatSnackBarModule,
-    SharedModule
+    SharedModule,
+    AngularFireFunctionsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: REGION,
+      useValue: 'asia-northeast1'
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

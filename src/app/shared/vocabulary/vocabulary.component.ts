@@ -23,6 +23,7 @@ export class VocabularyComponent implements OnInit {
   vocabulary$: Observable<VocabularyWithAuthor>;
   user$ = this.authService.afUser$;
   sub = new Subscription();
+  userId = this.authService.uid;
 
   constructor(
     private vocabularyService: VocabularyService,
@@ -45,7 +46,10 @@ export class VocabularyComponent implements OnInit {
     );
     this.isLiked$ = combineLatest([this.vocabulary$, this.user$]).pipe(
       switchMap(([vocabulary, user]) => {
-        return this.likeService.isLiked(vocabulary.vocabularyId, user.uid);
+        return this.likeService.isLiked(
+          vocabulary.vocabularyId,
+          user && user.uid
+        );
       })
     );
     this.sub.add(
@@ -80,5 +84,8 @@ export class VocabularyComponent implements OnInit {
     this.isLiked = false;
     this.likedCount--;
     this.likeService.dislikeVocabulary(this.vocabulary.vocabularyId, uid);
+  }
+  deleteVocabulary() {
+    this.vocabularyService.deleteVocabulary(this.vocabulary.vocabularyId);
   }
 }

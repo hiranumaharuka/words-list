@@ -1,13 +1,21 @@
-<div class="vocabulary">
-  <p class="vocabulary__title">
-    {{ vocabulary.title }}
-  </p>
-  <p class="vocabulary__description">
-    {{ vocabulary.description }}
-  </p>
-  <p class="vocabulary__tag">{{ vocabulary.tag }}</p>
-
-  <div class="vocabulary__content">
+<mat-card class="vocabulary">
+  <mat-card-content class="vocabulary__title">
+    <mat-card-title>{{ vocabulary.title }}</mat-card-title>
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      aria-label="menu"
+      (click)="$event.stopPropagation()"
+      *ngIf="vocabulary.authorId === userId"
+    >
+      <mat-icon aria-hidden="true" aria-label="menu">more_vert</mat-icon>
+    </button>
+  </mat-card-content>
+  <mat-card-content>
+    <p>{{ vocabulary.description }}</p>
+    <p class="vocabulary__tag">{{ vocabulary.tag }}</p>
+  </mat-card-content>
+  <mat-card-content class="vocabulary__user">
     <p class="vocabulary__username">{{ vocabulary.author.userName }}</p>
     <ng-container *ngIf="user$ | async as user">
       <ng-template #disLikeButton>
@@ -21,18 +29,35 @@
           </i>
         </button>
       </ng-template>
-      <button
-        mat-icon-button
-        aria-label="heart icon"
-        *ngIf="isLiked; else disLikeButton"
-        (click)="dislikeVocabulary(user.uid); $event.stopPropagation()"
-        type="button"
-      >
-        <i class="material-icons pink">
-          favorite
-        </i>
-      </button>
+      <div class="like">
+        <button
+          mat-icon-button
+          aria-label="heart icon"
+          *ngIf="isLiked; else disLikeButton"
+          (click)="dislikeVocabulary(user.uid); $event.stopPropagation()"
+          type="button"
+        >
+          <i class="material-icons pink">
+            favorite
+          </i>
+        </button>
+        <p>{{ likedCount }}</p>
+      </div>
     </ng-container>
-    <p class="like">{{ likedCount }}</p>
-  </div>
-</div>
+  </mat-card-content>
+</mat-card>
+
+<mat-menu #menu="matMenu">
+  <button
+    mat-menu-item
+    [routerLink]="['/edit']"
+    [queryParams]="{ vocabularyId: vocabulary.vocabularyId }"
+  >
+    <mat-icon>edit</mat-icon>
+    <span>編集</span>
+  </button>
+  <button mat-menu-item (click)="deleteVocabulary()">
+    <mat-icon>delete</mat-icon>
+    <span>削除</span>
+  </button>
+</mat-menu>
