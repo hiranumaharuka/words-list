@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-// tslint:disable-next-line: no-implicit-dependencies
-const firebase_tools = require('firebase-tools');
+
+const firebaseTools = require('firebase-tools');
 const db = admin.firestore();
 
 export const recursiveDelete = functions
@@ -19,7 +19,7 @@ export const recursiveDelete = functions
     for (const doc of docs.docs) {
       await doc.ref.delete();
     }
-    return firebase_tools.firestore
+    return firebaseTools.firestore
       .delete(path, {
         project: process.env.GCLOUD_PROJECT,
         recursive: true,
