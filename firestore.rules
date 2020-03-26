@@ -10,9 +10,9 @@ service cloud.firestore {
       // 作ることはログインした人しかできない
       allow create: if isAuthenticated()
       // 作成者であり、そのuserを変えようとしていない人がupdateできる
-      allow update: if request.auth.uid == resource.data.user && resource.data.user == request.resource.data.user;
+      allow update: if request.auth.uid == resource.data.authorId && resource.data.authorId == request.resource.data.authorId;
       // 作った人だけがdeleteできる。resource.dataはこれから作るデータにアクセスできる
-      allow delete: if request.auth.uid == resource.data.user;
+      allow delete: if request.auth.uid == resource.data.authorId;
     }
     match /users/{userId} {
       // 見ることは誰でもできる
@@ -45,28 +45,6 @@ service cloud.firestore {
       allow update: if request.auth.uid == resource.data.authorId && resource.data.authorId == request.resource.data.authorId;
       // 作った人だけがdeleteできる。resource.dataはこれから作るデータにアクセスできる
       allow delete: if request.auth.uid == resource.data.authorId;
-    }
-    match /users/{userId} {
-      // 見ることは誰でもできる
-      allow read: if true;
-      // 作ることはログインした人しかできない
-      allow create: if isAuthenticated()
-      // 作成者であり、そのuserを変えようとしていない人がupdateできる
-      allow update: if request.auth.uid == resource.data.authorId && resource.data.authorId == request.resource.data.authorId;
-      // 作った人だけがdeleteできる。resource.dataはこれから作るデータにアクセスできる
-      allow delete: if request.auth.uid == resource.data.user;
-    }
-    match /vocabularies/{vocabularyId}/likedUserIds/{userId} {
-      // 見ることは誰でもできる
-      allow read: if true;
-      // 作る、更新、削除はログインした人しかできない
-      allow create, update, delete: if isAuthenticated()
-    }
-    match /users/{userId}/likedVocabularies/{vocabularyId} {
-      // 見ることは誰でもできる
-      allow read: if true;
-      // 作る、更新、削除はログインした人しかできない
-      allow create, update, delete: if isAuthenticated()
     }
   }
 }

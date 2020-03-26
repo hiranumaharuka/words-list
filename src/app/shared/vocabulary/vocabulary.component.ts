@@ -23,6 +23,7 @@ export class VocabularyComponent implements OnInit {
   vocabulary$: Observable<VocabularyWithAuthor>;
   user$ = this.authService.afUser$;
   sub = new Subscription();
+  userId = this.authService.uid;
 
   constructor(
     private vocabularyService: VocabularyService,
@@ -83,5 +84,8 @@ export class VocabularyComponent implements OnInit {
     this.isLiked = false;
     this.likedCount--;
     this.likeService.dislikeVocabulary(this.vocabulary.vocabularyId, uid);
+  }
+  deleteVocabulary() {
+    this.vocabularyService.deleteVocabulary(this.vocabulary.vocabularyId);
   }
 }

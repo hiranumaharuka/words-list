@@ -98,6 +98,15 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'edit',
+    loadChildren: () =>
+      import('./addvocabulary/addvocabulary.module').then(
+        m => m.AddvocabularyModule
+      ),
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     component: NotfoundComponent
   }

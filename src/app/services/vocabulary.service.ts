@@ -9,10 +9,11 @@ import {
   User
 } from '../interfaces/vocabulary';
 import { Router } from '@angular/router';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, first } from 'rxjs/operators';
 import { Observable, combineLatest, of } from 'rxjs';
 import { firestore } from 'firebase';
 import { MatSnackBar } from '@angular/material';
+import { AngularFireFunctions } from '@angular/fire/functions';
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +23,14 @@ export class VocabularyService {
     // データベースにアクセスする
     private db: AngularFirestore,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private fns: AngularFireFunctions
   ) {}
 
   addVocabulary(
     vocabulary: Omit<Vocabulary, 'vocabularyId' | 'likedCount'>,
     uid: string
   ): Promise<void> {
-    // createIdは元からfirebaseの中で定義されている
     const vocabularyId = this.db.createId();
     return this.db
       .doc(`vocabularies/${vocabularyId}`)
@@ -152,5 +153,29 @@ export class VocabularyService {
         return result.vocabulariesData;
       })
     );
+  }
+
+  updateVocabulary(
+    vocabulary: Omit<Vocabulary, 'createdAt' | 'likedCount'>
+  ): Promise<void> {
+    return this.db
+      .doc(`vocabularies/${vocabulary.vocabularyId}`)
+      .update({ ...vocabulary })
+      .then(() => {
+        this.snackBar.open('単語帳を編集しました', null, { duration: 1500 });
+      });
+  }
+  deleteVocabulary(vocabularyId: string): Promise<void> {
+    const deleteFn = this.fns.httpsCallable('recursiveDelete');
+    return deleteFn({ vocabularyId })
+      .pipe(first())
+      .toPromise()
+      .then(() => {
+        this.snackBar.open('単語帳を削除しました', null, { duration: 1500 });
+      })
+      .catch(err => {
+        console.log('Delete failed, see console,');
+        console.warn(err);
+      });
   }
 }

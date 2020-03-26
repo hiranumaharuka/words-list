@@ -1,10 +1,11 @@
 <div class="container">
-  <h2>単語帳を作成</h2>
-  <!-- ボタンを押した時に何をするかをngsubmitで定義 -->
+  <ng-template #addheading>
+    <h2>単語帳を作成</h2>
+  </ng-template>
+  <h2 *ngIf="isEditing; else addheading">単語帳を編集</h2>
   <form [formGroup]="form" (ngSubmit)="submit()">
     <mat-form-field>
       <mat-label>名前</mat-label>
-      <!-- formControlNameでcomponentのfomrの値と関連付ける -->
       <input
         formControlName="title"
         type="text"
@@ -25,13 +26,26 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>タグ</mat-label>
-      <!-- formControlNameでcomponentのformの値と関連付ける -->
       <input formControlName="tag" type="text" matInput autocomplete="off" />
     </mat-form-field>
-    <!-- disabledでちゃんと入力していないとボタンを押せないようにする -->
-    <!-- form.invalideはformの中身がちゃんとしていない状態 -->
-    <button [disabled]="form.invalid" mat-raised-button color="primary">
-      作成する
+
+    <ng-template #addvocabulary>
+      <button [disabled]="form.invalid" mat-raised-button color="primary">
+        作成する
+      </button>
+    </ng-template>
+    <button
+      [disabled]="form.invalid"
+      mat-raised-button
+      color="primary"
+      (click)="updateVocabulary()"
+      type="button"
+      *ngIf="isEditing; else addvocabulary"
+    >
+      編集を適用
+    </button>
+    <button type="button" mat-raised-button (click)="goBack()">
+      キャンセル
     </button>
   </form>
 </div>
