@@ -9,11 +9,12 @@ import {
   User
 } from '../interfaces/vocabulary';
 import { Router } from '@angular/router';
-import { map, switchMap, first } from 'rxjs/operators';
+import { map, switchMap, first, tap } from 'rxjs/operators';
 import { Observable, combineLatest, of } from 'rxjs';
 import { firestore } from 'firebase';
 import { MatSnackBar } from '@angular/material';
 import { AngularFireFunctions } from '@angular/fire/functions';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,13 +25,15 @@ export class VocabularyService {
     private db: AngularFirestore,
     private router: Router,
     private snackBar: MatSnackBar,
-    private fns: AngularFireFunctions
+    private fns: AngularFireFunctions,
+    private loadingService: LoadingService
   ) {}
 
   addVocabulary(
     vocabulary: Omit<Vocabulary, 'vocabularyId' | 'likedCount'>,
     uid: string
   ): Promise<void> {
+    this.loadingService.toggleLoading(true);
     const vocabularyId = this.db.createId();
     return this.db
       .doc(`vocabularies/${vocabularyId}`)
@@ -43,13 +46,20 @@ export class VocabularyService {
       .then(() => {
         this.snackBar.open('単語帳を作成しました', null, { duration: 1500 });
         this.router.navigateByUrl('/myvocabulary');
+        this.loadingService.toggleLoading(false);
       });
   }
 
   getVocabulary(vocabularyId: string): Observable<Vocabulary> {
+    this.loadingService.toggleLoading(true);
     return this.db
       .doc<Vocabulary>(`vocabularies/${vocabularyId}`)
-      .valueChanges();
+      .valueChanges()
+      .pipe(
+        tap(() => {
+          this.loadingService.toggleLoading(false);
+        })
+      );
   }
 
   getUser(userId: string): Observable<User> {
@@ -158,20 +168,24 @@ export class VocabularyService {
   updateVocabulary(
     vocabulary: Omit<Vocabulary, 'createdAt' | 'likedCount'>
   ): Promise<void> {
+    this.loadingService.toggleLoading(true);
     return this.db
       .doc(`vocabularies/${vocabulary.vocabularyId}`)
       .update({ ...vocabulary })
       .then(() => {
         this.snackBar.open('単語帳を編集しました', null, { duration: 1500 });
+        this.loadingService.toggleLoading(false);
       });
   }
   deleteVocabulary(vocabularyId: string): Promise<void> {
+    this.loadingService.toggleLoading(true);
     const deleteFn = this.fns.httpsCallable('recursiveDelete');
     return deleteFn({ vocabularyId })
       .pipe(first())
       .toPromise()
       .then(() => {
         this.snackBar.open('単語帳を削除しました', null, { duration: 1500 });
+        this.loadingService.toggleLoading(false);
       })
       .catch(err => {
         console.log('Delete failed, see console,');

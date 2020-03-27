@@ -9,7 +9,8 @@ import {
   MatButtonModule,
   MatMenuModule,
   MatToolbarModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatProgressBarModule
 } from '@angular/material';
 import { FooterComponent } from './footer/footer.component';
 import { AngularFireModule } from '@angular/fire';
@@ -42,7 +43,8 @@ import { SharedModule } from './shared/shared.module';
     AngularFireAuthModule,
     MatSnackBarModule,
     SharedModule,
-    AngularFireFunctionsModule
+    AngularFireFunctionsModule,
+    MatProgressBarModule
   ],
   providers: [
     {

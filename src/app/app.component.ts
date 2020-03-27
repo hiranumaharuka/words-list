@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderService } from './header/header.service';
+import { LoadingService } from './services/loading.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +10,12 @@ import { HeaderService } from './header/header.service';
 })
 export class AppComponent implements OnInit {
   title = 'wordbook';
-  constructor(private header: HeaderService) {}
+  loading$: Observable<boolean> = this.loadingService.loading$;
+  loading: boolean;
+  constructor(
+    private header: HeaderService,
+    private loadingService: LoadingService
+  ) {}
   ngOnInit() {
     this.header.show();
   }
