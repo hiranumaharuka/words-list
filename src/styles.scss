@@ -1,10 +1,54 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/theming';
+@include mat-core();
+$mat-original-orange: (
+  50: #ffece6,
+  100: #ffcfbf,
+  200: #ffb095,
+  300: #fe906b,
+  400: #fe784b,
+  500: #fe602b,
+  600: #fe5826,
+  700: #fe4e20,
+  800: #fe441a,
+  900: #fd3310,
+  A100: #ffffff,
+  A200: #fff7f6,
+  A400: #ffcac3,
+  A700: #ffb4aa,
+  contrast: (
+    50: #ffffff,
+    100: #ffffff,
+    200: #ffffff,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #ffffff,
+    A200: #ffffff,
+    A400: #ffffff,
+    A700: #ffffff
+  )
+);
 
-html,
-body {
+// プライマリカラー
+$candy-app-primary: mat-palette($mat-original-orange);
+
+// アクセントカラー
+$candy-app-accent: mat-palette($mat-grey, 600, 900, 400);
+
+$my-theme: mat-light-theme($candy-app-primary, $candy-app-accent);
+@include angular-material-theme($my-theme);
+
+html {
   height: 100%;
+  background-color: #fcfcfc;
 }
 body {
+  height: 100%;
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
