@@ -8,9 +8,7 @@
       (click)="$event.stopPropagation()"
       *ngIf="vocabulary.authorId === userId"
     >
-      <mat-icon aria-hidden="true" aria-label="menu" class="orange"
-        >more_vert</mat-icon
-      >
+      <mat-icon aria-hidden="true" aria-label="menu">more_vert</mat-icon>
     </button>
   </mat-card-content>
   <mat-card-content>
@@ -39,7 +37,7 @@
           (click)="dislikeVocabulary(user.uid); $event.stopPropagation()"
           type="button"
         >
-          <i class="material-icons orange">
+          <i class="material-icons">
             favorite
           </i>
         </button>
@@ -55,11 +53,11 @@
     [routerLink]="['/edit']"
     [queryParams]="{ vocabularyId: vocabulary.vocabularyId }"
   >
-    <mat-icon class="orange">edit</mat-icon>
+    <mat-icon>edit</mat-icon>
     <span>編集</span>
   </button>
   <button mat-menu-item (click)="deleteVocabulary()">
-    <mat-icon class="orange">delete</mat-icon>
+    <mat-icon>delete</mat-icon>
     <span>削除</span>
   </button>
 </mat-menu>

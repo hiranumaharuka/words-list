@@ -1,3 +1,6 @@
+@mixin primary-color {
+  color: #fe602b;
+}
 .vocabulary {
   border: solid 1px #dcdcdc;
   border-radius: 8px;
@@ -45,6 +48,10 @@
   color: rgba(0, 0, 0, 0.26);
 }
 
-.orange {
-  color: #fe602b;
+.mat-menu-item,
+button {
+  mat-icon,
+  i {
+    @include primary-color;
+  }
 }

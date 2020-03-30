@@ -1,4 +1,8 @@
+@mixin primary-color {
+  color: #fe602b;
+}
 .header {
+  @include primary-color;
   &__icon {
     padding: 0 8px;
   }
@@ -13,6 +17,7 @@ mat-toolbar {
   background: #fff;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
-.orange {
-  color: #fe602b;
+
+.mat-menu-item mat-icon {
+  @include primary-color;
 }

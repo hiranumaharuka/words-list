@@ -1,35 +1,33 @@
-<mat-toolbar *ngIf="header.visible">
+<mat-toolbar *ngIf="header.visible" class="header">
   <mat-toolbar-row>
-    <span routerLink="/" class="orange">LOGO</span>
+    <span routerLink="/">LOGO</span>
     <span class="header__spacer"></span>
-    <mat-icon class="header__icon orange" aria-hidden="true" aria-label="search"
+    <mat-icon class="header__icon" aria-hidden="true" aria-label="search"
       >search</mat-icon
     >
     <button mat-icon-button routerLink="/addvocabulary">
-      <mat-icon class="header__icon orange" aria-hidden="true" aria-label="add"
+      <mat-icon class="header__icon" aria-hidden="true" aria-label="add"
         >add_circle_outline</mat-icon
       >
     </button>
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="menu">
-      <mat-icon aria-hidden="true" aria-label="menu" class="orange"
-        >more_vert</mat-icon
-      >
+      <mat-icon aria-hidden="true" aria-label="menu">more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item routerLink="/myvocabulary">
-        <mat-icon class="orange">library_books</mat-icon>
+        <mat-icon>library_books</mat-icon>
         <span>My単語帳</span>
       </button>
       <button mat-menu-item routerLink="/favvocabulary">
-        <mat-icon class="orange">favorite</mat-icon>
+        <mat-icon>favorite</mat-icon>
         <span>お気に入りの単語帳</span>
       </button>
       <button mat-menu-item routerLink="/setting">
-        <mat-icon class="orange">settings</mat-icon>
+        <mat-icon>settings</mat-icon>
         <span>設定</span>
       </button>
       <button *ngIf="user$ | async" (click)="logout()" mat-menu-item>
-        <mat-icon class="orange">exit_to_app</mat-icon>
+        <mat-icon>exit_to_app</mat-icon>
         <span>ログアウト</span>
       </button>
     </mat-menu>
