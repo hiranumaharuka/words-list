@@ -10,7 +10,9 @@
       aria-label="menu"
       (click)="$event.stopPropagation()"
     >
-      <mat-icon aria-hidden="true" aria-label="menu">more_vert</mat-icon>
+      <mat-icon aria-hidden="true" aria-label="menu" color="primary"
+        >more_vert</mat-icon
+      >
     </button>
     <mat-menu #menu="matMenu">
       <button
@@ -19,7 +21,7 @@
         [queryParams]="{ wordId: word.wordId }"
         *ngIf="vocabulary.authorId === uid"
       >
-        <mat-icon>edit</mat-icon>
+        <mat-icon color="primary">edit</mat-icon>
         <span>編集</span>
       </button>
       <button
@@ -27,11 +29,11 @@
         (click)="deleteWord()"
         *ngIf="word.authorId === uid"
       >
-        <mat-icon>delete</mat-icon>
+        <mat-icon color="primary">delete</mat-icon>
         <span>削除</span>
       </button>
       <button mat-menu-item>
-        <mat-icon>volume_up</mat-icon>
+        <mat-icon color="primary">volume_up</mat-icon>
         <span>音声</span>
       </button>
     </mat-menu>

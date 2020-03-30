@@ -1,6 +1,3 @@
-@mixin primary-color {
-  color: #fe602b;
-}
 .vocabulary {
   border: solid 1px #dcdcdc;
   border-radius: 8px;
@@ -44,14 +41,6 @@
   }
 }
 
-.material-icons.md-dark.md-inactive {
+.md-dark.md-inactive {
   color: rgba(0, 0, 0, 0.26);
-}
-
-.mat-menu-item,
-button {
-  mat-icon,
-  i {
-    @include primary-color;
-  }
 }

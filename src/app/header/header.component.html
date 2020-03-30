@@ -15,19 +15,19 @@
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item routerLink="/myvocabulary">
-        <mat-icon>library_books</mat-icon>
+        <mat-icon color="primary">library_books</mat-icon>
         <span>My単語帳</span>
       </button>
       <button mat-menu-item routerLink="/favvocabulary">
-        <mat-icon>favorite</mat-icon>
+        <mat-icon color="primary">favorite</mat-icon>
         <span>お気に入りの単語帳</span>
       </button>
       <button mat-menu-item routerLink="/setting">
-        <mat-icon>settings</mat-icon>
+        <mat-icon color="primary">settings</mat-icon>
         <span>設定</span>
       </button>
       <button *ngIf="user$ | async" (click)="logout()" mat-menu-item>
-        <mat-icon>exit_to_app</mat-icon>
+        <mat-icon color="primary">exit_to_app</mat-icon>
         <span>ログアウト</span>
       </button>
     </mat-menu>
