@@ -1,30 +1,68 @@
 <div class="container" *ngIf="vocabulary$ | async as vocabulary">
-  <h2>単語一覧</h2>
-  <app-word
-    *ngFor="let word of words"
-    [word]="word"
-    (delete)="deleteWord($event)"
-  ></app-word>
-  <button
-    *ngIf="vocabulary.authorId === userId"
-    mat-mini-fab
-    color="primary"
-    routerLink="/wordlist/{{ vocabulary.vocabularyId }}/addword"
-    class="add"
-  >
-    <i class="material-icons">
-      add
-    </i>
-  </button>
-  <button mat-mini-fab color="primary" class="flash">
-    <i class="material-icons">
-      style
-    </i>
-  </button>
-  <div
-    infiniteScroll
-    [infiniteScrollDistance]="2"
-    [infiniteScrollThrottle]="50"
-    (scrolled)="getWords()"
-  ></div>
+  <ng-container *ngIf="flipped; else isflip">
+    <h2>単語一覧</h2>
+    <app-word
+      *ngFor="let word of words"
+      [word]="word"
+      (delete)="deleteWord($event)"
+    ></app-word>
+    <button
+      *ngIf="vocabulary.authorId === userId"
+      mat-mini-fab
+      color="primary"
+      routerLink="/wordlist/{{ vocabulary.vocabularyId }}/addword"
+      class="add"
+    >
+      <mat-icon class="material-icons">
+        add
+      </mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      color="primary"
+      class="flash"
+      (click)="flip()"
+      *ngIf="!(words.length === 0)"
+    >
+      <mat-icon class="material-icons">
+        style
+      </mat-icon>
+    </button>
+    <div
+      infiniteScroll
+      [infiniteScrollDistance]="2"
+      [infiniteScrollThrottle]="50"
+      (scrolled)="getWords()"
+    ></div>
+  </ng-container>
 </div>
+
+<ng-template #isflip>
+  <div class="flip">
+    <div class="inner">
+      <mat-progress-bar
+        mode="determinate"
+        [value]="progress"
+      ></mat-progress-bar>
+      <ng-template #zero>
+        <p>
+          0 %
+        </p></ng-template
+      >
+    </div>
+    <p *ngIf="!(progress === undefined); else zero">{{ progress + ' %' }}</p>
+    <swiper
+      [config]="config"
+      [(index)]="index"
+      (indexChange)="onIndexChange($event)"
+    >
+      <app-card *ngFor="let word of words" [word]="word"></app-card>
+    </swiper>
+
+    <button mat-mini-fab color="primary" class="flash" (click)="list()">
+      <mat-icon class="material-icons">
+        list
+      </mat-icon>
+    </button>
+  </div>
+</ng-template>

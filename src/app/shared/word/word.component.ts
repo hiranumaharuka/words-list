@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Word } from 'src/app/interfaces/word';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Vocabulary } from 'src/app/interfaces/vocabulary';
 import { ActivatedRoute } from '@angular/router';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
