@@ -7,6 +7,7 @@ import { switchMap, take } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { Word } from 'src/app/interfaces/word';
 import { WordService } from 'src/app/services/word.service';
+import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 
 @Component({
   selector: 'app-wordlist',
@@ -17,9 +18,18 @@ export class WordlistComponent implements OnInit {
   vocabulary$: Observable<Vocabulary>;
   userId: string = this.authService.uid;
   lastDoc;
-  words: Word[] = [];
   isComplete: boolean;
   vocabularyId: string;
+  config: SwiperConfigInterface = {
+    loop: false,
+    navigation: false,
+    centeredSlides: true,
+    slidesPerView: 1
+  };
+  index: number;
+  flipped: boolean;
+  words: Word[] = [];
+  progress: number;
   constructor(
     private route: ActivatedRoute,
     private vocabularyService: VocabularyService,
@@ -36,6 +46,7 @@ export class WordlistComponent implements OnInit {
     );
     this.vocabularyId = this.route.snapshot.paramMap.get('vocabularyId');
     this.getWords();
+    this.flipped = true;
   }
   getWords() {
     if (this.isComplete) {
@@ -60,5 +71,17 @@ export class WordlistComponent implements OnInit {
   deleteWord(wordId: string) {
     const targetIndex = this.words.findIndex(word => word.wordId === wordId);
     this.words.splice(targetIndex, 1);
+  }
+  flip() {
+    this.flipped = false;
+  }
+  list() {
+    this.flipped = true;
+  }
+  onIndexChange(index: number) {
+    const result = (this.index / (this.words.length - 1)) * 100;
+    const n = 0;
+    this.progress = Math.floor(result * Math.pow(10, n)) / Math.pow(10, n);
+    return index;
   }
 }

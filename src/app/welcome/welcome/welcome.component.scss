@@ -1,22 +1,6 @@
-$pc: 1024px;
-$tab: 768px;
-$sp: 480px;
-@mixin pc {
-  @media (min-width: ($pc)) {
-    @content;
-  }
-}
-@mixin tab {
-  @media (max-width: ($tab)) {
-    @content;
-  }
-}
+@import 'mixins';
+@import 'variables';
 
-@mixin sp {
-  @media (max-width: ($sp)) {
-    @content;
-  }
-}
 .container {
   padding: 24px;
   display: flex;

@@ -1,0 +1,50 @@
+@import 'mixins';
+@import 'variables';
+
+.tp-wrapper {
+  perspective: 2000px;
+}
+
+.tp-box {
+  position: relative;
+  @include pc {
+    max-width: 40%;
+  }
+  @include sp {
+    width: 80%;
+  }
+  height: 300px;
+  margin: 3rem auto;
+  transform-style: preserve-3d;
+  transform: transform 1s;
+}
+.tp-box__side {
+  width: 100%;
+  height: auto;
+  position: absolute;
+  backface-visibility: hidden;
+  color: #fff;
+  text-align: center;
+  line-height: 25px;
+  font-size: 24px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  border: solid 1px #dcdcdc;
+  user-select: none;
+  box-sizing: border-box;
+  padding: 32px;
+}
+.tp-box__front {
+  @include primary-color {
+    color: $primary-color;
+  }
+  background: white;
+  transform: rotateY(0deg);
+}
+.tp-box__back {
+  @include primary-color {
+    background: $primary-color;
+  }
+  transform: rotateY(-180deg);
+}

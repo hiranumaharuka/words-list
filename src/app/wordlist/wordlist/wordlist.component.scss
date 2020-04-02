@@ -1,3 +1,6 @@
+@import 'mixins';
+@import 'variables';
+
 button {
   display: block;
   margin-bottom: 16px;
@@ -8,5 +11,11 @@ button {
   }
   &.flash {
     bottom: 80px;
+    z-index: 1000;
   }
+}
+.inner {
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
 }
