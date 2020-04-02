@@ -20,6 +20,9 @@
       <mat-error *ngIf="surfaceControl.hasError('required')"
         >必須入力です</mat-error
       >
+      <mat-error *ngIf="surfaceControl.hasError('maxlength')"
+        >長過ぎます</mat-error
+      >
     </mat-form-field>
     <mat-form-field>
       <mat-label>裏面</mat-label>
@@ -32,6 +35,9 @@
       />
       <mat-error *ngIf="backsideControl.hasError('required')"
         >必須入力です</mat-error
+      >
+      <mat-error *ngIf="backsideControl.hasError('maxlength')"
+        >長過ぎます</mat-error
       >
     </mat-form-field>
     <button

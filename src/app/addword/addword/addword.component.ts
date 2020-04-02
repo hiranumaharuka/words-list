@@ -5,7 +5,7 @@ import { WordService } from 'src/app/services/word.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 
 @Component({
@@ -16,8 +16,8 @@ import { switchMap, take } from 'rxjs/operators';
 export class AddwordComponent implements OnInit {
   vocabularyId: string;
   form = this.fb.group({
-    surface: ['', [Validators.required]],
-    backside: ['', [Validators.required]]
+    surface: ['', [Validators.required, Validators.maxLength(300)]],
+    backside: ['', [Validators.required, Validators.maxLength(200)]]
   });
   isEditing: boolean;
   word$: Observable<Word>;
