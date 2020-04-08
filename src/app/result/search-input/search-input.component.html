@@ -11,18 +11,20 @@
       >
         <div *ngFor="let index of state.indices || []">
           <ng-container *ngIf="mode === 'vocabularies'; else words">
+            <p>{{ index.hits | json }}</p>
             <mat-option
               *ngFor="let option of index.hits"
-              [value]="option.title"
+              [value]="111"
               (click)="querySuggestionSelected.emit(option.title)"
             >
               {{ option.title }}
             </mat-option>
           </ng-container>
           <ng-template #words>
+            <p>{{ index.hits | json }}</p>
             <mat-option
               *ngFor="let option of index.hits"
-              [value]="option.surface"
+              [value]="111"
               (click)="querySuggestionSelected.emit(option.surface)"
             >
               {{ option.surface }}

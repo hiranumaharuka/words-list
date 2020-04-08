@@ -26,49 +26,42 @@ export class ResultComponent implements OnInit {
   mode: Mode;
   // configはこれだけ
   config = {
-    indexName: 'vocabularies',
+    indexName: 'words',
     searchClient
   };
   constructor(private route: ActivatedRoute, private router: Router) {
     this.route.queryParamMap.subscribe(map => {
       this.config.indexName = map.get('mode') as Mode;
-      console.log('constructorの中のindexNameは' + this.config.indexName);
-      if (this.config.indexName === 'vocabularies') {
-        this.route.queryParamMap.subscribe(paramMap => {
-          this.resultParams.query = paramMap.get('title');
-          console.log('constructorの中のtitle取得しました');
-        });
-      } else if (this.config.indexName === 'words') {
-        this.route.queryParamMap.subscribe(param => {
-          this.resultParams.query = param.get('surface');
-          console.log('constructorの中のsurface取得しました');
-        });
+      console.log('change');
+      switch (this.config.indexName) {
+        case 'vocabularies':
+          this.resultParams.query = map.get('title');
+          break;
+        case 'words':
+          this.resultParams.query = map.get('surface');
+          break;
       }
     });
   }
   ngOnInit() {}
-  search(title?: string, surface?: string) {
-    // 検索する度にresultに飛ぶ、queryparamsを追加する
-    console.log('resultのindexNameの中身は' + this.config.indexName);
-    if (this.config.indexName === 'vocabularies') {
-      this.router.navigate(['/result'], {
-        queryParams: { title },
-        queryParamsHandling: 'merge'
-      });
-      console.log('titleを追加しました');
-    } else if (this.config.indexName === 'words') {
-      this.router.navigate(['/result'], {
-        queryParams: { surface },
-        queryParamsHandling: 'merge'
-      });
-      console.log('surfaceを追加しました');
+  search(value) {
+    switch (this.config.indexName) {
+      case 'vocabularies':
+        this.router.navigate(['/result'], {
+          queryParams: { title: value },
+          queryParamsHandling: 'merge'
+        });
+        console.log(value);
+        break;
+      case 'words':
+        this.router.navigate(['/result'], {
+          queryParams: { surface: value },
+          queryParamsHandling: 'merge'
+        });
+        console.log(value);
+        break;
     }
-    // this.router.navigate(['/result'], {
-    //   queryParams: { title },
-    //   queryParamsHandling: 'merge'
-    // });
   }
-
   nextPage() {
     this.resultParams.page++;
   }
