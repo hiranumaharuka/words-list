@@ -1,0 +1,28 @@
+<div class="container">
+  <ais-instantsearch [config]="config">
+    <!-- ヒット数を減らすために、検索パラメーターを渡すこと -->
+    <ais-configure [searchParameters]="inputParams"></ais-configure>
+    <app-search-input
+      (querySuggestionSelected)="search($event)"
+    ></app-search-input>
+    <app-segmented-control></app-segmented-control>
+  </ais-instantsearch>
+  <div class="container">
+    <ais-instantsearch [config]="config">
+      <ais-configure [searchParameters]="resultParams"></ais-configure>
+      <ais-hits>
+        <ng-template let-hits="hits">
+          <ol class="ais-Hits-list">
+            <li *ngFor="let hit of hits" class="ais-Hits-item">
+              {{ hit.title }}
+              {{ hit.tag }}
+              {{ hit.description }}
+              {{ hit.surface }}
+              {{ hit.back }}
+            </li>
+          </ol>
+        </ng-template>
+      </ais-hits>
+    </ais-instantsearch>
+  </div>
+</div>

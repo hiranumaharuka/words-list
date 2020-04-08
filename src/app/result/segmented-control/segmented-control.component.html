@@ -1,0 +1,18 @@
+<div>
+  <ul class="segmented">
+    <li
+      class="segmented__item"
+      (click)="changeMode('vocabularies')"
+      [class.segmented--active]="mode === 'vocabularies'"
+    >
+      <button>単語帳</button>
+    </li>
+    <li
+      class="segmented__item"
+      (click)="changeMode('words')"
+      [class.segmented--active]="mode === 'words'"
+    >
+      <button>単語</button>
+    </li>
+  </ul>
+</div>

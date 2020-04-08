@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { GuestGuard } from './guards/guest.guard';
 import { NotfoundComponent } from './notfound/notfound.component';
+import { ResultComponent } from './result/result/result.component';
 
 const routes: Routes = [
   {
@@ -103,6 +104,20 @@ const routes: Routes = [
       import('./addvocabulary/addvocabulary.module').then(
         m => m.AddvocabularyModule
       ),
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'result',
+    loadChildren: () =>
+      import('./result/result.module').then(m => m.ResultModule),
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'mode',
+    loadChildren: () =>
+      import('./result/result.module').then(m => m.ResultModule),
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
   },

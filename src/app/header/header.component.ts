@@ -10,6 +10,7 @@ import { HeaderService } from './header.service';
 export class HeaderComponent implements OnInit {
   // user$は最新のuserが入る箱
   user$ = this.authService.afUser$;
+
   constructor(private authService: AuthService, public header: HeaderService) {}
 
   ngOnInit() {}

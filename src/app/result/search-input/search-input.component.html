@@ -1,0 +1,40 @@
+<div>
+  <form
+    (ngSubmit)="querySuggestionSelected.emit(inputControl.value)"
+    class="search"
+  >
+    <mat-form-field class="search__input">
+      <input matInput [formControl]="inputControl" [matAutocomplete]="auto" />
+      <mat-autocomplete
+        (optionSelected)="querySuggestionSelected.emit($event.option.value)"
+        #auto="matAutocomplete"
+      >
+        <div *ngFor="let index of state.indices || []">
+          <ng-container *ngIf="mode === 'vocabularies'; else words">
+            <mat-option
+              *ngFor="let option of index.hits"
+              [value]="option.title"
+              (click)="querySuggestionSelected.emit(option.title)"
+            >
+              {{ option.title }}
+            </mat-option>
+          </ng-container>
+          <ng-template #words>
+            <mat-option
+              *ngFor="let option of index.hits"
+              [value]="option.surface"
+              (click)="querySuggestionSelected.emit(option.surface)"
+            >
+              {{ option.surface }}
+            </mat-option>
+          </ng-template>
+        </div>
+      </mat-autocomplete>
+    </mat-form-field>
+    <button>
+      <mat-icon color="primary" aria-hidden="true" aria-label="search"
+        >search</mat-icon
+      >
+    </button>
+  </form>
+</div>
