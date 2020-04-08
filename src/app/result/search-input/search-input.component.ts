@@ -1,54 +1,54 @@
-import {
-  Component,
-  OnInit,
-  EventEmitter,
-  Inject,
-  forwardRef,
-  Output
-} from '@angular/core';
-import { BaseWidget, NgAisInstantSearch } from 'angular-instantsearch';
-import { connectAutocomplete } from 'instantsearch.js/es/connectors';
+import { environment } from './../../../environments/environment';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import * as algoliasearch from 'algoliasearch/lite';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+
+const searchClient = algoliasearch(
+  environment.algolia.appId,
+  environment.algolia.apiKey
+);
+
 type Mode = 'vocabularies' | 'words';
 @Component({
   selector: 'app-search-input',
   templateUrl: './search-input.component.html',
   styleUrls: ['./search-input.component.scss']
 })
-export class SearchInputComponent extends BaseWidget implements OnInit {
-  state: {
-    query: string;
-    refine: (target: string) => void;
-    indices: object[];
-  };
+export class SearchInputComponent implements OnInit {
   inputControl = new FormControl();
+
+  options = [];
 
   @Output() querySuggestionSelected = new EventEmitter<{ query: string }>();
   // mode$: Observable<Mode>;
   mode: Mode;
-  constructor(
-    @Inject(forwardRef(() => NgAisInstantSearch))
-    public instantSearchParent,
-    private route: ActivatedRoute
-  ) {
-    super('AutocompleteComponent');
+  constructor(private route: ActivatedRoute) {
     // 値が変わった時だけ上下選べる
     this.inputControl.valueChanges.subscribe(value => {
-      // 中身取れてる
-      this.state.refine(value);
+      this.testSearch(value);
     });
     this.route.queryParamMap.subscribe(map => {
-      console.log(map.get('mode'));
       // 中身取れてる
       this.mode = map.get('mode') as Mode;
-      // console.log('searchinput' + this.mode);
+      this.testSearch('');
     });
   }
 
-  public ngOnInit() {
-    this.createWidget(connectAutocomplete, {});
-    super.ngOnInit();
+  testSearch(query: string) {
+    searchClient
+      .search([
+        {
+          indexName: this.mode,
+          query: query || '',
+          params: null
+        }
+      ])
+      .then(result => {
+        this.options = result.results[0].hits;
+      })
+      .catch(error => console.log(error));
   }
+
+  ngOnInit() {}
 }

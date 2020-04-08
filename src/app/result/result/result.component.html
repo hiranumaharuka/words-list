@@ -8,8 +8,19 @@
     <app-segmented-control></app-segmented-control>
   </ais-instantsearch>
   <div class="container">
-    <ais-instantsearch [config]="config">
+    <h2>テスト結果</h2>
+    <ul>
+      <li *ngFor="let item of items">
+        <pre>
+        {{ item | json }}
+      </pre
+        >
+      </li>
+    </ul>
+
+    <!-- <ais-instantsearch [config]="config">
       <ais-configure [searchParameters]="resultParams"></ais-configure>
+      <p>indice: {{ config.indexName }}</p>
       <ais-hits>
         <ng-template let-hits="hits">
           <ol class="ais-Hits-list">
@@ -23,6 +34,6 @@
           </ol>
         </ng-template>
       </ais-hits>
-    </ais-instantsearch>
+    </ais-instantsearch> -->
   </div>
 </div>

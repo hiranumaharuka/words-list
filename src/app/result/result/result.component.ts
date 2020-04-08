@@ -23,6 +23,8 @@ export class ResultComponent implements OnInit {
     query: ''
     // filters: 'tag: "英検"'
   };
+  items;
+  isVisible: boolean;
   mode: Mode;
   // configはこれだけ
   config = {
@@ -32,18 +34,39 @@ export class ResultComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router) {
     this.route.queryParamMap.subscribe(map => {
       this.config.indexName = map.get('mode') as Mode;
-      console.log('change');
+      const query = map.get(
+        this.config.indexName === 'vocabularies' ? 'title' : 'surface'
+      );
+      this.testSearch(this.config.indexName, query);
       switch (this.config.indexName) {
         case 'vocabularies':
-          this.resultParams.query = map.get('title');
+          // this.resultParams.query = map.get('title');
           break;
         case 'words':
-          this.resultParams.query = map.get('surface');
+          // this.resultParams.query = map.get('surface');
           break;
       }
     });
   }
+
+  testSearch(indexName: string, query: string) {
+    console.log(query);
+    searchClient
+      .search([
+        {
+          indexName,
+          query,
+          params: null
+        }
+      ])
+      .then(result => {
+        this.items = result.results[0].hits;
+      })
+      .catch(error => console.log(error));
+  }
+
   ngOnInit() {}
+
   search(value) {
     switch (this.config.indexName) {
       case 'vocabularies':
