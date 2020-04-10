@@ -6,10 +6,6 @@ const routes: Routes = [
   {
     path: '',
     component: ResultComponent
-  },
-  {
-    path: 'mode',
-    component: ResultComponent
   }
 ];
 

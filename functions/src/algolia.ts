@@ -86,7 +86,8 @@ export const addWordIndex = (data: any) => {
     createdAt: data.createdAt.toMillis(),
     wordId: data.wordId,
     objectID: data.wordId,
-    authorId: data.authorId
+    authorId: data.authorId,
+    vocabularyId: data.vocabularyId
   };
 
   if (word.surface && word.surface.length > 500) {
@@ -97,8 +98,6 @@ export const addWordIndex = (data: any) => {
 };
 
 export const removeWordIndex = (id: string) => {
-  console.log(id + ' removewordindex');
-  console.log(wordIndex);
   return wordIndex.deleteBy({ filters: `wordId:${id}` }); // 特定のidをもつレコードをすべて削除
 };
 
@@ -109,10 +108,10 @@ export const updateWordIndex = async (data: any) => {
     createdAt: data.createdAt.toMillis(),
     wordId: data.wordId,
     objectID: data.wordId,
-    authorId: data.authorId
+    authorId: data.authorId,
+    vocabularyId: data.vocabularyId
   };
   await removeWordIndex(word.wordId);
-  console.log(word.wordId);
   if (word.surface && word.surface.length > 500) {
     return addWordRecords(word);
   } else {

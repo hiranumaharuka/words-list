@@ -26,6 +26,5 @@ export const updateVocabularyMeta = functions.firestore
 export const deleteVocabulary = functions.firestore
   .document('vocabularies/{vocabularyId}')
   .onDelete(async (snapshot, context) => {
-    console.log(context.params.vocabularyId);
     return removeVocabularyIndex(context.params.vocabularyId);
   });

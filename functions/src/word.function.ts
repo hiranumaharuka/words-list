@@ -21,6 +21,5 @@ export const updateWordMeta = functions.firestore
 export const deleteWord = functions.firestore
   .document('vocabularies/{vocabularyId}/words/{wordId}')
   .onDelete(async (snapshot, context) => {
-    console.log(context.params.wordId + ' deleteword');
     return removeWordIndex(context.params.wordId);
   });

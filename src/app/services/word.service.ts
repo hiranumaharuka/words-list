@@ -19,7 +19,7 @@ export class WordService {
     private loadingService: LoadingService
   ) {}
   addWord(
-    word: Omit<Word, 'wordId'>,
+    word: Omit<Word, 'wordId' | 'vocabularyId'>,
     uid: string,
     vocabularyId: string
   ): Promise<void> {
@@ -30,6 +30,7 @@ export class WordService {
       .set({
         wordId,
         ...word,
+        vocabularyId,
         authorId: uid
       })
       .then(() => {

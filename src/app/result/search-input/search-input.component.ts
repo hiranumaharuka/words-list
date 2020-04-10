@@ -2,53 +2,80 @@ import {
   Component,
   OnInit,
   EventEmitter,
-  Inject,
-  forwardRef,
-  Output
+  Output,
+  Input,
+  OnChanges
 } from '@angular/core';
-import { BaseWidget, NgAisInstantSearch } from 'angular-instantsearch';
-import { connectAutocomplete } from 'instantsearch.js/es/connectors';
+import { environment } from './../../../environments/environment';
+import * as algoliasearch from 'algoliasearch/lite';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+
+const searchClient = algoliasearch(
+  environment.algolia.appId,
+  environment.algolia.apiKey
+);
+
 type Mode = 'vocabularies' | 'words';
 @Component({
   selector: 'app-search-input',
   templateUrl: './search-input.component.html',
   styleUrls: ['./search-input.component.scss']
 })
-export class SearchInputComponent extends BaseWidget implements OnInit {
-  state: {
-    query: string;
-    refine: (target: string) => void;
-    indices: object[];
-  };
+export class SearchInputComponent implements OnInit, OnChanges {
   inputControl = new FormControl();
 
+  options = [];
+  otpion;
   @Output() querySuggestionSelected = new EventEmitter<{ query: string }>();
-  // mode$: Observable<Mode>;
+  @Input() wordId: string;
   mode: Mode;
-  constructor(
-    @Inject(forwardRef(() => NgAisInstantSearch))
-    public instantSearchParent,
-    private route: ActivatedRoute
-  ) {
-    super('AutocompleteComponent');
+  constructor(private route: ActivatedRoute) {
     // 値が変わった時だけ上下選べる
     this.inputControl.valueChanges.subscribe(value => {
-      // 中身取れてる
-      this.state.refine(value);
+      this.testSearch(value);
     });
+    // 切り替えてすぐ、何も入力してない時
     this.route.queryParamMap.subscribe(map => {
-      console.log(map.get('mode'));
-      // 中身取れてる
       this.mode = map.get('mode') as Mode;
-      // console.log('searchinput' + this.mode);
+      this.testSearch('');
     });
   }
 
-  public ngOnInit() {
-    this.createWidget(connectAutocomplete, {});
-    super.ngOnInit();
+  testSearch(query: string, wordId?: string) {
+    searchClient
+      .search([
+        {
+          indexName: this.mode,
+          // queryが何も無ければ(nullであれば)空文字列を渡す
+          // これによって最初から候補が入ってくる
+          query: query || '',
+          params: null
+        }
+      ])
+      .then(result => {
+        this.options = result.results[0].hits.slice(0, 5);
+      })
+      .catch(error => console.log(error));
+  }
+  deleteOption(option, wordId) {
+    const index = searchClient.initIndex('words');
+    index.search(option).then(result => {
+      this.options = result.hits;
+      console.log('optionsの中身は');
+      console.log(this.options);
+      const targetIndex = this.options.findIndex(
+        word => word.wordId === wordId
+      );
+      this.options.splice(targetIndex, 1);
+      console.log('wordIdは' + wordId);
+    });
+  }
+
+  ngOnInit() {}
+  ngOnChanges() {
+    // 単語を入れて消した瞬間はoptionから消えるけど、単語を消すと復活する
+    // 検索表示制限が効かない
+    this.deleteOption(this.otpion, this.wordId);
   }
 }

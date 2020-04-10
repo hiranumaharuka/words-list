@@ -1,0 +1,17 @@
+<div class="container">
+  <p>vocabularyresultの中身</p>
+  <ais-instantsearch [config]="config">
+    <ais-configure [searchParameters]="resultParams"></ais-configure>
+    <ais-hits>
+      <ng-template let-hits="hits">
+        <ol class="ais-Hits-list">
+          <li *ngFor="let hit of hits" class="ais-Hits-item">
+            {{ hit.title }}
+            {{ hit.tag }}
+            {{ hit.description }}
+          </li>
+        </ol>
+      </ng-template>
+    </ais-hits>
+  </ais-instantsearch>
+</div>
