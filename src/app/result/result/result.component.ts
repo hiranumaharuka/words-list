@@ -15,10 +15,6 @@ type Mode = 'vocabularies' | 'words';
   styleUrls: ['./result.component.scss']
 })
 export class ResultComponent implements OnInit {
-  inputParams: SearchParameters = {
-    hitsPerPage: 5,
-    filters: ''
-  };
   resultParams = {
     hitsPerPage: 5,
     page: 0,
@@ -29,9 +25,6 @@ export class ResultComponent implements OnInit {
     indexName: 'words',
     searchClient
   };
-  options = [];
-  option;
-  wordId: string;
   params;
   constructor(private route: ActivatedRoute, private router: Router) {
     this.route.queryParamMap.subscribe(map => {
@@ -41,9 +34,7 @@ export class ResultComponent implements OnInit {
       );
     });
   }
-  ngOnInit() {
-    this.deleteWord(this.wordId);
-  }
+  ngOnInit() {}
 
   search(value) {
     switch (this.config.indexName) {
@@ -63,9 +54,5 @@ export class ResultComponent implements OnInit {
   }
   nextPage() {
     this.resultParams.page++;
-  }
-
-  deleteWord(wordId) {
-    this.wordId = wordId;
   }
 }

@@ -1,16 +1,17 @@
 <div class="container">
-  <p>vocabularyresultの中身</p>
   <ais-instantsearch [config]="config">
     <ais-configure [searchParameters]="resultParams"></ais-configure>
     <ais-hits>
       <ng-template let-hits="hits">
-        <ol class="ais-Hits-list">
-          <li *ngFor="let hit of hits" class="ais-Hits-item">
-            {{ hit.title }}
-            {{ hit.tag }}
-            {{ hit.description }}
-          </li>
-        </ol>
+        <ng-container *ngFor="let hit of hits | mergeuser | async">
+          <ng-container *ngIf="hit.vocabularyId !== findIds(hit.vocabularyId)">
+            <app-vocabulary
+              class="ais-Hits-item"
+              [vocabulary]="hit"
+              routerLink="/wordlist/{{ hit.vocabularyId }}"
+            ></app-vocabulary>
+          </ng-container>
+        </ng-container>
       </ng-template>
     </ais-hits>
   </ais-instantsearch>

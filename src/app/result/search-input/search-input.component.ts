@@ -3,13 +3,15 @@ import {
   OnInit,
   EventEmitter,
   Output,
-  Input,
-  OnChanges
+  OnDestroy
 } from '@angular/core';
 import { environment } from './../../../environments/environment';
 import * as algoliasearch from 'algoliasearch/lite';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { WordService } from 'src/app/services/word.service';
+import { VocabularyService } from 'src/app/services/vocabulary.service';
 
 const searchClient = algoliasearch(
   environment.algolia.appId,
@@ -22,15 +24,21 @@ type Mode = 'vocabularies' | 'words';
   templateUrl: './search-input.component.html',
   styleUrls: ['./search-input.component.scss']
 })
-export class SearchInputComponent implements OnInit, OnChanges {
+export class SearchInputComponent implements OnInit, OnDestroy {
   inputControl = new FormControl();
 
   options = [];
-  otpion;
   @Output() querySuggestionSelected = new EventEmitter<{ query: string }>();
-  @Input() wordId: string;
+
   mode: Mode;
-  constructor(private route: ActivatedRoute) {
+  public deleteWordIds = [];
+  public deleteVocabularyIds = [];
+  private subscription: Subscription;
+  constructor(
+    private route: ActivatedRoute,
+    private wordService: WordService,
+    private vocbaularyService: VocabularyService
+  ) {
     // 値が変わった時だけ上下選べる
     this.inputControl.valueChanges.subscribe(value => {
       this.testSearch(value);
@@ -41,8 +49,18 @@ export class SearchInputComponent implements OnInit, OnChanges {
       this.testSearch('');
     });
   }
+  ngOnInit() {
+    this.subscription = this.wordService.deleteWordId$.subscribe(id => {
+      this.deleteWordIds.push(id);
+    });
+    this.subscription = this.vocbaularyService.deleteVocabularyId$.subscribe(
+      id => {
+        this.deleteVocabularyIds.push(id);
+      }
+    );
+  }
 
-  testSearch(query: string, wordId?: string) {
+  testSearch(query: string) {
     searchClient
       .search([
         {
@@ -58,24 +76,12 @@ export class SearchInputComponent implements OnInit, OnChanges {
       })
       .catch(error => console.log(error));
   }
-  deleteOption(option, wordId) {
-    const index = searchClient.initIndex('words');
-    index.search(option).then(result => {
-      this.options = result.hits;
-      console.log('optionsの中身は');
-      console.log(this.options);
-      const targetIndex = this.options.findIndex(
-        word => word.wordId === wordId
-      );
-      this.options.splice(targetIndex, 1);
-      console.log('wordIdは' + wordId);
-    });
+
+  findIds(wordId) {
+    return this.deleteWordIds.find(id => id === wordId);
   }
 
-  ngOnInit() {}
-  ngOnChanges() {
-    // 単語を入れて消した瞬間はoptionから消えるけど、単語を消すと復活する
-    // 検索表示制限が効かない
-    this.deleteOption(this.otpion, this.wordId);
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

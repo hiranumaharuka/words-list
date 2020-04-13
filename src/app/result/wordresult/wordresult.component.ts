@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as algoliasearch from 'algoliasearch/lite';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { Word } from 'src/app/interfaces/word';
 import { WordService } from 'src/app/services/word.service';
+import { Subscription } from 'rxjs';
 const searchClient = algoliasearch(
   environment.algolia.appId,
   environment.algolia.apiKey
@@ -21,7 +22,6 @@ export class WordresultComponent implements OnInit {
     page: 0,
     query: ''
   };
-  @Output() delete = new EventEmitter<string>();
   @Input() mode: Mode;
   uid: string = this.authService.uid;
   config = {
@@ -29,9 +29,9 @@ export class WordresultComponent implements OnInit {
     searchClient
   };
   indexName = this.config.indexName;
+  public deleteWordIds = [];
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private authService: AuthService,
     private wordService: WordService
   ) {
@@ -41,13 +41,12 @@ export class WordresultComponent implements OnInit {
   }
 
   ngOnInit() {}
+  findIds(wordId) {
+    return this.deleteWordIds.find(id => id === wordId);
+  }
   deleteWord(vocabularyId: string, wordId: string) {
     this.wordService.deleteWord(vocabularyId, wordId);
-    this.router.navigate([/result/], {
-      queryParams: {
-        mode: 'words'
-      }
-    });
-    this.delete.emit(wordId);
+    this.wordService.getDeleteWordId(wordId);
+    this.deleteWordIds.push(wordId);
   }
 }

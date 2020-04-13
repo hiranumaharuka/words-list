@@ -9,17 +9,23 @@
         (optionSelected)="querySuggestionSelected.emit($event.option.value)"
         #auto="matAutocomplete"
       >
-        <mat-option
-          *ngFor="let option of options"
-          [value]="mode === 'vocabularies' ? option.title : option.surface"
-          (click)="
-            querySuggestionSelected.emit(
-              mode === 'vocabularies' ? option.title : option.surface
-            )
-          "
-        >
-          {{ mode === 'vocabularies' ? option.title : option.surface }}
-        </mat-option>
+        <ng-container *ngFor="let option of options">
+          <mat-option
+            *ngIf="
+              mode === 'vocabularies'
+                ? option.vocabularyId !== findIds(option.vocabularyId)
+                : option.wordId !== findIds(option.wordId)
+            "
+            [value]="mode === 'vocabularies' ? option.title : option.surface"
+            (click)="
+              querySuggestionSelected.emit(
+                mode === 'vocabularies' ? option.title : option.surface
+              )
+            "
+          >
+            {{ mode === 'vocabularies' ? option.title : option.surface }}
+          </mat-option>
+        </ng-container>
       </mat-autocomplete>
     </mat-form-field>
     <button>

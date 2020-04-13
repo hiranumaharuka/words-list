@@ -1,9 +1,7 @@
 <div class="container">
   <ais-instantsearch [config]="config">
-    <ais-configure [searchParameters]="inputParams"></ais-configure>
     <app-search-input
       (querySuggestionSelected)="search($event)"
-      [wordId]="wordId"
     ></app-search-input>
     <app-segmented-control></app-segmented-control>
   </ais-instantsearch>
@@ -13,7 +11,6 @@
     ></app-vocabularyresult>
     <app-wordresult
       *ngIf="config.indexName !== 'vocabularies'"
-      (delete)="deleteWord($event)"
     ></app-wordresult>
   </div>
 </div>

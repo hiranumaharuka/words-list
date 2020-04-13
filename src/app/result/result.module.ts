@@ -17,6 +17,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SegmentedControlComponent } from './segmented-control/segmented-control.component';
 import { VocabularyresultComponent } from './vocabularyresult/vocabularyresult.component';
 import { WordresultComponent } from './wordresult/wordresult.component';
+import { SharedModule } from '../shared/shared.module';
+import { MergeuserPipe } from '../mergeuser.pipe';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { WordresultComponent } from './wordresult/wordresult.component';
     SearchInputComponent,
     SegmentedControlComponent,
     VocabularyresultComponent,
-    WordresultComponent
+    WordresultComponent,
+    MergeuserPipe
   ],
   imports: [
     CommonModule,
@@ -38,7 +41,8 @@ import { WordresultComponent } from './wordresult/wordresult.component';
     MatInputModule,
     MatCardModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
+    SharedModule
   ]
 })
 export class ResultModule {}
