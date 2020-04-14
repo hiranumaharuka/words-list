@@ -4,7 +4,7 @@ import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { LikeService } from 'src/app/services/like.service';
 import { combineLatest, Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -53,7 +53,7 @@ export class VocabularyComponent implements OnInit {
       })
     );
     this.sub.add(
-      this.vocabulary$.subscribe(vocabulary => {
+      this.vocabulary$.pipe(take(1)).subscribe(vocabulary => {
         // これがないと自動でいいねがふくれあがる
         // 2回目以降はif文で弾かれて、最新のlikedcountは代入されない
         // 等しくなければ最新のlikedcountが入ってくる
@@ -69,7 +69,7 @@ export class VocabularyComponent implements OnInit {
     // いいねしてたらisLiked=true,なければfalseを代入
     // 初期状態いいねした状態で表示されるか
     this.sub.add(
-      this.isLiked$.subscribe(isLiked => {
+      this.isLiked$.pipe(take(1)).subscribe(isLiked => {
         this.isLiked = isLiked;
       })
     );
@@ -87,5 +87,6 @@ export class VocabularyComponent implements OnInit {
   }
   deleteVocabulary() {
     this.vocabularyService.deleteVocabulary(this.vocabulary.vocabularyId);
+    this.vocabularyService.getDeleteVocabularyId(this.vocabulary.vocabularyId);
   }
 }

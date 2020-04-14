@@ -76,8 +76,8 @@ export class VocabularyService {
   }> {
     let vocabularies: Vocabulary[];
     let lastDoc: firestore.QueryDocumentSnapshot<firestore.DocumentData>;
-    return sorted.snapshotChanges().pipe(
-      map(snaps => snaps.map(snap => snap.payload.doc)),
+    return sorted.get({ source: 'server' }).pipe(
+      map(results => results.docs),
       switchMap(docs => {
         lastDoc = docs[docs.length - 1];
         // 最後にvocabuleryのデータを取ってくるため
