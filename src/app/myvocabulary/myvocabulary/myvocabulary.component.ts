@@ -14,6 +14,8 @@ import { take } from 'rxjs/operators';
 export class MyvocabularyComponent implements OnInit {
   startAfter: firestore.QueryDocumentSnapshot<firestore.DocumentData>;
   vocabularies: VocabularyWithAuthor[] = [];
+  isNextDocs: boolean;
+
   constructor(
     private vocabularyService: VocabularyService,
     private authService: AuthService
@@ -22,12 +24,15 @@ export class MyvocabularyComponent implements OnInit {
   ngOnInit() {
     this.getMore();
   }
+
   getMore() {
     this.vocabularyService
       .getMyVocabularies(this.authService.uid, this.startAfter)
       .pipe(take(1))
-      .subscribe(({ vocabulariesData, lastDoc }) => {
-        this.startAfter = lastDoc;
+      .subscribe(data => {
+        const { vocabulariesData, lastDoc } = data;
+        // TODO: 次の記事があるかどうかを受け取ってジャッジ
+        // this.isNextDocs = isNext;
         vocabulariesData.map(doc => this.vocabularies.push(doc));
       });
   }

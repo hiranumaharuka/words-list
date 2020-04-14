@@ -5,7 +5,12 @@
     [vocabulary]="vocabulary"
     routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
   ></app-vocabulary>
-  <button (click)="getMore(vocabularies)" mat-raised-button color="primary">
+  <button
+    *ngIf="isNextDocs"
+    (click)="getMore(vocabularies)"
+    mat-raised-button
+    color="primary"
+  >
     もっと見る
   </button>
 </div>
