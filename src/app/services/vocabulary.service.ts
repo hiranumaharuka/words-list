@@ -120,6 +120,7 @@ export class VocabularyService {
       })
     );
   }
+
   getMyVocabularies(
     authorId: string,
     startAfter?: firestore.QueryDocumentSnapshot<firestore.DocumentData>
@@ -153,6 +154,7 @@ export class VocabularyService {
       })
     );
   }
+
   getPopularVocabularies(): Observable<VocabularyWithAuthor[]> {
     const sorted = this.db.collection<VocabularyWithAuthor>(
       `vocabularies`,
@@ -179,6 +181,7 @@ export class VocabularyService {
         this.loadingService.toggleLoading(false);
       });
   }
+
   deleteVocabulary(vocabularyId: string): Promise<void> {
     this.loadingService.toggleLoading(true);
     const deleteFn = this.fns.httpsCallable('recursiveDelete');
@@ -194,6 +197,7 @@ export class VocabularyService {
         console.warn(err);
       });
   }
+
   public getDeleteVocabularyId(deleteId: string) {
     this.deleteVocabularyId.next(deleteId);
   }

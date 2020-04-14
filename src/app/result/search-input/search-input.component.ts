@@ -49,6 +49,7 @@ export class SearchInputComponent implements OnInit, OnDestroy {
       this.testSearch('');
     });
   }
+
   ngOnInit() {
     this.subscription = this.wordService.deleteWordId$.subscribe(id => {
       this.deleteWordIds.push(id);

@@ -41,9 +41,11 @@ export class WordresultComponent implements OnInit {
   }
 
   ngOnInit() {}
+
   findIds(wordId) {
     return this.deleteWordIds.find(id => id === wordId);
   }
+
   deleteWord(vocabularyId: string, wordId: string) {
     this.wordService.deleteWord(vocabularyId, wordId);
     this.wordService.getDeleteWordId(wordId);

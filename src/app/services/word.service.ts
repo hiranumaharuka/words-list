@@ -20,6 +20,7 @@ export class WordService {
     private snackBar: MatSnackBar,
     private loadingService: LoadingService
   ) {}
+
   addWord(
     word: Omit<Word, 'wordId' | 'vocabularyId'>,
     uid: string,
@@ -48,6 +49,7 @@ export class WordService {
       .valueChanges()
       .pipe(tap(() => this.loadingService.toggleLoading(false)));
   }
+
   getWords(
     vocabularyId: string,
     startAt?: QueryDocumentSnapshot<Word>
@@ -83,6 +85,7 @@ export class WordService {
         this.loadingService.toggleLoading(false);
       });
   }
+
   deleteWord(vocabularyId: string, wordId: string): Promise<void> {
     this.loadingService.toggleLoading(true);
     return this.db
@@ -90,6 +93,7 @@ export class WordService {
       .delete()
       .then(() => this.loadingService.toggleLoading(false));
   }
+
   public getDeleteWordId(deleteId: string) {
     this.deleteWordId.next(deleteId);
   }

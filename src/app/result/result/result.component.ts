@@ -34,6 +34,7 @@ export class ResultComponent implements OnInit {
       );
     });
   }
+
   ngOnInit() {}
 
   search(value) {
@@ -52,6 +53,7 @@ export class ResultComponent implements OnInit {
         break;
     }
   }
+
   nextPage() {
     this.resultParams.page++;
   }
