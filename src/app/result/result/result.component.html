@@ -1,0 +1,16 @@
+<div class="container">
+  <ais-instantsearch [config]="config">
+    <app-search-input
+      (querySuggestionSelected)="search($event)"
+    ></app-search-input>
+    <app-segmented-control></app-segmented-control>
+  </ais-instantsearch>
+  <div class="container">
+    <app-vocabularyresult
+      *ngIf="config.indexName === 'vocabularies'"
+    ></app-vocabularyresult>
+    <app-wordresult
+      *ngIf="config.indexName !== 'vocabularies'"
+    ></app-wordresult>
+  </div>
+</div>

@@ -10,7 +10,10 @@ import {
   MatMenuModule,
   MatToolbarModule,
   MatSnackBarModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatInputModule,
+  MatAutocompleteModule,
+  MatFormFieldModule
 } from '@angular/material';
 import { FooterComponent } from './footer/footer.component';
 import { AngularFireModule } from '@angular/fire';
@@ -21,6 +24,9 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireFunctionsModule, REGION } from '@angular/fire/functions';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { SharedModule } from './shared/shared.module';
+import { NgAisModule } from 'angular-instantsearch';
+import { SearchInputComponent } from './result/search-input/search-input.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -44,7 +50,12 @@ import { SharedModule } from './shared/shared.module';
     MatSnackBarModule,
     SharedModule,
     AngularFireFunctionsModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    NgAisModule.forRoot(),
+    MatInputModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    ReactiveFormsModule
   ],
   providers: [
     {

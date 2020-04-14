@@ -4,4 +4,5 @@ export interface Word {
   createdAt: Date;
   wordId: string;
   authorId: string;
+  vocabularyId: string;
 }

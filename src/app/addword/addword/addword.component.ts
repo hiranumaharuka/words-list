@@ -51,7 +51,7 @@ export class AddwordComponent implements OnInit {
 
   submit(form: NgForm) {
     const formData = this.form.value;
-    const sendData: Omit<Word, 'wordId'> = {
+    const sendData: Omit<Word, 'wordId' | 'vocabularyId'> = {
       surface: formData.surface,
       backside: formData.backside,
       createdAt: new Date(),
@@ -76,7 +76,8 @@ export class AddwordComponent implements OnInit {
             surface: formData.surface,
             backside: formData.backside,
             authorId: word.authorId,
-            wordId: word.wordId
+            wordId: word.wordId,
+            vocabularyId: word.vocabularyId
           };
           this.wordService
             .updateWord(this.vocabularyId, sendData)

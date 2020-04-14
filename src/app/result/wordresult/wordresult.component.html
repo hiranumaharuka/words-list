@@ -1,0 +1,57 @@
+<div class="container">
+  <ais-instantsearch [config]="config">
+    <ais-configure [searchParameters]="resultParams"></ais-configure>
+    <ais-hits>
+      <ng-template let-hits="hits">
+        <div class="ais-Hits-list">
+          <ng-container *ngFor="let hit of hits">
+            <mat-card
+              *ngIf="hit.wordId !== findIds(hit.wordId)"
+              class="ais-Hits-item card"
+            >
+              <mat-card-content>
+                <p class="surface">{{ hit.surface }}</p>
+                <p class="backside">{{ hit.backside }}</p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button
+                  mat-icon-button
+                  [matMenuTriggerFor]="menu"
+                  aria-label="menu"
+                  (click)="$event.stopPropagation()"
+                >
+                  <mat-icon aria-hidden="true" aria-label="menu" color="primary"
+                    >more_vert</mat-icon
+                  >
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button
+                    mat-menu-item
+                    routerLink="/wordlist/{{ hit.vocabularyId }}/edit"
+                    [queryParams]="{ wordId: hit.wordId }"
+                    *ngIf="hit.authorId === uid"
+                  >
+                    <mat-icon color="primary">edit</mat-icon>
+                    <span>編集</span>
+                  </button>
+                  <button
+                    mat-menu-item
+                    (click)="deleteWord(hit.vocabularyId, hit.wordId)"
+                    *ngIf="hit.authorId === uid"
+                  >
+                    <mat-icon color="primary">delete</mat-icon>
+                    <span>削除</span>
+                  </button>
+                  <button mat-menu-item>
+                    <mat-icon color="primary">volume_up</mat-icon>
+                    <span>音声</span>
+                  </button>
+                </mat-menu>
+              </mat-card-actions>
+            </mat-card>
+          </ng-container>
+        </div>
+      </ng-template>
+    </ais-hits>
+  </ais-instantsearch>
+</div>

@@ -10,7 +10,7 @@ import {
 } from '../interfaces/vocabulary';
 import { Router } from '@angular/router';
 import { map, switchMap, first, tap } from 'rxjs/operators';
-import { Observable, combineLatest, of } from 'rxjs';
+import { Observable, combineLatest, of, Subject } from 'rxjs';
 import { firestore } from 'firebase';
 import { MatSnackBar } from '@angular/material';
 import { AngularFireFunctions } from '@angular/fire/functions';
@@ -20,6 +20,8 @@ import { LoadingService } from './loading.service';
   providedIn: 'root'
 })
 export class VocabularyService {
+  private deleteVocabularyId = new Subject<string>();
+  public deleteVocabularyId$ = this.deleteVocabularyId.asObservable();
   constructor(
     // データベースにアクセスする
     private db: AngularFirestore,
@@ -118,6 +120,7 @@ export class VocabularyService {
       })
     );
   }
+
   getMyVocabularies(
     authorId: string,
     startAfter?: firestore.QueryDocumentSnapshot<firestore.DocumentData>
@@ -151,6 +154,7 @@ export class VocabularyService {
       })
     );
   }
+
   getPopularVocabularies(): Observable<VocabularyWithAuthor[]> {
     const sorted = this.db.collection<VocabularyWithAuthor>(
       `vocabularies`,
@@ -177,6 +181,7 @@ export class VocabularyService {
         this.loadingService.toggleLoading(false);
       });
   }
+
   deleteVocabulary(vocabularyId: string): Promise<void> {
     this.loadingService.toggleLoading(true);
     const deleteFn = this.fns.httpsCallable('recursiveDelete');
@@ -191,5 +196,9 @@ export class VocabularyService {
         console.log('Delete failed, see console,');
         console.warn(err);
       });
+  }
+
+  public getDeleteVocabularyId(deleteId: string) {
+    this.deleteVocabularyId.next(deleteId);
   }
 }

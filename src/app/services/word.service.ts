@@ -5,7 +5,7 @@ import {
 } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material';
 import { Word } from '../interfaces/word';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { LoadingService } from './loading.service';
 
@@ -13,13 +13,16 @@ import { LoadingService } from './loading.service';
   providedIn: 'root'
 })
 export class WordService {
+  private deleteWordId = new Subject<string>();
+  public deleteWordId$ = this.deleteWordId.asObservable();
   constructor(
     private db: AngularFirestore,
     private snackBar: MatSnackBar,
     private loadingService: LoadingService
   ) {}
+
   addWord(
-    word: Omit<Word, 'wordId'>,
+    word: Omit<Word, 'wordId' | 'vocabularyId'>,
     uid: string,
     vocabularyId: string
   ): Promise<void> {
@@ -30,6 +33,7 @@ export class WordService {
       .set({
         wordId,
         ...word,
+        vocabularyId,
         authorId: uid
       })
       .then(() => {
@@ -45,6 +49,7 @@ export class WordService {
       .valueChanges()
       .pipe(tap(() => this.loadingService.toggleLoading(false)));
   }
+
   getWords(
     vocabularyId: string,
     startAt?: QueryDocumentSnapshot<Word>
@@ -80,11 +85,16 @@ export class WordService {
         this.loadingService.toggleLoading(false);
       });
   }
+
   deleteWord(vocabularyId: string, wordId: string): Promise<void> {
     this.loadingService.toggleLoading(true);
     return this.db
       .doc(`vocabularies/${vocabularyId}/words/${wordId}`)
       .delete()
       .then(() => this.loadingService.toggleLoading(false));
+  }
+
+  public getDeleteWordId(deleteId: string) {
+    this.deleteWordId.next(deleteId);
   }
 }

@@ -2,9 +2,9 @@
   <mat-toolbar-row>
     <span routerLink="/">LOGO</span>
     <span class="header__spacer"></span>
-    <mat-icon class="header__icon" aria-hidden="true" aria-label="search"
-      >search</mat-icon
-    >
+    <div class="toolbar">
+      <div class="searchbox"></div>
+    </div>
     <button mat-icon-button routerLink="/addvocabulary">
       <mat-icon class="header__icon" aria-hidden="true" aria-label="add"
         >add_circle_outline</mat-icon
@@ -14,6 +14,14 @@
       <mat-icon aria-hidden="true" aria-label="menu">more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
+      <button
+        mat-menu-item
+        routerLink="/result"
+        [queryParams]="{ mode: 'vocabularies' }"
+      >
+        <mat-icon color="primary">search</mat-icon>
+        <span>検索</span>
+      </button>
       <button mat-menu-item routerLink="/myvocabulary">
         <mat-icon color="primary">library_books</mat-icon>
         <span>My単語帳</span>

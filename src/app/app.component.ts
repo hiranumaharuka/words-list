@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
   title = 'wordbook';
   loading$: Observable<boolean> = this.loadingService.loading$;
   loading: boolean;
+
   constructor(
     private header: HeaderService,
     private loadingService: LoadingService
