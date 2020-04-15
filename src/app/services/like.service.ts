@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, combineLatest } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { User } from '../interfaces/vocabulary';
 
 @Injectable({
@@ -44,6 +44,7 @@ export class LikeService {
         // doc=vocabularyにいいねしている人のドキュメント一覧
         // docがあればtrue、docがなければfalseでbooleanで判断できるようにしている
         .pipe(
+          take(1),
           map(doc => {
             return !!doc;
           })
