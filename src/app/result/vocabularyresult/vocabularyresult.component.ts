@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import * as algoliasearch from 'algoliasearch/lite';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
+import { Subscription } from 'rxjs';
 const searchClient = algoliasearch(
   environment.algolia.appId,
   environment.algolia.apiKey
@@ -14,7 +15,7 @@ type Mode = 'vocabularies' | 'words';
   templateUrl: './vocabularyresult.component.html',
   styleUrls: ['./vocabularyresult.component.scss']
 })
-export class VocabularyresultComponent implements OnInit {
+export class VocabularyresultComponent implements OnInit, OnDestroy {
   resultParams = {
     hitsPerPage: 5,
     page: 0,
@@ -28,7 +29,7 @@ export class VocabularyresultComponent implements OnInit {
   };
   indexName = this.config.indexName;
   public deleteVocabularyIds = [];
-
+  private sub: Subscription;
   constructor(
     private route: ActivatedRoute,
     private vocabularyService: VocabularyService
@@ -38,14 +39,17 @@ export class VocabularyresultComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.sub = this.vocabularyService.deleteVocabularyId$.subscribe(id => {
+      this.deleteVocabularyIds.push(id);
+    });
+  }
+
   findIds(vocabularyId) {
     return this.deleteVocabularyIds.find(id => id === vocabularyId);
   }
 
-  deleteWord(vocabularyId: string) {
-    this.vocabularyService.deleteVocabulary(vocabularyId);
-    this.vocabularyService.getDeleteVocabularyId(vocabularyId);
-    this.deleteVocabularyIds.push(vocabularyId);
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }

@@ -13,8 +13,9 @@
           <mat-option
             *ngIf="
               mode === 'vocabularies'
-                ? option.vocabularyId !== findIds(option.vocabularyId)
-                : option.wordId !== findIds(option.wordId)
+                ? option.vocabularyId !==
+                  findDeleteVocabularyIds(option.vocabularyId)
+                : option.wordId !== findDeleteWordIds(option.wordId)
             "
             [value]="mode === 'vocabularies' ? option.title : option.surface"
             (click)="
