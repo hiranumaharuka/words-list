@@ -6,7 +6,7 @@
         <div class="ais-Hits-list">
           <ng-container *ngFor="let hit of hits">
             <mat-card
-              *ngIf="hit.wordId !== findIds(hit.wordId)"
+              *ngIf="hit.wordId !== findId(hit.wordId)"
               class="ais-Hits-item card"
             >
               <mat-card-content>

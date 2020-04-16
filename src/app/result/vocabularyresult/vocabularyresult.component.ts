@@ -45,7 +45,7 @@ export class VocabularyresultComponent implements OnInit, OnDestroy {
     });
   }
 
-  findIds(vocabularyId) {
+  findId(vocabularyId) {
     return this.deleteVocabularyIds.find(id => id === vocabularyId);
   }
 

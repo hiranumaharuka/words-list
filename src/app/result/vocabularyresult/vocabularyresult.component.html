@@ -4,7 +4,7 @@
     <ais-hits>
       <ng-template let-hits="hits">
         <ng-container *ngFor="let hit of hits | mergeuser | async">
-          <ng-container *ngIf="hit.vocabularyId !== findIds(hit.vocabularyId)">
+          <ng-container *ngIf="hit.vocabularyId !== findId(hit.vocabularyId)">
             <app-vocabulary
               class="ais-Hits-item"
               [vocabulary]="hit"
