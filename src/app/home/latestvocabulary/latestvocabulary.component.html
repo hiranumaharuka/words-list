@@ -1,5 +1,9 @@
-<app-vocabulary
-  *ngFor="let vocabulary of vocabularies$ | async"
-  [vocabulary]="vocabulary"
-  routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
-></app-vocabulary>
+<ng-container
+  *ngFor="let vocabulary of vocabularies$ | async as vocabularyWithAuthor"
+>
+  <app-vocabulary
+    *ngIf="vocabulary.vocabularyId !== findId(vocabulary.vocabularyId)"
+    [vocabulary]="vocabulary"
+    routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
+  ></app-vocabulary>
+</ng-container>

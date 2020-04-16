@@ -42,7 +42,7 @@ export class WordresultComponent implements OnInit {
 
   ngOnInit() {}
 
-  findIds(wordId) {
+  findId(wordId) {
     return this.deleteWordIds.find(id => id === wordId);
   }
 

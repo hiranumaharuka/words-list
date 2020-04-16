@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { VocabularyWithAuthor } from 'src/app/interfaces/vocabulary';
 
 @Component({
@@ -8,11 +8,27 @@ import { VocabularyWithAuthor } from 'src/app/interfaces/vocabulary';
   templateUrl: './latestvocabulary.component.html',
   styleUrls: ['./latestvocabulary.component.scss']
 })
-export class LatestvocabularyComponent implements OnInit {
+export class LatestvocabularyComponent implements OnInit, OnDestroy {
   vocabularies$: Observable<
     VocabularyWithAuthor[]
   > = this.vocabularyService.getLatestVocabularies();
+
+  deleteVocabularyIds = [];
+  private sub: Subscription;
+
   constructor(private vocabularyService: VocabularyService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.sub = this.vocabularyService.deleteVocabularyId$.subscribe(id => {
+      this.deleteVocabularyIds.push(id);
+    });
+  }
+
+  findId(vocabularyId) {
+    return this.deleteVocabularyIds.find(id => id === vocabularyId);
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
 }

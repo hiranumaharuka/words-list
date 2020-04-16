@@ -33,11 +33,11 @@ export class SearchInputComponent implements OnInit, OnDestroy {
   mode: Mode;
   public deleteWordIds = [];
   public deleteVocabularyIds = [];
-  private subscription: Subscription;
+  private sub: Subscription;
   constructor(
     private route: ActivatedRoute,
     private wordService: WordService,
-    private vocbaularyService: VocabularyService
+    private vocabularyService: VocabularyService
   ) {
     // 値が変わった時だけ上下選べる
     this.inputControl.valueChanges.subscribe(value => {
@@ -51,14 +51,12 @@ export class SearchInputComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription = this.wordService.deleteWordId$.subscribe(id => {
+    this.sub = this.wordService.deleteWordId$.subscribe(id => {
       this.deleteWordIds.push(id);
     });
-    this.subscription = this.vocbaularyService.deleteVocabularyId$.subscribe(
-      id => {
-        this.deleteVocabularyIds.push(id);
-      }
-    );
+    this.sub = this.vocabularyService.deleteVocabularyId$.subscribe(id => {
+      this.deleteVocabularyIds.push(id);
+    });
   }
 
   testSearch(query: string) {
@@ -78,11 +76,14 @@ export class SearchInputComponent implements OnInit, OnDestroy {
       .catch(error => console.log(error));
   }
 
-  findIds(wordId) {
+  findDeleteWordIds(wordId) {
     return this.deleteWordIds.find(id => id === wordId);
+  }
+  findDeleteVocabularyIds(vocabularyId) {
+    return this.deleteVocabularyIds.find(id => id === vocabularyId);
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.sub.unsubscribe();
   }
 }
