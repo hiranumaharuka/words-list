@@ -11,11 +11,9 @@ export const countUpCreate = functions.firestore
     return shouldEventRun(eventId).then(async (should: boolean) => {
       const uid = snap.data()!.authorId;
       if (should) {
-        // tslint:disable-next-line: no-floating-promises
-        db.doc(`users/${uid}`).update(
-          'createdVocabulary',
-          admin.firestore.FieldValue.increment(1)
-        );
+        await db
+          .doc(`users/${uid}`)
+          .update('createdVocabulary', admin.firestore.FieldValue.increment(1));
         return markEventTried(eventId);
       } else {
         return;
@@ -31,11 +29,12 @@ export const countDownCreate = functions.firestore
     return shouldEventRun(eventId).then(async (should: boolean) => {
       const uid = snap.data()!.authorId;
       if (should) {
-        // tslint:disable-next-line: no-floating-promises
-        db.doc(`users/${uid}`).update(
-          'createdVocabulary',
-          admin.firestore.FieldValue.increment(-1)
-        );
+        await db
+          .doc(`users/${uid}`)
+          .update(
+            'createdVocabulary',
+            admin.firestore.FieldValue.increment(-1)
+          );
         return markEventTried(eventId);
       } else {
         return;
