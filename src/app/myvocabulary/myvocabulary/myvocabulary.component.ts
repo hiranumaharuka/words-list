@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { VocabularyWithAuthor } from 'src/app/interfaces/vocabulary';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { firestore } from 'firebase';
+import { firestore, User } from 'firebase';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -13,6 +13,8 @@ import { take } from 'rxjs/operators';
 export class MyvocabularyComponent implements OnInit {
   startAfter: firestore.QueryDocumentSnapshot<firestore.DocumentData>;
   vocabularies: VocabularyWithAuthor[] = [];
+  isNext: boolean;
+  uid: string = this.authService.uid;
   constructor(
     private vocabularyService: VocabularyService,
     private authService: AuthService
@@ -28,7 +30,18 @@ export class MyvocabularyComponent implements OnInit {
       .pipe(take(1))
       .subscribe(({ vocabulariesData, lastDoc }) => {
         this.startAfter = lastDoc;
-        vocabulariesData.map(doc => this.vocabularies.push(doc));
+        this.vocabularyService
+          .getUser(this.uid)
+          .pipe(take(1))
+          .subscribe(user => {
+            if (this.vocabularies.length + 3 < user.createdVocabulary) {
+              vocabulariesData.map(doc => this.vocabularies.push(doc));
+              this.isNext = true;
+            } else {
+              vocabulariesData.map(doc => this.vocabularies.push(doc));
+              this.isNext = false;
+            }
+          });
       });
   }
   deleteVocabulary(vocabularyId: string) {
