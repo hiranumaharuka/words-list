@@ -11,6 +11,8 @@ export interface Vocabulary {
 export interface User {
   id: string;
   userName: string;
+  createdVocabulary: number;
+  likedVocabulary: number;
 }
 
 export interface VocabularyWithAuthor extends Vocabulary {

@@ -6,7 +6,7 @@
     routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
     (deleted)="deleteVocabulary($event)"
   ></app-vocabulary>
-  <button (click)="getMore()" mat-raised-button color="primary">
+  <button *ngIf="isNext" (click)="getMore()" mat-raised-button color="primary">
     もっと見る
   </button>
 </div>
