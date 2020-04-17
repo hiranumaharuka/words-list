@@ -9,12 +9,14 @@ export const countUpLiked = functions.firestore
   .onCreate(async (snap, context) => {
     const eventId = context.eventId;
     return shouldEventRun(eventId).then(async (should: boolean) => {
+      const uid = snap.data()!.userId;
       if (should) {
-        // tslint:disable-next-line: no-floating-promises
-        db.doc(`vocabularies/${context.params.vocabularyId}`).update(
-          'likedCount',
-          admin.firestore.FieldValue.increment(1)
-        );
+        await db
+          .doc(`vocabularies/${context.params.vocabularyId}`)
+          .update('likedCount', admin.firestore.FieldValue.increment(1));
+        await db
+          .doc(`users/${uid}`)
+          .update('likedVocabulary', admin.firestore.FieldValue.increment(1));
         return markEventTried(eventId);
       } else {
         return;
@@ -28,12 +30,14 @@ export const countDownLiked = functions.firestore
   .onDelete(async (snap, context) => {
     const eventId = context.eventId;
     return shouldEventRun(eventId).then(async (should: boolean) => {
+      const uid = snap.data()!.userId;
       if (should) {
-        // tslint:disable-next-line: no-floating-promises
-        db.doc(`vocabularies/${context.params.vocabularyId}`).update(
-          'likedCount',
-          admin.firestore.FieldValue.increment(-1)
-        );
+        await db
+          .doc(`vocabularies/${context.params.vocabularyId}`)
+          .update('likedCount', admin.firestore.FieldValue.increment(-1));
+        await db
+          .doc(`users/${uid}`)
+          .update('likedVocabulary', admin.firestore.FieldValue.increment(-1));
         return markEventTried(eventId);
       } else {
         return;

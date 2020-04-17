@@ -35,6 +35,9 @@ export const countDownCreate = functions.firestore
             'createdVocabulary',
             admin.firestore.FieldValue.increment(-1)
           );
+        await db
+          .doc(`users/${uid}`)
+          .update('likedVocabulary', admin.firestore.FieldValue.increment(-1));
         return markEventTried(eventId);
       } else {
         return;

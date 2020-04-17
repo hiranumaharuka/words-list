@@ -23,7 +23,7 @@ export class LikeService {
       // 自分のいいねリストを取得するために追加
       this.db
         .doc(`users/${userId}/likedVocabularies/${vocabularyId}`)
-        .set({ vocabularyId })
+        .set({ vocabularyId, createdAt: new Date() })
     ]);
   }
   dislikeVocabulary(vocabularyId: string, userId: string): Promise<void[]> {
