@@ -4,6 +4,7 @@ import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { firestore } from 'firebase';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable } from 'rxjs';
+import { take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-favvocabulary',
@@ -13,20 +14,41 @@ import { Observable } from 'rxjs';
 export class FavvocabularyComponent implements OnInit {
   startAfter: firestore.QueryDocumentSnapshot<firestore.DocumentData>;
   vocabularies: VocabularyWithAuthor[] = [];
+  uid: string = this.authService.uid;
+  isNext: boolean;
+
   constructor(
     private vocabularyService: VocabularyService,
     private authService: AuthService
   ) {}
-  // ページ開いたら実行される
   ngOnInit() {
     this.getMore();
   }
+
   getMore() {
     this.vocabularyService
-      .getMyVocabularies(this.authService.uid, this.startAfter)
+      .getLikedVocabularies(this.authService.uid, this.startAfter)
+      .pipe(take(1))
       .subscribe(({ vocabulariesData, lastDoc }) => {
         this.startAfter = lastDoc;
-        vocabulariesData.map(doc => this.vocabularies.push(doc));
+        this.vocabularyService
+          .getUser(this.uid)
+          .pipe(take(1))
+          .subscribe(user => {
+            if (this.vocabularies.length + 3 < user.likedVocabulary) {
+              vocabulariesData.map(doc => this.vocabularies.push(doc));
+              this.isNext = true;
+            } else {
+              vocabulariesData.map(doc => this.vocabularies.push(doc));
+              this.isNext = false;
+            }
+          });
       });
+  }
+  deleteVocabulary(vocabularyId: string) {
+    const targetIndex = this.vocabularies.findIndex(
+      vocabulary => vocabulary.vocabularyId === vocabularyId
+    );
+    this.vocabularies.splice(targetIndex, 1);
   }
 }

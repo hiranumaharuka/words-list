@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
-  AngularFirestoreCollection
+  AngularFirestoreCollection,
+  QueryDocumentSnapshot
 } from '@angular/fire/firestore';
 import {
   Vocabulary,
@@ -114,8 +115,8 @@ export class VocabularyService {
           return result;
         });
         return {
-          vocabulariesData,
-          lastDoc
+          lastDoc,
+          vocabulariesData
         };
       })
     );
@@ -125,19 +126,22 @@ export class VocabularyService {
     authorId: string,
     startAfter?: firestore.QueryDocumentSnapshot<firestore.DocumentData>
   ) {
-    const sorted = this.db.collection<Vocabulary>(`vocabularies`, ref => {
-      // 作成日順に3件取得
-      let query = ref
-        .where('authorId', '==', authorId)
-        .orderBy('createdAt', 'desc')
-        .limit(3);
-      // もし開始位置があればそれ以降を取得
-      if (startAfter) {
-        query = query.startAfter(startAfter);
+    const sorted = this.db.collection<VocabularyWithAuthor>(
+      `vocabularies`,
+      ref => {
+        // 作成日順に3件取得
+        let query = ref
+          .where('authorId', '==', authorId)
+          .orderBy('createdAt', 'desc')
+          .limit(3);
+        // もし開始位置があればそれ以降を取得
+        if (startAfter) {
+          query = query.startAfter(startAfter);
+        }
+        // 開始位置がなければそのままかえす
+        return query;
       }
-      // 開始位置がなければそのままかえす
-      return query;
-    });
+    );
     return this.getVocabularies(sorted);
   }
 
@@ -200,5 +204,74 @@ export class VocabularyService {
 
   public getDeleteVocabularyId(deleteId: string) {
     this.deleteVocabularyId.next(deleteId);
+  }
+
+  getLikedVocabularies(
+    userId: string,
+    startAfter?: firestore.QueryDocumentSnapshot<firestore.DocumentData>
+  ): Observable<{
+    lastDoc: firestore.QueryDocumentSnapshot<firestore.DocumentData>;
+    vocabulariesData: VocabularyWithAuthor[];
+  }> {
+    let lastDoc: firestore.QueryDocumentSnapshot<firestore.DocumentData>;
+    const vocabularies$: Observable<Vocabulary[]> = this.db
+      .collection(`users/${userId}/likedVocabularies`, ref => {
+        let query = ref.orderBy('createdAt', 'desc').limit(3);
+        if (startAfter) {
+          query = query.startAfter(startAfter);
+        }
+        return query;
+      })
+      .get({ source: 'server' })
+      .pipe(
+        map(results => results.docs),
+        switchMap(vocabularydocs => {
+          lastDoc = vocabularydocs[vocabularydocs.length - 1];
+          return combineLatest(
+            vocabularydocs.map(doc => {
+              const id = doc.data().vocabularyId;
+              return this.db
+                .doc<Vocabulary>(`vocabularies/${id}`)
+                .valueChanges();
+            })
+          );
+        })
+      );
+
+    const authors$: Observable<User[]> = vocabularies$.pipe(
+      switchMap(vocabularies => {
+        return combineLatest(
+          vocabularies
+            .filter((vocabulary, index, self) => {
+              return (
+                self.findIndex(
+                  item => vocabulary.authorId === item.authorId
+                ) === index
+              );
+            })
+            .map(vocabulary => {
+              return this.db
+                .doc<User>(`users/${vocabulary.authorId}`)
+                .valueChanges();
+            })
+        );
+      })
+    );
+
+    return combineLatest([vocabularies$, authors$]).pipe(
+      map(([vocabularies, authors]) => {
+        const vocabulariesData = vocabularies.map((vocabulary, index) => {
+          const result: VocabularyWithAuthor = {
+            ...vocabulary,
+            author: authors.find(author => author.id === vocabulary.authorId)
+          };
+          return result;
+        });
+        return {
+          lastDoc,
+          vocabulariesData
+        };
+      })
+    );
   }
 }
