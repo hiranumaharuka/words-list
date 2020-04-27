@@ -14,7 +14,7 @@ import {
 } from '@angular/forms';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { Vocabulary, User } from 'src/app/interfaces/vocabulary';
+import { Vocabulary } from 'src/app/interfaces/vocabulary';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Location } from '@angular/common';
@@ -44,17 +44,17 @@ export class AddvocabularyComponent implements OnInit {
   addOnBlur = true;
   vocabularyId: string;
   isEditing: boolean;
-  //   public state: {
-  //     items: object[];
-  //     // refine: Function;
-  //     // createURL: Function;
-  //     isFromSearch: boolean;
-  //     // searchForItems: Function;
-  //     isShowingMore: boolean;
-  //     canToggleShowMore: boolean;
-  //     // toggleShowMore: Function;
-  //     widgetParams: object;
-  //  };
+  public state: {
+    items: object[];
+    // refine: Function;
+    // createURL: Function;
+    isFromSearch: boolean;
+    // searchForItems: Function;
+    isShowingMore: boolean;
+    canToggleShowMore: boolean;
+    // toggleShowMore: Function;
+    widgetParams: object;
+  };
   @ViewChild('chipList', { static: true }) chipList;
   @ViewChild('tagInput', { static: true }) tagInput: ElementRef<
     HTMLInputElement
@@ -82,52 +82,15 @@ export class AddvocabularyComponent implements OnInit {
     searchClient
   };
   constructor(
-    // @Inject(forwardRef(() => NgAisInstantSearch))
-    // public instantSearchParent,
-    // formを作るための機能
     private fb: FormBuilder,
     private vocabularyService: VocabularyService,
     private authService: AuthService,
     private route: ActivatedRoute,
     private location: Location
-  ) {
-    // super('RefinementList');
-  }
+  ) {}
 
   ngOnInit() {
     this.patchDefaultValue();
-    // this.createWidget(connectRefinementList, {
-    //   // instance options
-    //   attribute: 'tags',
-    // });
-    // super.ngOnInit();
-  }
-
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-    // Add language
-    if ((value || '').trim() && this.tagsArray.length < 3) {
-      this.tagsArray.push(value.trim());
-    }
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-  }
-
-  /* Remove dynamic languages */
-  remove(subject: string): void {
-    const index = this.tagsArray.indexOf(subject);
-    if (index >= 0) {
-      this.tagsArray.splice(index, 1);
-    }
-  }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.tagsArray.push(event.option.viewValue);
-    this.tagInput.nativeElement.value = '';
-    this.tagsControl.setValue(null);
   }
 
   submit() {
@@ -188,5 +151,10 @@ export class AddvocabularyComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  updateTag(value) {
+    console.log('親の値');
+    console.log(value);
   }
 }

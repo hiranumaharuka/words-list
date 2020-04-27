@@ -4,22 +4,13 @@ import {
   Inject,
   forwardRef,
   ViewChild,
-  ElementRef
+  ElementRef,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import { BaseWidget, NgAisInstantSearch } from 'angular-instantsearch';
 import { connectRefinementList } from 'instantsearch.js/es/connectors';
-import {
-  FormBuilder,
-  Validators,
-  FormControl,
-  FormArray
-} from '@angular/forms';
-import { VocabularyService } from 'src/app/services/vocabulary.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { Vocabulary, User } from 'src/app/interfaces/vocabulary';
-import { ActivatedRoute } from '@angular/router';
-import { take } from 'rxjs/operators';
-import { Location } from '@angular/common';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {
   MatChipInputEvent,
@@ -31,18 +22,34 @@ import {
   styleUrls: ['./searchtags.component.scss']
 })
 export class SearchtagsComponent extends BaseWidget implements OnInit {
+  @Output() tags = new EventEmitter();
+
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
   vocabularyId: string;
   isEditing: boolean;
+  demos = [
+    {
+      title: 'test',
+      value: 11
+    },
+    {
+      title: 'test',
+      value: 11
+    },
+    {
+      title: 'test',
+      value: 11
+    }
+  ];
   public state: {
-    items: object[];
+    items: any[];
     refine: (tag: string) => void;
     createURL: () => void;
     isFromSearch: boolean;
-    searchForItems: () => void;
+    searchForItems: any;
     isShowingMore: boolean;
     canToggleShowMore: boolean;
     toggleShowMore: () => void;
@@ -53,22 +60,7 @@ export class SearchtagsComponent extends BaseWidget implements OnInit {
     HTMLInputElement
   >;
   tagsArray: string[] = [];
-  form = this.fb.group({
-    // 最初の,までで初期値を指定
-    // validators.requiredは必須入力にするため
-    title: ['', [Validators.required, Validators.maxLength(60)]],
-    description: ['', [Validators.maxLength(100)]],
-    tags: [this.tagsArray, [Validators.maxLength(100)]]
-  });
   options = [];
-  // エラー内容を取得する
-  get titleControl() {
-    return this.form.get('title') as FormControl;
-  }
-  // form配列をtagとして扱えるように
-  get tagsControl() {
-    return this.form.get('tags') as FormArray;
-  }
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   constructor(
     @Inject(forwardRef(() => NgAisInstantSearch))
@@ -77,6 +69,7 @@ export class SearchtagsComponent extends BaseWidget implements OnInit {
   ) {
     super('RefinementList');
   }
+  tagsControl = new FormControl();
 
   ngOnInit() {
     this.createWidget(connectRefinementList, {
@@ -84,5 +77,51 @@ export class SearchtagsComponent extends BaseWidget implements OnInit {
       attribute: 'tags'
     });
     super.ngOnInit();
+
+    this.tagsControl.valueChanges.subscribe(value => {
+      this.handleChange(value);
+    });
+  }
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    // Add language
+    if ((value || '').trim() && this.tagsArray.length < 3) {
+      this.tagsArray.push(value.trim());
+    }
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    this.tags.emit(this.tagsArray);
+  }
+
+  /* Remove dynamic languages */
+  remove(subject: string): void {
+    const index = this.tagsArray.indexOf(subject);
+    if (index >= 0) {
+      this.tagsArray.splice(index, 1);
+    }
+    this.tags.emit(this.tagsArray);
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.tagsArray.push(event.option.viewValue);
+    this.tagInput.nativeElement.value = '';
+    this.tagsControl.setValue(null);
+    this.tags.emit(this.tagsArray);
+  }
+
+  handleChange(value) {
+    this.state.searchForItems(value);
+    // if (this.lastValue !== value) {
+    //   this.state.searchForItems(value);
+    //   this.tagOptions = this.state.items.filter(
+    //     item => !this.isExsists(item.label)
+    //   );
+    //   this.lastValue = value;
+    // }
   }
 }

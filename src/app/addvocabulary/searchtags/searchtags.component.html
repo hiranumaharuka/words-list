@@ -1,6 +1,3 @@
-<label *ngFor="let item of state.items">
-  {{ item.value }}
-</label>
 <mat-form-field class="multiple-items">
   <mat-chip-list #chipList>
     <mat-chip
@@ -15,19 +12,18 @@
     <input
       placeholder="タグ"
       #tagInput
+      matInput
       [formControl]="tagsControl"
+      [matAutocomplete]="auto"
       [matChipInputFor]="chipList"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
       [matChipInputAddOnBlur]="addOnBlur"
       (matChipInputTokenEnd)="add($event)"
-      formArrayName="tags"
     />
   </mat-chip-list>
-  <mat-autocomplete
-    (optionSelected)="selected($event)"
-    #auto="matAutocomplete"
-    *ngFor="let item of state.items"
-  >
-    <mat-option>{{ item }}</mat-option>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option [value]="item" *ngFor="let item of state.items">{{
+      item.label
+    }}</mat-option>
   </mat-autocomplete>
 </mat-form-field>
