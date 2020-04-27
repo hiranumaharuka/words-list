@@ -16,13 +16,15 @@ import { firestore } from 'firebase';
 import { MatSnackBar } from '@angular/material';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { LoadingService } from './loading.service';
-
+// import * as admin from 'firebase-admin';
+import * as firebase from 'firebase/app';
 @Injectable({
   providedIn: 'root'
 })
 export class VocabularyService {
   private deleteVocabularyId = new Subject<string>();
   public deleteVocabularyId$ = this.deleteVocabularyId.asObservable();
+  // admin = require('firebase-admin');
   constructor(
     // データベースにアクセスする
     private db: AngularFirestore,

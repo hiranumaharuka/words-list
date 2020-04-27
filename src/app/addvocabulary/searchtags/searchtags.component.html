@@ -1,0 +1,33 @@
+<label *ngFor="let item of state.items">
+  {{ item.value }}
+</label>
+<mat-form-field class="multiple-items">
+  <mat-chip-list #chipList>
+    <mat-chip
+      *ngFor="let tags of tagsArray"
+      [selectable]="selectable"
+      [removable]="removable"
+      (removed)="remove(tags)"
+    >
+      {{ tags }}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+    <input
+      placeholder="タグ"
+      #tagInput
+      [formControl]="tagsControl"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      [matChipInputAddOnBlur]="addOnBlur"
+      (matChipInputTokenEnd)="add($event)"
+      formArrayName="tags"
+    />
+  </mat-chip-list>
+  <mat-autocomplete
+    (optionSelected)="selected($event)"
+    #auto="matAutocomplete"
+    *ngFor="let item of state.items"
+  >
+    <mat-option>{{ item }}</mat-option>
+  </mat-autocomplete>
+</mat-form-field>

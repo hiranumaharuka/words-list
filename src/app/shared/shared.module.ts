@@ -7,7 +7,8 @@ import {
   MatInputModule,
   MatFormFieldModule,
   MatCardModule,
-  MatMenuModule
+  MatMenuModule,
+  MatChipsModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WordComponent } from './word/word.component';
@@ -21,7 +22,8 @@ import { SharedRoutingModule } from './shared-routing.module';
     MatButtonModule,
     MatCardModule,
     MatMenuModule,
-    SharedRoutingModule
+    SharedRoutingModule,
+    MatChipsModule
   ],
   exports: [
     VocabularyComponent,
@@ -32,7 +34,8 @@ import { SharedRoutingModule } from './shared-routing.module';
     MatInputModule,
     MatFormFieldModule,
     WordComponent,
-    MatCardModule
+    MatCardModule,
+    MatChipsModule
   ]
 })
 export class SharedModule {}

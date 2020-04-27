@@ -24,11 +24,38 @@
       <mat-label>説明</mat-label>
       <textarea matInput formControlName="description"></textarea>
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>タグ</mat-label>
-      <input formControlName="tag" type="text" matInput autocomplete="off" />
+    <mat-form-field class="multiple-items">
+      <mat-chip-list #chipList>
+        <mat-chip
+          *ngFor="let tags of tagsArray"
+          [selectable]="selectable"
+          [removable]="removable"
+          (removed)="remove(tags)"
+        >
+          {{ tags }}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input
+          placeholder="タグ"
+          #tagInput
+          [formControl]="tagsControl"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="add($event)"
+          formArrayName="tags"
+        />
+      </mat-chip-list>
+      <mat-autocomplete
+        (optionSelected)="selected($event)"
+        #auto="matAutocomplete"
+      >
+        <mat-option></mat-option>
+      </mat-autocomplete>
     </mat-form-field>
-
+    <ais-instantsearch [config]="config">
+      <app-searchtags></app-searchtags>
+    </ais-instantsearch>
     <ng-template #addvocabulary>
       <button [disabled]="form.invalid" mat-raised-button color="primary">
         作成する

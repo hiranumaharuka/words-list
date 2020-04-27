@@ -1,9 +1,7 @@
-import { Component, OnInit, OnChanges, DoCheck } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as algoliasearch from 'algoliasearch/lite';
-import { SearchParameters } from 'angular-instantsearch/instantsearch/instantsearch';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Word } from 'src/app/interfaces/word';
 const searchClient = algoliasearch(
   environment.algolia.appId,
   environment.algolia.apiKey
