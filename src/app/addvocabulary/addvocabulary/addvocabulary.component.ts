@@ -74,6 +74,7 @@ export class AddvocabularyComponent implements OnInit {
   }
 
   updateTag(value) {
+    console.log(value);
     this.tagsArray = value;
   }
 

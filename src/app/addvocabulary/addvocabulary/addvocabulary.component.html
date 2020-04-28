@@ -26,7 +26,7 @@
     </mat-form-field>
     <ais-instantsearch [config]="config">
       <app-searchtags
-        (tags)="updateTag($event)"
+        (tagEmit)="updateTag($event)"
         [tagsArray]="tagsArray"
       ></app-searchtags>
     </ais-instantsearch>

@@ -2,23 +2,20 @@
   <mat-chip-list #chipList>
     <mat-chip
       *ngFor="let tags of tagsArray"
-      [selectable]="selectable"
-      [removable]="removable"
+      [removable]="true"
       (removed)="remove(tags)"
     >
       {{ tags }}
       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
     </mat-chip>
     <input
-      (keyup)="handleChange($event)"
       placeholder="タグ"
-      #tagInput
       matInput
       [formControl]="tagsControl"
       [matAutocomplete]="auto"
       [matChipInputFor]="chipList"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-      [matChipInputAddOnBlur]="addOnBlur"
+      [matChipInputAddOnBlur]="true"
       (matChipInputTokenEnd)="add($event)"
     />
   </mat-chip-list>
