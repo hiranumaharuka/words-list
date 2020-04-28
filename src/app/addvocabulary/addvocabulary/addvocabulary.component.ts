@@ -1,17 +1,5 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  Inject,
-  forwardRef
-} from '@angular/core';
-import {
-  FormBuilder,
-  Validators,
-  FormControl,
-  FormArray
-} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Vocabulary, User } from 'src/app/interfaces/vocabulary';
@@ -19,15 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Location } from '@angular/common';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import {
-  MatChipInputEvent,
-  MatAutocompleteSelectedEvent
-} from '@angular/material';
 import * as algoliasearch from 'algoliasearch/lite';
 import { environment } from 'src/environments/environment';
-import { BaseWidget, NgAisInstantSearch } from 'angular-instantsearch';
-import { connectRefinementList } from 'instantsearch.js/es/connectors';
-import { SearchParameters } from 'angular-instantsearch/instantsearch/instantsearch';
 
 const searchClient = algoliasearch(
   environment.algolia.appId,

@@ -15,7 +15,8 @@ import { FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {
   MatChipInputEvent,
-  MatAutocompleteSelectedEvent
+  MatAutocompleteSelectedEvent,
+  MatAutocomplete
 } from '@angular/material';
 @Component({
   selector: 'app-searchtags',
@@ -24,28 +25,22 @@ import {
 })
 export class SearchtagsComponent extends BaseWidget implements OnInit {
   @Output() tags = new EventEmitter();
-  @Input() tagsArray: string[] = [];
+  @Input() tagsArray = [];
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
   public state: {
     items: any[];
-    refine: (tag: string) => void;
-    createURL: () => void;
-    isFromSearch: boolean;
     searchForItems: any;
-    isShowingMore: boolean;
-    canToggleShowMore: boolean;
-    toggleShowMore: () => void;
-    widgetParams: object;
   };
-  tagOptions: [];
-
+  tagOptions: any[];
+  lastValue: string;
   @ViewChild('chipList', { static: true }) chipList;
   @ViewChild('tagInput', { static: true }) tagInput: ElementRef<
     HTMLInputElement
   >;
+  @ViewChild('auto', { static: false }) matAutocomplete: MatAutocomplete;
   tagsControl = new FormControl();
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   constructor(
@@ -62,28 +57,33 @@ export class SearchtagsComponent extends BaseWidget implements OnInit {
     });
     super.ngOnInit();
     // formに入力された値を取得してる
-    this.tagsControl.valueChanges.subscribe(value => {
-      this.handleChange(value);
-    });
+    // this.tagsControl.valueChanges.subscribe(value => {
+    //   this.handleChange(value);
+    // });
   }
 
   add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-    // Add language
-    if ((value || '').trim() && this.tagsArray.length < 3) {
-      this.tagsArray.push(value.trim());
+    if (!this.matAutocomplete.isOpen) {
+      const input = event.input;
+      const value = event.value;
+      // Add language
+      if ((value || '').trim() && this.tagsArray.length < 5) {
+        if (!this.isExsists(value)) {
+          this.tagsArray.push(value.trim());
+        }
+      }
+      // Reset the input value
+      if (input) {
+        input.value = '';
+      }
+      this.tagsControl.setValue(null);
+      this.tags.emit(this.tagsArray);
     }
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-    this.tags.emit(this.tagsArray);
   }
 
   /* Remove dynamic languages */
-  remove(subject: string): void {
-    const index = this.tagsArray.indexOf(subject);
+  remove(value: { label: string }): void {
+    const index = this.tagsArray.findIndex(tag => tag.label === value.label);
     if (index >= 0) {
       this.tagsArray.splice(index, 1);
     }
@@ -91,33 +91,37 @@ export class SearchtagsComponent extends BaseWidget implements OnInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.tagsArray.push(event.option.viewValue);
-    this.tagInput.nativeElement.value = '';
-    this.tagsControl.setValue(null);
-    this.tags.emit(this.tagsArray);
-  }
-
-  async aryDelete(value, tagsArray) {
-    value = value.filter(v => {
-      let check = true;
-      for (const i in tagsArray) {
-        if (v.value === tagsArray[i]) {
-          check = false;
-          break;
-        }
-      }
-      return check;
-    });
-    return value;
+    if (
+      !this.isExsists(event.option.value.label) &&
+      this.tagsArray.length < 5
+    ) {
+      this.tagsArray.push(event.option.value.label);
+      this.tagInput.nativeElement.value = '';
+      this.tagsControl.setValue(null);
+      this.tags.emit(this.tagsArray);
+    }
   }
 
   // これがないと検索して絞り込みができない
   handleChange(value) {
+    // handleChange($event: KeyboardEvent) {
     // valueは入力欄に入力した値
-    this.aryDelete(this.state.items, this.tagsArray).then(tags => {
-      this.state.items = this.tagOptions;
-      this.tagOptions = tags;
+    // const value = ($event.target as HTMLInputElement).value;
+    if (this.lastValue !== value) {
       this.state.searchForItems(value);
-    });
+      console.log('前');
+      console.log(this.tagOptions);
+
+      this.tagOptions = this.state.items.filter(
+        item => !this.isExsists(item.label)
+      );
+      console.log('後');
+      console.log(this.tagOptions);
+      this.lastValue = value;
+    }
+  }
+
+  private isExsists(value: string): boolean {
+    return !!this.tagsArray.find(tag => tag.label === value);
   }
 }

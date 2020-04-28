@@ -10,6 +10,7 @@
       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
     </mat-chip>
     <input
+      (keyup)="handleChange($event)"
       placeholder="タグ"
       #tagInput
       matInput
@@ -23,8 +24,11 @@
   </mat-chip-list>
   <mat-autocomplete (optionSelected)="selected($event)" #auto="matAutocomplete">
     <mat-option [value]="item" *ngFor="let item of tagOptions">{{
-      item.value
+      item.label
     }}</mat-option>
-    <!-- <mat-option [value]="item" *ngFor="let item of state.items">{{ item.value }}</mat-option> -->
+    <!--
+    <mat-option [value]="item" *ngFor="let item of state.items">{{
+      item.label
+    }}</mat-option> -->
   </mat-autocomplete>
 </mat-form-field>
