@@ -12,7 +12,7 @@ import { SearchtagsComponent } from './searchtags/searchtags.component';
     CommonModule,
     AddvocabularyRoutingModule,
     SharedModule,
-    NgAisModule.forRoot(),
+    NgAisModule,
     MatAutocompleteModule
   ]
 })

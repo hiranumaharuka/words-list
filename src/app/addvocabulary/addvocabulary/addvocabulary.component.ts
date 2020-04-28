@@ -27,6 +27,7 @@ import * as algoliasearch from 'algoliasearch/lite';
 import { environment } from 'src/environments/environment';
 import { BaseWidget, NgAisInstantSearch } from 'angular-instantsearch';
 import { connectRefinementList } from 'instantsearch.js/es/connectors';
+import { SearchParameters } from 'angular-instantsearch/instantsearch/instantsearch';
 
 const searchClient = algoliasearch(
   environment.algolia.appId,
@@ -37,6 +38,7 @@ const searchClient = algoliasearch(
   templateUrl: './addvocabulary.component.html',
   styleUrls: ['./addvocabulary.component.scss']
 })
+// export class AddvocabularyComponent extends BaseWidget implements OnInit {
 export class AddvocabularyComponent implements OnInit {
   visible = true;
   selectable = true;
@@ -44,21 +46,7 @@ export class AddvocabularyComponent implements OnInit {
   addOnBlur = true;
   vocabularyId: string;
   isEditing: boolean;
-  //   public state: {
-  //     items: object[];
-  //     // refine: Function;
-  //     // createURL: Function;
-  //     isFromSearch: boolean;
-  //     // searchForItems: Function;
-  //     isShowingMore: boolean;
-  //     canToggleShowMore: boolean;
-  //     // toggleShowMore: Function;
-  //     widgetParams: object;
-  //  };
-  @ViewChild('chipList', { static: true }) chipList;
-  @ViewChild('tagInput', { static: true }) tagInput: ElementRef<
-    HTMLInputElement
-  >;
+
   tagsArray: string[] = [];
   form = this.fb.group({
     // 最初の,までで初期値を指定
@@ -67,67 +55,29 @@ export class AddvocabularyComponent implements OnInit {
     description: ['', [Validators.maxLength(100)]],
     tags: [this.tagsArray, [Validators.maxLength(100)]]
   });
-  options = [];
   // エラー内容を取得する
   get titleControl() {
     return this.form.get('title') as FormControl;
   }
-  // form配列をtagとして扱えるように
-  get tagsControl() {
-    return this.form.get('tags') as FormArray;
-  }
+
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   config = {
     indexName: 'vocabularies',
     searchClient
   };
+
+  inputControl = new FormControl();
   constructor(
-    // @Inject(forwardRef(() => NgAisInstantSearch))
-    // public instantSearchParent,
     // formを作るための機能
     private fb: FormBuilder,
     private vocabularyService: VocabularyService,
     private authService: AuthService,
     private route: ActivatedRoute,
     private location: Location
-  ) {
-    // super('RefinementList');
-  }
+  ) {}
 
   ngOnInit() {
     this.patchDefaultValue();
-    // this.createWidget(connectRefinementList, {
-    //   // instance options
-    //   attribute: 'tags',
-    // });
-    // super.ngOnInit();
-  }
-
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-    // Add language
-    if ((value || '').trim() && this.tagsArray.length < 3) {
-      this.tagsArray.push(value.trim());
-    }
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-  }
-
-  /* Remove dynamic languages */
-  remove(subject: string): void {
-    const index = this.tagsArray.indexOf(subject);
-    if (index >= 0) {
-      this.tagsArray.splice(index, 1);
-    }
-  }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.tagsArray.push(event.option.viewValue);
-    this.tagInput.nativeElement.value = '';
-    this.tagsControl.setValue(null);
   }
 
   submit() {
@@ -135,11 +85,15 @@ export class AddvocabularyComponent implements OnInit {
     const sendData: Omit<Vocabulary, 'vocabularyId' | 'likedCount'> = {
       title: formData.title,
       description: formData.description,
-      tags: formData.tags,
+      tags: this.tagsArray,
       authorId: this.authService.uid,
       createdAt: new Date()
     };
     this.vocabularyService.addVocabulary(sendData, this.authService.uid);
+  }
+
+  updateTag(value) {
+    this.tagsArray = value;
   }
 
   updateVocabulary() {
@@ -153,7 +107,7 @@ export class AddvocabularyComponent implements OnInit {
           const sendData: Omit<Vocabulary, 'createdAt' | 'likedCount'> = {
             title: formData.title,
             description: formData.description,
-            tags: formData.tags,
+            tags: this.tagsArray,
             authorId: word.authorId,
             vocabularyId: word.vocabularyId
           };
@@ -176,8 +130,7 @@ export class AddvocabularyComponent implements OnInit {
             this.tagsArray = vocabulary.tags;
             this.form.patchValue({
               title: vocabulary.title,
-              description: vocabulary.description,
-              tags: vocabulary.tags
+              description: vocabulary.description
             });
           });
       } else {

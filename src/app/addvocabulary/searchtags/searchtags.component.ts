@@ -4,22 +4,14 @@ import {
   Inject,
   forwardRef,
   ViewChild,
-  ElementRef
+  ElementRef,
+  Output,
+  EventEmitter,
+  Input
 } from '@angular/core';
 import { BaseWidget, NgAisInstantSearch } from 'angular-instantsearch';
 import { connectRefinementList } from 'instantsearch.js/es/connectors';
-import {
-  FormBuilder,
-  Validators,
-  FormControl,
-  FormArray
-} from '@angular/forms';
-import { VocabularyService } from 'src/app/services/vocabulary.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { Vocabulary, User } from 'src/app/interfaces/vocabulary';
-import { ActivatedRoute } from '@angular/router';
-import { take } from 'rxjs/operators';
-import { Location } from '@angular/common';
+import { FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {
   MatChipInputEvent,
@@ -31,58 +23,101 @@ import {
   styleUrls: ['./searchtags.component.scss']
 })
 export class SearchtagsComponent extends BaseWidget implements OnInit {
+  @Output() tags = new EventEmitter();
+  @Input() tagsArray: string[] = [];
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
-  vocabularyId: string;
-  isEditing: boolean;
   public state: {
-    items: object[];
+    items: any[];
     refine: (tag: string) => void;
     createURL: () => void;
     isFromSearch: boolean;
-    searchForItems: () => void;
+    searchForItems: any;
     isShowingMore: boolean;
     canToggleShowMore: boolean;
     toggleShowMore: () => void;
     widgetParams: object;
   };
+  tagOptions: [];
+
   @ViewChild('chipList', { static: true }) chipList;
   @ViewChild('tagInput', { static: true }) tagInput: ElementRef<
     HTMLInputElement
   >;
-  tagsArray: string[] = [];
-  form = this.fb.group({
-    // 最初の,までで初期値を指定
-    // validators.requiredは必須入力にするため
-    title: ['', [Validators.required, Validators.maxLength(60)]],
-    description: ['', [Validators.maxLength(100)]],
-    tags: [this.tagsArray, [Validators.maxLength(100)]]
-  });
-  options = [];
-  // エラー内容を取得する
-  get titleControl() {
-    return this.form.get('title') as FormControl;
-  }
-  // form配列をtagとして扱えるように
-  get tagsControl() {
-    return this.form.get('tags') as FormArray;
-  }
+  tagsControl = new FormControl();
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   constructor(
     @Inject(forwardRef(() => NgAisInstantSearch))
-    public instantSearchParent,
-    private fb: FormBuilder
+    public instantSearchParent
   ) {
     super('RefinementList');
   }
 
   ngOnInit() {
     this.createWidget(connectRefinementList, {
-      // instance options
-      attribute: 'tags'
+      attribute: 'tags',
+      limit: 5
     });
     super.ngOnInit();
+    // formに入力された値を取得してる
+    this.tagsControl.valueChanges.subscribe(value => {
+      this.handleChange(value);
+    });
+  }
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    // Add language
+    if ((value || '').trim() && this.tagsArray.length < 3) {
+      this.tagsArray.push(value.trim());
+    }
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+    this.tags.emit(this.tagsArray);
+  }
+
+  /* Remove dynamic languages */
+  remove(subject: string): void {
+    const index = this.tagsArray.indexOf(subject);
+    if (index >= 0) {
+      this.tagsArray.splice(index, 1);
+    }
+    this.tags.emit(this.tagsArray);
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.tagsArray.push(event.option.viewValue);
+    this.tagInput.nativeElement.value = '';
+    this.tagsControl.setValue(null);
+    this.tags.emit(this.tagsArray);
+  }
+
+  async aryDelete(value, tagsArray) {
+    value = value.filter(v => {
+      let check = true;
+      for (const i in tagsArray) {
+        if (v.value === tagsArray[i]) {
+          check = false;
+          break;
+        }
+      }
+      return check;
+    });
+    return value;
+  }
+
+  // これがないと検索して絞り込みができない
+  handleChange(value) {
+    // valueは入力欄に入力した値
+    this.aryDelete(this.state.items, this.tagsArray).then(tags => {
+      this.state.items = this.tagOptions;
+      this.tagOptions = tags;
+      this.state.searchForItems(value);
+    });
   }
 }
