@@ -39,7 +39,7 @@ export class SearchtagsComponent extends BaseWidget implements OnInit {
     @Inject(forwardRef(() => NgAisInstantSearch))
     public instantSearchParent
   ) {
-    super('RefinementList');
+    super('SearchtagsComponent');
   }
   get tagOptions() {
     const items = this.state.items || [];
