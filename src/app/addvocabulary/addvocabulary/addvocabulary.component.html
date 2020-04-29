@@ -24,11 +24,12 @@
       <mat-label>説明</mat-label>
       <textarea matInput formControlName="description"></textarea>
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>タグ</mat-label>
-      <input formControlName="tag" type="text" matInput autocomplete="off" />
-    </mat-form-field>
-
+    <ais-instantsearch [config]="config">
+      <app-searchtags
+        (tagEmit)="updateTag($event)"
+        [tagsArray]="tagsArray"
+      ></app-searchtags>
+    </ais-instantsearch>
     <ng-template #addvocabulary>
       <button [disabled]="form.invalid" mat-raised-button color="primary">
         作成する

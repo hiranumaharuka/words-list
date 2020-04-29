@@ -25,7 +25,6 @@ import { AngularFireFunctionsModule, REGION } from '@angular/fire/functions';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { SharedModule } from './shared/shared.module';
 import { NgAisModule } from 'angular-instantsearch';
-import { SearchInputComponent } from './result/search-input/search-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({

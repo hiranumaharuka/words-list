@@ -1,7 +1,8 @@
 export interface Vocabulary {
   title: string;
   description: string;
-  tag: string;
+  // tags: string[] | firebase.firestore.FieldValue;
+  tags: string[];
   authorId: string;
   vocabularyId: string;
   createdAt: Date;

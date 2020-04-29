@@ -44,3 +44,10 @@
 .md-dark.md-inactive {
   color: rgba(0, 0, 0, 0.26);
 }
+mat-chip {
+  font-size: 12px;
+}
+.mat-standard-chip {
+  min-height: 25px;
+  border-radius: 12.5px;
+}

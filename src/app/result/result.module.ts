@@ -32,7 +32,7 @@ import { MergeuserPipe } from '../mergeuser.pipe';
   imports: [
     CommonModule,
     ResultRoutingModule,
-    NgAisModule.forRoot(),
+    NgAisModule,
     MatAutocompleteModule,
     MatFormFieldModule,
     ReactiveFormsModule,

@@ -31,7 +31,7 @@ export const addVocabularyIndex = (data: any) => {
     description: data.description,
     createdAt: data.createdAt.toMillis(),
     authorId: data.authorId,
-    tag: data.tag,
+    tags: data.tags,
     likedCount: data.likedCount
   };
   if (vocabulary.description && vocabulary.description.length > 500) {
@@ -55,7 +55,7 @@ export const updateVocabularyIndex = async (data: any) => {
     description: data.description,
     createdAt: data.createdAt.toMillis(),
     authorId: data.authorId,
-    tag: data.tag,
+    tags: data.tags,
     likedCount: data.likedCount
   };
   await removeVocabularyIndex(vocabulary.vocabularyId);

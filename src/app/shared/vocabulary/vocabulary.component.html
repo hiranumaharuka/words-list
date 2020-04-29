@@ -15,7 +15,11 @@
   </mat-card-content>
   <mat-card-content>
     <p>{{ vocabulary.description }}</p>
-    <p class="vocabulary__tag">{{ vocabulary.tag }}</p>
+    <mat-chip-list aria-label="tag selection">
+      <mat-chip *ngFor="let tag of vocabulary.tags" selected>{{
+        tag
+      }}</mat-chip>
+    </mat-chip-list>
   </mat-card-content>
   <mat-card-content class="vocabulary__user">
     <p class="vocabulary__username">{{ vocabulary.author.userName }}</p>

@@ -1,0 +1,29 @@
+<mat-form-field class="multiple-items">
+  <mat-chip-list #chipList>
+    <mat-chip
+      *ngFor="let tags of tagsArray"
+      [removable]="true"
+      (removed)="remove(tags)"
+    >
+      {{ tags }}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+    <input
+      placeholder="タグ"
+      #tagInput
+      matInput
+      [formControl]="tagsControl"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      [matChipInputAddOnBlur]="true"
+      (matChipInputTokenEnd)="add($event)"
+    />
+  </mat-chip-list>
+  <mat-error>タグは3つまで登録できます</mat-error>
+  <mat-autocomplete (optionSelected)="selected($event)" #auto="matAutocomplete">
+    <mat-option [value]="item" *ngFor="let item of tagOptions">{{
+      item.label
+    }}</mat-option>
+  </mat-autocomplete>
+</mat-form-field>
