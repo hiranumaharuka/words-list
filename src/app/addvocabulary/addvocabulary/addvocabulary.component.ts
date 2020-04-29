@@ -33,8 +33,7 @@ export class AddvocabularyComponent implements OnInit {
     // 最初の,までで初期値を指定
     // validators.requiredは必須入力にするため
     title: ['', [Validators.required, Validators.maxLength(60)]],
-    description: ['', [Validators.maxLength(100)]],
-    tags: [this.tagsArray, [Validators.maxLength(100)]]
+    description: ['', [Validators.maxLength(100)]]
   });
   // エラー内容を取得する
   get titleControl() {
