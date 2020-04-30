@@ -13,11 +13,6 @@ type Mode = 'vocabularies' | 'words';
   styleUrls: ['./result.component.scss']
 })
 export class ResultComponent implements OnInit {
-  resultParams = {
-    hitsPerPage: 5,
-    page: 0,
-    query: ''
-  };
   mode: Mode;
   config = {
     indexName: 'words',
@@ -50,9 +45,5 @@ export class ResultComponent implements OnInit {
         });
         break;
     }
-  }
-
-  nextPage() {
-    this.resultParams.page++;
   }
 }

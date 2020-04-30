@@ -1,9 +1,19 @@
 <div class="container">
   <ais-instantsearch [config]="config">
     <ais-configure [searchParameters]="resultParams"></ais-configure>
-    <ais-hits>
-      <ng-template let-hits="hits">
-        <ng-container *ngFor="let hit of hits | mergeuser | async">
+    <ais-stats>
+      <ng-template let-state="state">
+        <ng-container *ngIf="state.nbHits !== 0">
+          <p class="hitnumber">{{ state.nbHits }}件</p>
+        </ng-container>
+      </ng-template>
+    </ais-stats>
+    <ais-infinite-hits>
+      <ng-template let-hits="hits" let-refine="showMore">
+        <ng-container
+          class="ais-Hits-list"
+          *ngFor="let hit of hits | mergeuser | async"
+        >
           <ng-container *ngIf="hit.vocabularyId !== findId(hit.vocabularyId)">
             <app-vocabulary
               class="ais-Hits-item"
@@ -12,7 +22,8 @@
             ></app-vocabulary>
           </ng-container>
         </ng-container>
+        <div appView (visible)="refine()"></div>
       </ng-template>
-    </ais-hits>
+    </ais-infinite-hits>
   </ais-instantsearch>
 </div>

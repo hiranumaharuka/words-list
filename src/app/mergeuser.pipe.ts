@@ -19,14 +19,15 @@ export class MergeuserPipe implements PipeTransform {
       .map(vocabulary => vocabulary.authorId);
     const authors$ = authorIds.map(id => this.vocabularyService.getUser(id));
     return combineLatest(authors$).pipe(
-      map(authors =>
-        authors.map((author, index) => {
+      map(authors => {
+        const result = vocabularies.map(vocabulary => {
           return {
-            ...vocabularies[index],
-            author
+            ...vocabulary,
+            author: authors.find(author => author.id === vocabulary.authorId)
           };
-        })
-      )
+        });
+        return result;
+      })
     );
   }
 }

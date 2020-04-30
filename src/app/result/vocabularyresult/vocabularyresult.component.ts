@@ -17,7 +17,7 @@ type Mode = 'vocabularies' | 'words';
 })
 export class VocabularyresultComponent implements OnInit, OnDestroy {
   resultParams = {
-    hitsPerPage: 5,
+    // hitsPerPage: 5,
     page: 0,
     query: ''
   };

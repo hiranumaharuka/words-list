@@ -19,6 +19,7 @@ import { VocabularyresultComponent } from './vocabularyresult/vocabularyresult.c
 import { WordresultComponent } from './wordresult/wordresult.component';
 import { SharedModule } from '../shared/shared.module';
 import { MergeuserPipe } from '../mergeuser.pipe';
+import { ViewDirective } from './view.directive';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { MergeuserPipe } from '../mergeuser.pipe';
     SegmentedControlComponent,
     VocabularyresultComponent,
     WordresultComponent,
-    MergeuserPipe
+    MergeuserPipe,
+    ViewDirective
   ],
   imports: [
     CommonModule,

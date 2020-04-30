@@ -3,9 +3,7 @@ import * as algoliasearch from 'algoliasearch/lite';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { Word } from 'src/app/interfaces/word';
 import { WordService } from 'src/app/services/word.service';
-import { Subscription } from 'rxjs';
 const searchClient = algoliasearch(
   environment.algolia.appId,
   environment.algolia.apiKey
@@ -18,7 +16,7 @@ type Mode = 'vocabularies' | 'words';
 })
 export class WordresultComponent implements OnInit {
   resultParams = {
-    hitsPerPage: 5,
+    // hitsPerPage: 5,
     page: 0,
     query: ''
   };
