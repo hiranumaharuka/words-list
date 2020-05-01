@@ -1,3 +1,4 @@
+import { Vocabulary, VocabularyWithAuthor } from './../interfaces/vocabulary';
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
@@ -273,6 +274,30 @@ export class VocabularyService {
           lastDoc,
           vocabulariesData
         };
+      })
+    );
+  }
+
+  mergeUser(vocabularies: Vocabulary[]): Observable<VocabularyWithAuthor[]> {
+    console.log(vocabularies);
+    const authorIds: string[] = vocabularies
+      .filter((vocabulary, index, self) => {
+        return (
+          self.findIndex(item => vocabulary.authorId === item.authorId) ===
+          index
+        );
+      })
+      .map(vocabulary => vocabulary.authorId);
+    const authors$ = authorIds.map(id => this.getUser(id));
+    return combineLatest(authors$).pipe(
+      map(authors => {
+        const result = vocabularies.map(vocabulary => {
+          return {
+            ...vocabulary,
+            author: authors.find(author => author.id === vocabulary.authorId)
+          };
+        });
+        return result;
       })
     );
   }

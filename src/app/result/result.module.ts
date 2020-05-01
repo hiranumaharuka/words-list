@@ -1,3 +1,4 @@
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResultRoutingModule } from './result-routing.module';
@@ -11,7 +12,8 @@ import {
   MatInputModule,
   MatCardModule,
   MatButtonModule,
-  MatMenuModule
+  MatMenuModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SegmentedControlComponent } from './segmented-control/segmented-control.component';
@@ -44,7 +46,8 @@ import { ViewDirective } from './view.directive';
     MatCardModule,
     MatButtonModule,
     MatMenuModule,
-    SharedModule
+    SharedModule,
+    MatProgressSpinnerModule
   ]
 })
 export class ResultModule {}

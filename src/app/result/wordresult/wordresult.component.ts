@@ -16,7 +16,7 @@ type Mode = 'vocabularies' | 'words';
 })
 export class WordresultComponent implements OnInit {
   resultParams = {
-    // hitsPerPage: 5,
+    hitsPerPage: 5,
     page: 0,
     query: ''
   };
@@ -48,5 +48,9 @@ export class WordresultComponent implements OnInit {
     this.wordService.deleteWord(vocabularyId, wordId);
     this.wordService.getDeleteWordId(wordId);
     this.deleteWordIds.push(wordId);
+  }
+
+  check() {
+    console.log('hit');
   }
 }

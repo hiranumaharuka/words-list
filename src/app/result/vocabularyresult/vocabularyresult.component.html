@@ -9,20 +9,22 @@
       </ng-template>
     </ais-stats>
     <ais-infinite-hits>
-      <ng-template let-hits="hits" let-refine="showMore">
-        <ng-container
-          class="ais-Hits-list"
-          *ngFor="let hit of hits | mergeuser | async"
-        >
-          <ng-container *ngIf="hit.vocabularyId !== findId(hit.vocabularyId)">
+      <ng-template let-hits="hits">
+        <ng-container class="ais-Hits-list" *ngFor="let result of results">
+          <ng-container
+            *ngIf="result.vocabularyId !== findId(result.vocabularyId)"
+          >
             <app-vocabulary
               class="ais-Hits-item"
-              [vocabulary]="hit"
-              routerLink="/wordlist/{{ hit.vocabularyId }}"
+              [vocabulary]="result"
+              routerLink="/wordlist/{{ result.vocabularyId }}"
             ></app-vocabulary>
           </ng-container>
         </ng-container>
-        <div appView (visible)="refine()"></div>
+        <div *ngIf="isMoreActive" appView (visible)="getNextPage()"></div>
+        <div class="center">
+          <mat-spinner *ngIf="isLoading" [diameter]="24"></mat-spinner>
+        </div>
       </ng-template>
     </ais-infinite-hits>
   </ais-instantsearch>

@@ -2,13 +2,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { VocabularyService } from './services/vocabulary.service';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Vocabulary } from './interfaces/vocabulary';
 
 @Pipe({
   name: 'mergeuser'
 })
 export class MergeuserPipe implements PipeTransform {
   constructor(private vocabularyService: VocabularyService) {}
-  transform(vocabularies: { authorId: string }[]): Observable<any> {
+  transform(vocabularies: Vocabulary[]): Observable<any> {
     const authorIds: string[] = vocabularies
       .filter((vocabulary, index, self) => {
         return (
