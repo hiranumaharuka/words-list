@@ -6,11 +6,11 @@
     <app-segmented-control></app-segmented-control>
   </ais-instantsearch>
   <div class="container">
-    <app-vocabularyresult
+    <app-vocabulary-result
       *ngIf="config.indexName === 'vocabularies'"
-    ></app-vocabularyresult>
-    <app-wordresult
+    ></app-vocabulary-result>
+    <app-word-result
       *ngIf="config.indexName !== 'vocabularies'"
-    ></app-wordresult>
+    ></app-word-result>
   </div>
 </div>

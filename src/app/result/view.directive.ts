@@ -18,7 +18,6 @@ export class ViewDirective implements AfterViewInit, OnDestroy {
 
   public ngAfterViewInit() {
     this.intersectionObserver = new IntersectionObserver(entries => {
-      console.log(entries[0].intersectionRatio);
       this.checkForIntersection(entries);
     }, {});
     this.intersectionObserver.observe(this.element.nativeElement as Element);

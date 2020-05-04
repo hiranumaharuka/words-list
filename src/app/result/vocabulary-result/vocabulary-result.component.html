@@ -1,0 +1,31 @@
+<div class="container">
+  <ais-instantsearch [config]="config">
+    <ais-configure [searchParameters]="resultParams"></ais-configure>
+    <ais-stats>
+      <ng-template let-state="state">
+        <ng-container *ngIf="state.nbHits !== 0">
+          <p class="hitnumber">検索結果: {{ state.nbHits }}件</p>
+        </ng-container>
+      </ng-template>
+    </ais-stats>
+    <ais-infinite-hits>
+      <ng-template let-hits="hits">
+        <ng-container class="ais-Hits-list" *ngFor="let result of results">
+          <ng-container
+            *ngIf="result.vocabularyId !== findId(result.vocabularyId)"
+          >
+            <app-vocabulary
+              class="ais-Hits-item"
+              [vocabulary]="result"
+              routerLink="/wordlist/{{ result.vocabularyId }}"
+            ></app-vocabulary>
+          </ng-container>
+        </ng-container>
+        <div *ngIf="isMoreActive" appView (visible)="getMore()"></div>
+        <div class="center">
+          <mat-spinner *ngIf="isLoading" [diameter]="24"></mat-spinner>
+        </div>
+      </ng-template>
+    </ais-infinite-hits>
+  </ais-instantsearch>
+</div>

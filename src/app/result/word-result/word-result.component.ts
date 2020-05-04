@@ -10,13 +10,13 @@ const searchClient = algoliasearch(
 );
 type Mode = 'vocabularies' | 'words';
 @Component({
-  selector: 'app-wordresult',
-  templateUrl: './wordresult.component.html',
-  styleUrls: ['./wordresult.component.scss']
+  selector: 'app-word-result',
+  templateUrl: './word-result.component.html',
+  styleUrls: ['./word-result.component.scss']
 })
-export class WordresultComponent implements OnInit {
+export class WordResultComponent implements OnInit {
   resultParams = {
-    // hitsPerPage: 5,
+    hitsPerPage: 5,
     page: 0,
     query: ''
   };

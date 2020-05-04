@@ -11,14 +11,14 @@ import {
   MatInputModule,
   MatCardModule,
   MatButtonModule,
-  MatMenuModule
+  MatMenuModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SegmentedControlComponent } from './segmented-control/segmented-control.component';
-import { VocabularyresultComponent } from './vocabularyresult/vocabularyresult.component';
-import { WordresultComponent } from './wordresult/wordresult.component';
+import { VocabularyResultComponent } from './vocabulary-result/vocabulary-result.component';
+import { WordResultComponent } from './word-result/word-result.component';
 import { SharedModule } from '../shared/shared.module';
-import { MergeuserPipe } from '../mergeuser.pipe';
 import { ViewDirective } from './view.directive';
 
 @NgModule({
@@ -26,9 +26,8 @@ import { ViewDirective } from './view.directive';
     ResultComponent,
     SearchInputComponent,
     SegmentedControlComponent,
-    VocabularyresultComponent,
-    WordresultComponent,
-    MergeuserPipe,
+    VocabularyResultComponent,
+    WordResultComponent,
     ViewDirective
   ],
   imports: [
@@ -44,7 +43,8 @@ import { ViewDirective } from './view.directive';
     MatCardModule,
     MatButtonModule,
     MatMenuModule,
-    SharedModule
+    SharedModule,
+    MatProgressSpinnerModule
   ]
 })
 export class ResultModule {}
