@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
-  AngularFirestoreCollection,
-  QueryDocumentSnapshot
+  AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import {
   Vocabulary,
@@ -16,15 +15,12 @@ import { firestore } from 'firebase';
 import { MatSnackBar } from '@angular/material';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { LoadingService } from './loading.service';
-// import * as admin from 'firebase-admin';
-import * as firebase from 'firebase/app';
 @Injectable({
   providedIn: 'root'
 })
 export class VocabularyService {
   private deleteVocabularyId = new Subject<string>();
   public deleteVocabularyId$ = this.deleteVocabularyId.asObservable();
-  // admin = require('firebase-admin');
   constructor(
     // データベースにアクセスする
     private db: AngularFirestore,
@@ -273,6 +269,29 @@ export class VocabularyService {
           lastDoc,
           vocabulariesData
         };
+      })
+    );
+  }
+
+  mergeUser(vocabularies: Vocabulary[]): Observable<VocabularyWithAuthor[]> {
+    const authorIds: string[] = vocabularies
+      .filter((vocabulary, index, self) => {
+        return (
+          self.findIndex(item => vocabulary.authorId === item.authorId) ===
+          index
+        );
+      })
+      .map(vocabulary => vocabulary.authorId);
+    const authors$ = authorIds.map(id => this.getUser(id));
+    return combineLatest(authors$).pipe(
+      map(authors => {
+        const result = vocabularies.map(vocabulary => {
+          return {
+            ...vocabulary,
+            author: authors.find(author => author.id === vocabulary.authorId)
+          };
+        });
+        return result;
       })
     );
   }

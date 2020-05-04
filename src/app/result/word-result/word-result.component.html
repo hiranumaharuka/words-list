@@ -1,8 +1,15 @@
 <div class="container">
   <ais-instantsearch [config]="config">
     <ais-configure [searchParameters]="resultParams"></ais-configure>
-    <ais-hits>
-      <ng-template let-hits="hits">
+    <ais-stats>
+      <ng-template let-state="state">
+        <ng-container *ngIf="state.nbHits !== 0">
+          <p class="hitnumber">検索結果: {{ state.nbHits }}件</p>
+        </ng-container>
+      </ng-template>
+    </ais-stats>
+    <ais-infinite-hits>
+      <ng-template let-hits="hits" let-refine="showMore">
         <div class="ais-Hits-list">
           <ng-container *ngFor="let hit of hits">
             <mat-card
@@ -50,8 +57,9 @@
               </mat-card-actions>
             </mat-card>
           </ng-container>
+          <div appView (visible)="refine()"></div>
         </div>
       </ng-template>
-    </ais-hits>
+    </ais-infinite-hits>
   </ais-instantsearch>
 </div>
