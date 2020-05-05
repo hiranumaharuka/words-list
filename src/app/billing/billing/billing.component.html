@@ -1,0 +1,65 @@
+<div class="container">
+  <mat-card>
+    <mat-card-content class="header">
+      <mat-card-title>フリープラン</mat-card-title>
+    </mat-card-content>
+    <mat-card-content class="body">
+      <div class="body__price">¥0</div>
+      <div class="body__content">
+        <mat-icon color="primary">
+          import_contacts
+        </mat-icon>
+        <p class="sub-title">
+          単語帳作成数
+        </p>
+      </div>
+      <p class="detail">無制限</p>
+      <div class="body__content">
+        <mat-icon color="primary">
+          style
+        </mat-icon>
+        <p class="sub-title">
+          単語作成数
+        </p>
+      </div>
+      <p class="detail">10個</p>
+    </mat-card-content>
+    <button [disabled]="true" mat-raised-button color="primary">
+      このプランに変更する
+    </button>
+  </mat-card>
+  <mat-card>
+    <mat-card-content class="header">
+      <mat-card-title>月額プラン</mat-card-title>
+    </mat-card-content>
+    <mat-card-content class="body">
+      <div class="body__price">
+        <div>
+          ¥100
+        </div>
+        <p>+税/月</p>
+      </div>
+      <div class="body__content">
+        <mat-icon color="primary">
+          import_contacts
+        </mat-icon>
+        <p class="sub-title">
+          単語帳作成数
+        </p>
+      </div>
+      <p class="detail">無制限</p>
+      <div class="body__content">
+        <mat-icon color="primary">
+          style
+        </mat-icon>
+        <p class="sub-title">
+          単語作成数
+        </p>
+      </div>
+      <p class="detail">無制限</p>
+    </mat-card-content>
+    <button (click)="openDialog()" mat-raised-button color="primary">
+      このプランに変更する
+    </button>
+  </mat-card>
+</div>

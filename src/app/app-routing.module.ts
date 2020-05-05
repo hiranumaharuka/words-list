@@ -69,11 +69,9 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'favvocabulary',
+    path: 'billing',
     loadChildren: () =>
-      import('./favvocabulary/favvocabulary.module').then(
-        m => m.FavvocabularyModule
-      ),
+      import('./billing/billing.module').then(m => m.BillingModule),
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
   },
@@ -118,6 +116,15 @@ const routes: Routes = [
     path: 'mode',
     loadChildren: () =>
       import('./result/result.module').then(m => m.ResultModule),
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'favvocabulary',
+    loadChildren: () =>
+      import('./favvocabulary/favvocabulary.module').then(
+        m => m.FavvocabularyModule
+      ),
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
   },

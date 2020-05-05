@@ -13,7 +13,8 @@ import {
   MatProgressBarModule,
   MatInputModule,
   MatAutocompleteModule,
-  MatFormFieldModule
+  MatFormFieldModule,
+  MatDialogModule
 } from '@angular/material';
 import { FooterComponent } from './footer/footer.component';
 import { AngularFireModule } from '@angular/fire';
@@ -26,13 +27,15 @@ import { NotfoundComponent } from './notfound/notfound.component';
 import { SharedModule } from './shared/shared.module';
 import { NgAisModule } from 'angular-instantsearch';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { BillingDialogComponent } from './billing-dialog/billing-dialog.component';
+import { NgxStripeModule } from 'ngx-stripe';
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    NotfoundComponent
+    NotfoundComponent,
+    BillingDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +57,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatInputModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogModule,
+    NgxStripeModule.forRoot('***your-stripe-publishable key***')
   ],
   providers: [
     {
@@ -62,6 +67,7 @@ import { ReactiveFormsModule } from '@angular/forms';
       useValue: 'asia-northeast1'
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [BillingDialogComponent]
 })
 export class AppModule {}
