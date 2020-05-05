@@ -18,7 +18,7 @@ export class BillingDialogComponent implements OnInit {
 
   // optional parameters
   elementsOptions: ElementsOptions = {
-    locale: 'es'
+    locale: 'ja'
   };
 
   stripeTest: FormGroup;
