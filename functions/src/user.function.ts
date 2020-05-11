@@ -9,6 +9,8 @@ export const createUser = functions.auth.user().onCreate(user => {
     id: user.uid,
     userName: user.displayName,
     createdVocabulary: 0,
-    likedVocabulary: 0
+    likedVocabulary: 0,
+    isCustomer: false,
+    createdAt: new Date()
   });
 });

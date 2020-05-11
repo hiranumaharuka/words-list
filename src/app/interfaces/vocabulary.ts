@@ -14,6 +14,12 @@ export interface User {
   userName: string;
   createdVocabulary: number;
   likedVocabulary: number;
+  isCustomer: boolean;
+  createdAt: Date;
+}
+export interface Customer {
+  customerId: string;
+  uid: string;
 }
 
 export interface VocabularyWithAuthor extends Vocabulary {

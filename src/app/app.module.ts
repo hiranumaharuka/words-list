@@ -29,13 +29,15 @@ import { NgAisModule } from 'angular-instantsearch';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BillingDialogComponent } from './billing-dialog/billing-dialog.component';
 import { NgxStripeModule } from 'ngx-stripe';
+import { ChangeDialogComponent } from './change-dialog/change-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
     NotfoundComponent,
-    BillingDialogComponent
+    BillingDialogComponent,
+    ChangeDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +61,7 @@ import { NgxStripeModule } from 'ngx-stripe';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatDialogModule,
-    NgxStripeModule.forRoot('***your-stripe-publishable key***')
+    NgxStripeModule.forRoot('pk_test_h4aTKYTOTRM2i8fY3kLn0hyV002rH0glTl')
   ],
   providers: [
     {
@@ -68,6 +70,6 @@ import { NgxStripeModule } from 'ngx-stripe';
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [BillingDialogComponent]
+  entryComponents: [BillingDialogComponent, ChangeDialogComponent]
 })
 export class AppModule {}
