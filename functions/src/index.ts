@@ -6,3 +6,4 @@ export * from './vocabulary.function';
 export * from './word.function';
 export * from './createcount.function';
 export * from './algolia';
+export * from './stripe.function';

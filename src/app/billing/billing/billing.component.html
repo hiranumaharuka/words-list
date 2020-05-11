@@ -24,9 +24,19 @@
       </div>
       <p class="detail">10個</p>
     </mat-card-content>
-    <button [disabled]="true" mat-raised-button color="primary">
+    <button
+      *ngIf="isCustomer$ | async; else freeplan"
+      mat-raised-button
+      color="primary"
+      (click)="openChangeDialog()"
+    >
       このプランに変更する
     </button>
+    <ng-template #freeplan>
+      <p class="status">
+        現在ご利用中のプランです
+      </p>
+    </ng-template>
   </mat-card>
   <mat-card>
     <mat-card-content class="header">
@@ -58,8 +68,27 @@
       </div>
       <p class="detail">無制限</p>
     </mat-card-content>
-    <button (click)="openDialog()" mat-raised-button color="primary">
-      このプランに変更する
-    </button>
+    <ng-template #free>
+      <ng-template #first>
+        <button
+          (click)="openSubscribeDialog()"
+          mat-raised-button
+          color="primary"
+        >
+          このプランに変更する
+        </button>
+      </ng-template>
+      <button
+        *ngIf="customerData$ | async; else first"
+        (click)="openChangeDialog()"
+        mat-raised-button
+        color="primary"
+      >
+        このプランに変更する
+      </button>
+    </ng-template>
+    <p *ngIf="isCustomer$ | async as isCustomer; else free" class="status">
+      現在ご利用中のプランです
+    </p>
   </mat-card>
 </div>
