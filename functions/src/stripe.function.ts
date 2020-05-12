@@ -76,14 +76,56 @@ export const unsubscribePlan = functions.region('asia-northeast1').https.onCall(
     if (!userPayment) {
       return;
     }
-    await stripe.subscriptions.del(userPayment.subscriptionId);
-
-    return db.doc(`users/${data.userId}`).update({
-      isCustomer: false,
-      subscriptionId: null
+    return stripe.subscriptions.update(userPayment.subscriptionId, {
+      cancel_at_period_end: true
     });
   }
 );
+
+// 課金停止受信
+export const receiveUnsubscribe = functions
+  .region('asia-northeast1')
+  .https.onRequest(async (req: any, res: any) => {
+    const data = req.body.data.object;
+    const customer = await db
+      .collection('customers')
+      .where('customerId', '==', data.customer)
+      .get();
+    if (!customer) {
+      return;
+    } else {
+      const userId = await customer.docs[0].data().uid;
+      res.status(200).send(true);
+      return db.doc(`users/${userId}`).update({
+        isCustomer: false,
+        subscriptionId: null
+      });
+    }
+  });
+
+// 課金成功受信
+export const receiveSubscribe = functions
+  .region('asia-northeast1')
+  .https.onRequest(async (req: any, res: any) => {
+    const data = req.body.data.object;
+    const customer = await db
+      .collection('customers')
+      .where('customerId', '==', data.customer)
+      .get();
+    if (!customer) {
+      return;
+    } else {
+      const period = data.lines.data[0].period;
+      const startDate = period.start;
+      const endDate = period.end;
+      const userId = await customer.docs[0].data().uid;
+      res.status(200).send(true);
+      return db.doc(`users/${userId}`).update({
+        startDate,
+        endDate
+      });
+    }
+  });
 
 // user削除時に課金停止
 export const deleteCustomer = functions.auth.user().onDelete(async user => {

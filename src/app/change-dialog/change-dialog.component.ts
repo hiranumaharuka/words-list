@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PaymentService } from '../services/payment.service';
 import { MatSnackBar } from '@angular/material';
 import { AuthService } from '../services/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { VocabularyService } from '../services/vocabulary.service';
 import { map } from 'rxjs/operators';
 
@@ -11,11 +11,17 @@ import { map } from 'rxjs/operators';
   templateUrl: './change-dialog.component.html',
   styleUrls: ['./change-dialog.component.scss']
 })
-export class ChangeDialogComponent implements OnInit {
+export class ChangeDialogComponent implements OnInit, OnDestroy {
   uid = this.authService.uid;
   isCustomer$: Observable<boolean> = this.vocabularyService
     .getUser(this.uid)
     .pipe(map(data => data.isCustomer));
+  date: number;
+  endDate$: Observable<number> = this.vocabularyService
+    .getUser(this.uid)
+    .pipe(map(data => data.endDate));
+  endDate;
+  sub: Subscription;
   constructor(
     private paymentService: PaymentService,
     private snackBar: MatSnackBar,
@@ -23,7 +29,12 @@ export class ChangeDialogComponent implements OnInit {
     private vocabularyService: VocabularyService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.sub = this.endDate$.subscribe(data => {
+      this.date = data;
+      this.endDate = new Date(this.date * 1000);
+    });
+  }
 
   stopSubscribe() {
     this.paymentService
@@ -61,5 +72,9 @@ export class ChangeDialogComponent implements OnInit {
           });
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }

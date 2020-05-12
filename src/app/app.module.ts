@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -30,6 +30,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BillingDialogComponent } from './billing-dialog/billing-dialog.component';
 import { NgxStripeModule } from 'ngx-stripe';
 import { ChangeDialogComponent } from './change-dialog/change-dialog.component';
+import localeJa from '@angular/common/locales/ja';
+import { registerLocaleData } from '@angular/common';
+
+// 追加
+registerLocaleData(localeJa);
 @NgModule({
   declarations: [
     AppComponent,
@@ -67,7 +72,8 @@ import { ChangeDialogComponent } from './change-dialog/change-dialog.component';
     {
       provide: REGION,
       useValue: 'asia-northeast1'
-    }
+    },
+    { provide: LOCALE_ID, useValue: 'ja-JP' }
   ],
   bootstrap: [AppComponent],
   entryComponents: [BillingDialogComponent, ChangeDialogComponent]

@@ -16,6 +16,8 @@ export interface User {
   likedVocabulary: number;
   isCustomer: boolean;
   createdAt: Date;
+  startDate: number;
+  endDate: number;
 }
 export interface Customer {
   customerId: string;

@@ -87,8 +87,15 @@
         このプランに変更する
       </button>
     </ng-template>
-    <p *ngIf="isCustomer$ | async as isCustomer; else free" class="status">
-      現在ご利用中のプランです
-    </p>
+    <div *ngIf="isCustomer$ | async as isCustomer; else free">
+      <p class="plan">
+        現在ご利用中のプランです
+      </p>
+      <p class="date" *ngIf="startDate !== null && endDate !== null">
+        {{ startDate | date: 'yyyy/MM/dd(E)' }}〜{{
+          endDate | date: 'yyyy/MM/dd(E)'
+        }}まで
+      </p>
+    </div>
   </mat-card>
 </div>
