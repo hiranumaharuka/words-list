@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { BillingDialogComponent } from 'src/app/billing-dialog/billing-dialog.component';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { map } from 'rxjs/operators';
@@ -14,22 +14,42 @@ import { Customer } from 'src/app/interfaces/vocabulary';
   templateUrl: './billing.component.html',
   styleUrls: ['./billing.component.scss']
 })
-export class BillingComponent implements OnInit {
+export class BillingComponent implements OnInit, OnDestroy {
   uid = this.authService.uid;
+  date: number;
+  startDate$: Observable<number> = this.vocabularyService
+    .getUser(this.uid)
+    .pipe(map(data => data.startDate));
+  endDate$: Observable<number> = this.vocabularyService
+    .getUser(this.uid)
+    .pipe(map(data => data.endDate));
+  startDate;
+  endDate;
   isCustomer$: Observable<boolean> = this.vocabularyService
     .getUser(this.uid)
     .pipe(map(data => data.isCustomer));
   customerData$: Observable<Customer> = this.paymentService.getCustomer(
     this.uid
   );
+  sub: Subscription;
   constructor(
     private dialog: MatDialog,
     private vocabularyService: VocabularyService,
     private authService: AuthService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private snackBar: MatSnackBar
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.sub = this.startDate$.subscribe(data => {
+      this.date = data;
+      this.startDate = new Date(this.date * 1000);
+    });
+    this.sub = this.endDate$.subscribe(data => {
+      this.date = data;
+      this.endDate = new Date(this.date * 1000);
+    });
+  }
 
   openSubscribeDialog() {
     this.dialog.open(BillingDialogComponent, {
@@ -45,5 +65,9 @@ export class BillingComponent implements OnInit {
       autoFocus: false,
       restoreFocus: false
     });
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }

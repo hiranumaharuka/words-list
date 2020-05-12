@@ -1,10 +1,15 @@
 <h2 mat-dialog-title>このプランに変更しますか？</h2>
 <mat-dialog-content>
-  <p *ngIf="isCustomer$ | async; else paydetail">
-    変更すると月額課金が中止になり、機能制限がつきます
-  </p>
+  <div *ngIf="isCustomer$ | async; else paydetail">
+    <p>
+      変更すると月額課金が中止になり、機能制限がつきます。
+    </p>
+    <p *ngIf="endDate !== null">
+      解約しても{{ endDate | date: 'yyyy/MM/dd(E)' }}までご利用可能です。
+    </p>
+  </div>
   <ng-template #paydetail>
-    <p>変更すると月額課金が開始し、解約しない限り1ヶ月毎に課金が発生します</p>
+    <p>変更すると月額課金が開始し、解約しない限り1ヶ月毎に課金が発生します。</p>
   </ng-template>
 </mat-dialog-content>
 

@@ -60,6 +60,7 @@ export class PaymentService {
     const callable = this.fns.httpsCallable('deleteCustomer');
     return callable({ customerId }).toPromise();
   }
+
   getCustomer(userId: string): Observable<Customer> {
     return this.db.doc<Customer>(`customers/${userId}`).valueChanges();
   }
