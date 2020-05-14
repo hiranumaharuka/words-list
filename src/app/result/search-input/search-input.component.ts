@@ -70,7 +70,6 @@ export class SearchInputComponent implements OnInit, OnDestroy {
           params: {
             filters: `isDeleted=0`
           }
-          // params: null
         }
       ])
       .then(result => {
