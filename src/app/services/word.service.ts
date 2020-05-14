@@ -70,7 +70,12 @@ export class WordService {
         tap(() => this.loadingService.toggleLoading(false))
       );
   }
-
+  getWordsLength(vocabularyId: string): Observable<number> {
+    return this.db
+      .collection<Word>(`vocabularies/${vocabularyId}/words`)
+      .valueChanges()
+      .pipe(map(data => data.length));
+  }
   updateWord(
     vocabularyId: string,
     word: Omit<Word, 'createdAt' | 'isDeleted'>
