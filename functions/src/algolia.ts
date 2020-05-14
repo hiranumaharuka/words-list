@@ -32,7 +32,8 @@ export const addVocabularyIndex = (data: any) => {
     createdAt: data.createdAt.toMillis(),
     authorId: data.authorId,
     tags: data.tags,
-    likedCount: data.likedCount
+    likedCount: data.likedCount,
+    isDeleted: data.isDeleted
   };
   if (vocabulary.description && vocabulary.description.length > 500) {
     return addVocabularyRecords(vocabulary);
@@ -56,7 +57,8 @@ export const updateVocabularyIndex = async (data: any) => {
     createdAt: data.createdAt.toMillis(),
     authorId: data.authorId,
     tags: data.tags,
-    likedCount: data.likedCount
+    likedCount: data.likedCount,
+    isDeleted: data.isDeleted
   };
   await removeVocabularyIndex(vocabulary.vocabularyId);
   if (vocabulary.description && vocabulary.description.length > 500) {
@@ -89,7 +91,8 @@ export const addWordIndex = (data: any) => {
     wordId: data.wordId,
     objectID: data.wordId,
     authorId: data.authorId,
-    vocabularyId: data.vocabularyId
+    vocabularyId: data.vocabularyId,
+    isDeleted: data.isDeleted
   };
 
   if (word.surface && word.surface.length > 500) {
@@ -111,7 +114,8 @@ export const updateWordIndex = async (data: any) => {
     wordId: data.wordId,
     objectID: data.wordId,
     authorId: data.authorId,
-    vocabularyId: data.vocabularyId
+    vocabularyId: data.vocabularyId,
+    isDeleted: data.isDeleted
   };
   await removeWordIndex(word.wordId);
   if (word.surface && word.surface.length > 500) {

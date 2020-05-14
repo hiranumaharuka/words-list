@@ -1,1 +1,36 @@
-<p>setting works!</p>
+<div *ngIf="user$ | async as user" class="wrapper">
+  <div class="content">
+    <p class="content__title">ユーザー名</p>
+    <p>{{ user.userName }}</p>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="content">
+    <p class="content__title">プラン</p>
+    <p>{{ user.isCustomer ? '有料プラン' : '無料プラン' }}</p>
+    <p
+      class="content__date"
+      *ngIf="startDate !== undefined && endDate !== undefined"
+    >
+      {{ startDate | date: 'yyyy/MM/dd(E)' }}〜{{
+        endDate | date: 'yyyy/MM/dd(E)'
+      }}まで。 解約しない限り1ヶ月毎の自動更新となります。
+    </p>
+    <button
+      class="content__btn"
+      mat-stroked-button
+      color="primary"
+      routerLink="/billing"
+    >
+      プランを変更する
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="content">
+    <p class="content__title">退会</p>
+    <p>退会すると有料プランに入会している場合自動解約となります。</p>
+    <p>作成した単語帳及び単語は削除されます。</p>
+    <button mat-stroked-button color="primary" (click)="delete()">
+      退会する
+    </button>
+  </div>
+</div>

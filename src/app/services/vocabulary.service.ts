@@ -31,7 +31,7 @@ export class VocabularyService {
   ) {}
 
   addVocabulary(
-    vocabulary: Omit<Vocabulary, 'vocabularyId' | 'likedCount'>,
+    vocabulary: Omit<Vocabulary, 'vocabularyId' | 'likedCount' | 'isDeleted'>,
     uid: string
   ): Promise<void> {
     this.loadingService.toggleLoading(true);
@@ -42,6 +42,7 @@ export class VocabularyService {
         vocabularyId,
         ...vocabulary,
         likedCount: 0,
+        isDeleted: false,
         authorId: uid
       })
       .then(() => {
@@ -147,7 +148,10 @@ export class VocabularyService {
     const sorted = this.db.collection<VocabularyWithAuthor>(
       `vocabularies`,
       ref => {
-        return ref.orderBy('createdAt', 'desc').limit(5);
+        return ref
+          .where('isDeleted', '==', false)
+          .orderBy('createdAt', 'desc')
+          .limit(5);
       }
     );
     return this.getVocabularies(sorted).pipe(
@@ -161,7 +165,10 @@ export class VocabularyService {
     const sorted = this.db.collection<VocabularyWithAuthor>(
       `vocabularies`,
       ref => {
-        return ref.orderBy('likedCount', 'desc').limit(5);
+        return ref
+          .where('isDeleted', '==', false)
+          .orderBy('likedCount', 'desc')
+          .limit(5);
       }
     );
     return this.getVocabularies(sorted).pipe(
@@ -172,7 +179,7 @@ export class VocabularyService {
   }
 
   updateVocabulary(
-    vocabulary: Omit<Vocabulary, 'createdAt' | 'likedCount'>
+    vocabulary: Omit<Vocabulary, 'createdAt' | 'likedCount' | 'isDeleted'>
   ): Promise<void> {
     this.loadingService.toggleLoading(true);
     return this.db

@@ -5,4 +5,5 @@ export interface Word {
   wordId: string;
   authorId: string;
   vocabularyId: string;
+  isDeleted: boolean;
 }

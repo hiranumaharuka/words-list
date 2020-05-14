@@ -1,12 +1,12 @@
 export interface Vocabulary {
   title: string;
   description: string;
-  // tags: string[] | firebase.firestore.FieldValue;
   tags: string[];
   authorId: string;
   vocabularyId: string;
   createdAt: Date;
   likedCount: number;
+  isDeleted: boolean;
 }
 
 export interface User {
@@ -18,6 +18,7 @@ export interface User {
   createdAt: Date;
   startDate: number;
   endDate: number;
+  isDeleted: boolean;
 }
 export interface Customer {
   customerId: string;

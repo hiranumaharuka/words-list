@@ -67,7 +67,9 @@ export class SearchInputComponent implements OnInit, OnDestroy {
           // queryが何も無ければ(nullであれば)空文字列を渡す
           // これによって最初から候補が入ってくる
           query: query || '',
-          params: null
+          params: {
+            filters: `isDeleted=0`
+          }
         }
       ])
       .then(result => {

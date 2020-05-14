@@ -22,7 +22,7 @@ export class WordService {
   ) {}
 
   addWord(
-    word: Omit<Word, 'wordId' | 'vocabularyId'>,
+    word: Omit<Word, 'wordId' | 'vocabularyId' | 'isDeleted'>,
     uid: string,
     vocabularyId: string
   ): Promise<void> {
@@ -34,7 +34,8 @@ export class WordService {
         wordId,
         ...word,
         vocabularyId,
-        authorId: uid
+        authorId: uid,
+        isDeleted: false
       })
       .then(() => {
         this.snackBar.open('単語帳を作成しました', null, { duration: 1500 });
@@ -72,7 +73,7 @@ export class WordService {
 
   updateWord(
     vocabularyId: string,
-    word: Omit<Word, 'createdAt'>
+    word: Omit<Word, 'createdAt' | 'isDeleted'>
   ): Promise<void> {
     this.loadingService.toggleLoading(true);
     return this.db

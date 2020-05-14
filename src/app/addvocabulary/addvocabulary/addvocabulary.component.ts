@@ -62,7 +62,10 @@ export class AddvocabularyComponent implements OnInit {
 
   submit() {
     const formData = this.form.value;
-    const sendData: Omit<Vocabulary, 'vocabularyId' | 'likedCount'> = {
+    const sendData: Omit<
+      Vocabulary,
+      'vocabularyId' | 'likedCount' | 'isDeleted'
+    > = {
       title: formData.title,
       description: formData.description,
       tags: this.tagsArray,
@@ -84,7 +87,10 @@ export class AddvocabularyComponent implements OnInit {
         .getVocabulary(this.vocabularyId)
         .pipe(take(1))
         .subscribe(word => {
-          const sendData: Omit<Vocabulary, 'createdAt' | 'likedCount'> = {
+          const sendData: Omit<
+            Vocabulary,
+            'createdAt' | 'likedCount' | 'isDeleted'
+          > = {
             title: formData.title,
             description: formData.description,
             tags: this.tagsArray,
