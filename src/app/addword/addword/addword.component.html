@@ -51,25 +51,54 @@
       編集を適用
     </button>
     <ng-template #addword>
-      <button
-        [disabled]="form.invalid"
-        mat-raised-button
-        color="primary"
-        (click)="goBack()"
+      <ng-container
+        *ngIf="
+          (isCustomer === false && wordsLength < 10) || isCustomer === true;
+          else free
+        "
       >
-        保存する
-      </button>
-      <button
-        [disabled]="form.invalid"
-        mat-raised-button
-        color="primary"
-        routerLink="/wordlist/{{ vocabularyId }}/addword"
-      >
-        保存して次へ
-      </button>
+        <button
+          [disabled]="form.invalid"
+          mat-raised-button
+          color="primary"
+          (click)="goBack()"
+        >
+          保存する
+        </button>
+        <button
+          [disabled]="form.invalid"
+          mat-raised-button
+          color="primary"
+          routerLink="/wordlist/{{ vocabularyId }}/addword"
+        >
+          保存して次へ
+        </button>
+      </ng-container>
     </ng-template>
     <button type="button" mat-raised-button (click)="goBack()">
       キャンセル
     </button>
   </form>
 </div>
+
+<ng-template #free>
+  <button
+    [disabled]="form.invalid"
+    mat-raised-button
+    color="primary"
+    (click)="alert()"
+    type="button"
+  >
+    保存する
+  </button>
+  <button
+    [disabled]="form.invalid"
+    mat-raised-button
+    color="primary"
+    routerLink="/wordlist/{{ vocabularyId }}/addword"
+    (click)="alert()"
+    type="button"
+  >
+    保存して次へ
+  </button>
+</ng-template>

@@ -6,17 +6,24 @@
       [word]="word"
       (delete)="deleteWord($event)"
     ></app-word>
-    <button
-      *ngIf="vocabulary.authorId === userId"
-      mat-mini-fab
-      color="primary"
-      routerLink="/wordlist/{{ vocabulary.vocabularyId }}/addword"
-      class="add"
+    <ng-container
+      *ngIf="
+        (isCustomer === false && wordsLength < 10) || isCustomer === true;
+        else free
+      "
     >
-      <mat-icon class="material-icons">
-        add
-      </mat-icon>
-    </button>
+      <button
+        *ngIf="vocabulary.authorId === userId"
+        mat-mini-fab
+        color="primary"
+        routerLink="/wordlist/{{ vocabulary.vocabularyId }}/addword"
+        class="add"
+      >
+        <mat-icon class="material-icons">
+          add
+        </mat-icon>
+      </button>
+    </ng-container>
     <button
       mat-mini-fab
       color="primary"
@@ -35,6 +42,19 @@
       (scrolled)="getWords()"
     ></div>
   </ng-container>
+  <ng-template #free>
+    <button
+      *ngIf="vocabulary.authorId === userId"
+      mat-mini-fab
+      color="primary"
+      (click)="alert()"
+      class="add"
+    >
+      <mat-icon class="material-icons">
+        add
+      </mat-icon>
+    </button>
+  </ng-template>
 </div>
 
 <ng-template #isflip>
