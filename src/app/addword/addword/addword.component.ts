@@ -51,7 +51,7 @@ export class AddwordComponent implements OnInit {
 
   submit(form: NgForm) {
     const formData = this.form.value;
-    const sendData: Omit<Word, 'wordId' | 'vocabularyId'> = {
+    const sendData: Omit<Word, 'wordId' | 'vocabularyId' | 'isDeleted'> = {
       surface: formData.surface,
       backside: formData.backside,
       createdAt: new Date(),
@@ -72,7 +72,7 @@ export class AddwordComponent implements OnInit {
         .getWord(this.vocabularyId, this.wordId)
         .pipe(take(1))
         .subscribe(word => {
-          const sendData: Omit<Word, 'createdAt'> = {
+          const sendData: Omit<Word, 'createdAt' | 'isDeleted'> = {
             surface: formData.surface,
             backside: formData.backside,
             authorId: word.authorId,

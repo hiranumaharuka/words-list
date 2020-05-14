@@ -25,7 +25,8 @@ export class VocabularyResultComponent implements OnInit, OnDestroy {
   resultParams = {
     hitsPerPage: 10,
     page: 0,
-    query: ''
+    query: '',
+    filters: `isDeleted=0`
   };
   @Input() mode: Mode;
 
@@ -76,7 +77,8 @@ export class VocabularyResultComponent implements OnInit, OnDestroy {
           query: this.resultParams.query,
           params: {
             page: this.page++,
-            hitsPerPage: 10
+            hitsPerPage: 10,
+            filters: `isDeleted=0`
           }
         }
       ])

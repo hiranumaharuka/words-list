@@ -4,7 +4,6 @@ import { auth, User } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +12,6 @@ export class AuthService {
   // afUser$はUserという型の最新状態が入ってくる変数
   afUser$: Observable<User> = this.afAuth.user;
   uid: string;
-
   constructor(
     private afAuth: AngularFireAuth,
     private router: Router,

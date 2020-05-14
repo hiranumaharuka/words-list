@@ -1,12 +1,19 @@
 <div class="container">
   <h2>お気に入りの単語帳</h2>
-  <app-vocabulary
-    *ngFor="let vocabulary of vocabularies"
-    [vocabulary]="vocabulary"
-    routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
-    (deleted)="deleteVocabulary($event)"
-  ></app-vocabulary>
-  <button *ngIf="isNext" (click)="getMore()" mat-raised-button color="primary">
-    もっと見る
-  </button>
+  <ng-container *ngIf="!(deleted$ | async)">
+    <app-vocabulary
+      *ngFor="let vocabulary of vocabularies"
+      [vocabulary]="vocabulary"
+      routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
+      (deleted)="deleteVocabulary($event)"
+    ></app-vocabulary>
+    <button
+      *ngIf="isNext"
+      (click)="getMore()"
+      mat-raised-button
+      color="primary"
+    >
+      もっと見る
+    </button>
+  </ng-container>
 </div>

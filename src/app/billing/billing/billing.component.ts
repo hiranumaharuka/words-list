@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { BillingDialogComponent } from 'src/app/billing-dialog/billing-dialog.component';
 import { Observable, Subscription } from 'rxjs';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
@@ -36,8 +36,7 @@ export class BillingComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private vocabularyService: VocabularyService,
     private authService: AuthService,
-    private paymentService: PaymentService,
-    private snackBar: MatSnackBar
+    private paymentService: PaymentService
   ) {}
 
   ngOnInit() {

@@ -3,7 +3,8 @@ import { VocabularyWithAuthor } from 'src/app/interfaces/vocabulary';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { firestore, User } from 'firebase';
-import { take } from 'rxjs/operators';
+import { take, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-myvocabulary',
@@ -15,6 +16,9 @@ export class MyvocabularyComponent implements OnInit {
   vocabularies: VocabularyWithAuthor[] = [];
   isNext: boolean;
   uid: string = this.authService.uid;
+  deleted$: Observable<boolean> = this.vocabularyService
+    .getUser(this.uid)
+    .pipe(map(data => data.isDeleted));
   constructor(
     private vocabularyService: VocabularyService,
     private authService: AuthService

@@ -18,7 +18,8 @@ export class WordResultComponent implements OnInit {
   resultParams = {
     hitsPerPage: 5,
     page: 0,
-    query: ''
+    query: '',
+    filters: `isDeleted=0`
   };
   @Input() mode: Mode;
   uid: string = this.authService.uid;
