@@ -11,6 +11,10 @@
   &__spacer {
     flex: 1 1 auto;
   }
+  &__logo img {
+    height: 32px;
+    margin-top: 10px;
+  }
 }
 a {
   text-decoration: none;
