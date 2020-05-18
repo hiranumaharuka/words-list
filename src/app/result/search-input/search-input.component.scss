@@ -1,11 +1,11 @@
 .search {
   display: flex;
   align-self: center;
-  padding: 16px;
   &__input {
     flex: 1;
   }
 }
+
 button {
   background-color: transparent;
   border: none;
