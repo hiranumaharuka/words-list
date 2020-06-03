@@ -4,16 +4,14 @@ import { ResultRoutingModule } from './result-routing.module';
 import { ResultComponent } from './result/result.component';
 import { NgAisModule } from 'angular-instantsearch';
 import { SearchInputComponent } from './search-input/search-input.component';
-import {
-  MatAutocompleteModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatCardModule,
-  MatButtonModule,
-  MatMenuModule,
-  MatProgressSpinnerModule
-} from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SegmentedControlComponent } from './segmented-control/segmented-control.component';
 import { VocabularyResultComponent } from './vocabulary-result/vocabulary-result.component';

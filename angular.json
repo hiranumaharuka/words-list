@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "wordbook"
+  "defaultProject": "wordbook",
+  "cli": {
+    "analytics": "7a47e924-5a0b-4d6d-8353-c49af1720758"
+  }
 }

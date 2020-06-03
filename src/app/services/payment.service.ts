@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoadingService } from './loading.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Customer } from '../interfaces/vocabulary';

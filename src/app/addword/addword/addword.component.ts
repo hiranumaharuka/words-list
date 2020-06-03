@@ -8,7 +8,7 @@ import { Location } from '@angular/common';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap, take, map } from 'rxjs/operators';
 import { VocabularyService } from 'src/app/services/vocabulary.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-addword',
@@ -68,7 +68,7 @@ export class AddwordComponent implements OnInit, OnDestroy {
     this.sub = this.isCustomer$.subscribe(data => (this.isCustomer = data));
   }
 
-  submit(form: NgForm) {
+  submit(form) {
     const formData = this.form.value;
     const sendData: Omit<Word, 'wordId' | 'vocabularyId' | 'isDeleted'> = {
       surface: formData.surface,

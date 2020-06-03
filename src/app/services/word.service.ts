@@ -3,7 +3,7 @@ import {
   AngularFirestore,
   QueryDocumentSnapshot
 } from '@angular/fire/firestore';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Word } from '../interfaces/word';
 import { Observable, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
