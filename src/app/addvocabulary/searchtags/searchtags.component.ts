@@ -13,10 +13,8 @@ import { BaseWidget, NgAisInstantSearch } from 'angular-instantsearch';
 import { connectRefinementList } from 'instantsearch.js/es/connectors';
 import { FormControl, Validators } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import {
-  MatChipInputEvent,
-  MatAutocompleteSelectedEvent
-} from '@angular/material';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatChipInputEvent } from '@angular/material/chips';
 @Component({
   selector: 'app-searchtags',
   templateUrl: './searchtags.component.html',

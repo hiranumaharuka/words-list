@@ -4,7 +4,7 @@ import { NgAisModule } from 'angular-instantsearch';
 import { AddvocabularyRoutingModule } from './addvocabulary-routing.module';
 import { AddvocabularyComponent } from './addvocabulary/addvocabulary.component';
 import { SharedModule } from '../shared/shared.module';
-import { MatAutocompleteModule } from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SearchtagsComponent } from './searchtags/searchtags.component';
 @NgModule({
   declarations: [AddvocabularyComponent, SearchtagsComponent],

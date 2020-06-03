@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 import { map, switchMap, first, tap } from 'rxjs/operators';
 import { Observable, combineLatest, of, Subject } from 'rxjs';
 import { firestore } from 'firebase';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { LoadingService } from './loading.service';
 @Injectable({

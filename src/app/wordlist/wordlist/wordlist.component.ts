@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Word } from 'src/app/interfaces/word';
 import { WordService } from 'src/app/services/word.service';
 import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-wordlist',

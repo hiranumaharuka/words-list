@@ -4,18 +4,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './header/header.component';
-import {
-  MatIconModule,
-  MatButtonModule,
-  MatMenuModule,
-  MatToolbarModule,
-  MatSnackBarModule,
-  MatProgressBarModule,
-  MatInputModule,
-  MatAutocompleteModule,
-  MatFormFieldModule,
-  MatDialogModule
-} from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { FooterComponent } from './footer/footer.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';

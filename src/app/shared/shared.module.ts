@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VocabularyComponent } from './vocabulary/vocabulary.component';
-import {
-  MatIconModule,
-  MatButtonModule,
-  MatInputModule,
-  MatFormFieldModule,
-  MatCardModule,
-  MatMenuModule,
-  MatChipsModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WordComponent } from './word/word.component';
 import { SharedRoutingModule } from './shared-routing.module';

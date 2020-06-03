@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { BillingDialogComponent } from 'src/app/billing-dialog/billing-dialog.component';
 import { Observable, Subscription } from 'rxjs';
 import { VocabularyService } from 'src/app/services/vocabulary.service';

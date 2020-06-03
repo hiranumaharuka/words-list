@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PaymentService } from '../services/payment.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../services/auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { VocabularyService } from '../services/vocabulary.service';
