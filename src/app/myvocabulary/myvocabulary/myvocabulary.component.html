@@ -1,12 +1,14 @@
 <div class="container">
   <h2>My単語帳</h2>
   <ng-container *ngIf="!(deleted$ | async)">
-    <app-vocabulary
-      *ngFor="let vocabulary of vocabularies"
-      [vocabulary]="vocabulary"
-      routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
-      (deleted)="deleteVocabulary($event)"
-    ></app-vocabulary>
+    <a href="javascript:void(0)">
+      <app-vocabulary
+        *ngFor="let vocabulary of vocabularies"
+        [vocabulary]="vocabulary"
+        routerLink="/wordlist/{{ vocabulary.vocabularyId }}"
+        (deleted)="deleteVocabulary($event)"
+      ></app-vocabulary>
+    </a>
     <button
       *ngIf="isNext"
       (click)="getMore()"
