@@ -9,7 +9,7 @@ export const countUpCreate = functions.firestore
   .onCreate(async (snap, context) => {
     const eventId = context.eventId;
     return shouldEventRun(eventId).then(async (should: boolean) => {
-      const uid = snap.data()!.authorId;
+      const uid = snap.data().authorId;
       if (should) {
         await db
           .doc(`users/${uid}`)
@@ -26,7 +26,7 @@ export const countDownCreate = functions.firestore
   .onDelete(async (snap, context) => {
     const eventId = context.eventId;
     return shouldEventRun(eventId).then(async (should: boolean) => {
-      const uid = snap.data()!.authorId;
+      const uid = snap.data().authorId;
       if (should) {
         await db
           .doc(`users/${uid}`)
